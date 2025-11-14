@@ -1,0 +1,1329 @@
+/*
+ * NATUCART - Tema Dark
+ * 
+ * Paleta de Cores Dark:
+ * - Fundo principal: #1a1a1a (preto suave)
+ * - Fundo secundário: #2F2F2F (cinza escuro)
+ * - Fundo cards: #252525
+ * - Texto principal: #FFFFFF (branco)
+ * - Texto secundário: #BFBFBF (cinza claro)
+ * - Acento: #E24B2F (laranja-avermelhado vivo)
+ * - Acento hover: #B83A2A (laranja-avermelhado escuro)
+ */
+
+/* ============================================
+   FUNDO PRINCIPAL - TEMA DARK
+   ============================================ */
+
+body {
+    background-color: #1a1a1a !important;
+    color: #BFBFBF !important;
+}
+
+/* ============================================
+   HEADER - TEMA DARK
+   ============================================ */
+
+#sticky-header.sticky-header,
+.menu-area {
+    background-color: #1a1a1a !important;
+    border-bottom: 1px solid #2F2F2F;
+}
+
+/* ============================================
+   LOGO - GARANTIR VISIBILIDADE TOTAL
+   ============================================ */
+
+/* Garantir que menu-nav mostre o logo */
+.menu-nav {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+}
+
+/* Container do logo - TODAS as variações possíveis */
+.logo,
+.menu-nav .logo,
+header .logo,
+#sticky-header .logo,
+.menu-area .logo,
+.menu-wrap .logo,
+.menu-wrap .menu-nav .logo,
+.menu-area .menu-wrap .menu-nav .logo,
+.nav-logo {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1 !important;
+    flex-shrink: 0 !important;
+    margin-right: 30px !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* Logo do menu mobile - z-index maior que o header */
+.mobile-menu .nav-logo {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10000 !important;
+    flex-shrink: 0 !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* Link do logo */
+.logo a,
+.menu-nav .logo a,
+header .logo a,
+#sticky-header .logo a,
+.menu-area .logo a,
+.menu-wrap .logo a,
+.nav-logo a,
+.mobile-menu .nav-logo a {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10000 !important;
+    line-height: 60px !important;
+    height: 60px !important;
+    padding: 0 !important;
+    text-decoration: none !important;
+}
+
+/* Logo imagem - TODAS as variações possíveis - cores originais */
+.logo img,
+.menu-nav .logo img,
+header .logo img,
+#sticky-header .logo img,
+.menu-area .logo img,
+.menu-wrap .logo img,
+.menu-wrap .menu-nav .logo img,
+.menu-area .menu-wrap .menu-nav .logo img,
+.nav-logo img,
+.mobile-menu .nav-logo img,
+.logo a img,
+.menu-nav .logo a img,
+header .logo a img,
+#sticky-header .logo a img,
+.menu-area .logo a img,
+.menu-wrap .logo a img,
+.nav-logo a img,
+.mobile-menu .nav-logo a img,
+img[src*="logo.svg"],
+img[src="assets/img/logo/logo.svg"],
+img[alt="NATUCART Logo"],
+img[alt="NATUCART"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 200px !important;
+    width: auto !important;
+    height: 60px !important;
+    min-height: 40px !important;
+    position: relative !important;
+    z-index: 10001 !important;
+    object-fit: contain !important;
+    background: transparent !important;
+}
+
+/* Forçar renderização do SVG */
+.logo img[src$=".svg"],
+.nav-logo img[src$=".svg"],
+.logo img[src*="logo.svg"],
+.nav-logo img[src*="logo.svg"],
+.logo img[src*="logo"],
+.nav-logo img[src*="logo"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 200px !important;
+    width: auto !important;
+    height: 60px !important;
+    object-fit: contain !important;
+    filter: brightness(1.1) contrast(1.1) !important;
+}
+
+/* Garantir que nenhum elemento filho esteja oculto */
+.logo *,
+.menu-nav .logo *,
+.nav-logo * {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Menu de navegação */
+.main-menu ul li a {
+    color: #BFBFBF !important;
+}
+
+.main-menu ul li a:hover,
+.main-menu ul li.active a {
+    color: #E24B2F !important;
+}
+
+/* Mobile menu */
+.mobile-menu {
+    background-color: #1a1a1a !important;
+    z-index: 9999 !important;
+}
+
+.mobile-menu .menu-box {
+    background-color: #1a1a1a !important;
+    z-index: 10000 !important;
+}
+
+.mobile-menu .nav-logo {
+    z-index: 10000 !important;
+    position: relative !important;
+}
+
+/* ============================================
+   BANNER - TEMA DARK
+   ============================================ */
+
+.banner-area {
+    background-color: #1a1a1a !important;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2F2F2F 100%) !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+.banner-content .title {
+    color: #FFFFFF !important;
+}
+
+.banner-caption {
+    color: #E24B2F !important;
+}
+
+.banner-content .banner-description {
+    color: #BFBFBF !important;
+}
+
+/* ============================================
+   TÍTULOS E TEXTOS - TEMA DARK
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF !important;
+}
+
+p {
+    color: #BFBFBF !important;
+}
+
+.section-title .title {
+    color: #FFFFFF !important;
+}
+
+.section-title .sub-title {
+    color: #E24B2F !important;
+}
+
+/* ============================================
+   SEÇÕES - TEMA DARK
+   ============================================ */
+
+/* Features */
+.features-area {
+    background-color: #252525 !important;
+}
+
+/* ============================================
+   FEATURES/ICONS - TEMA DARK COM CORES NATUCART
+   ============================================ */
+
+.features-item .features-content .title {
+    color: #FFFFFF !important;
+}
+
+.features-item .features-content p {
+    color: #BFBFBF !important;
+}
+
+/* Ícones das features - Amarelo/Dourado que contrasta bem no dark */
+.features-icon {
+    color: #FFC107 !important;
+    position: relative !important;
+    z-index: 1 !important;
+    transition: all 0.3s ease !important;
+}
+
+.features-icon i {
+    color: inherit !important;
+}
+
+/* Círculo de fundo dos ícones - Cor NATUCART sutil */
+.features-icon::after {
+    background: rgba(226, 75, 47, 0.2) !important;
+    border: 2px solid rgba(226, 75, 47, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Efeito hover nos ícones */
+.features-item:hover .features-icon {
+    color: #FFD54F !important;
+    transform: scale(1.05) translateY(-3px) !important;
+    transition: all 0.3s ease !important;
+}
+
+.features-item:hover .features-icon::after {
+    background: rgba(226, 75, 47, 0.35) !important;
+    border-color: #E24B2F !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 6px 16px rgba(226, 75, 47, 0.5) !important;
+}
+
+/* Products */
+.home-shop-item {
+    background-color: #252525 !important;
+    border: 1px solid #2F2F2F;
+}
+
+.home-shop-item .home-shop-content .title a {
+    color: #FFFFFF !important;
+}
+
+.home-shop-item .home-shop-content .title a:hover {
+    color: #E24B2F !important;
+}
+
+.home-shop-price {
+    color: #E24B2F !important;
+}
+
+/* Brand area */
+.brand-area {
+    background-color: #1a1a1a !important;
+}
+
+.brand-title .title {
+    color: #FFFFFF !important;
+}
+
+/* Ingredients */
+.ingredients-area {
+    background-color: #1a1a1a !important;
+}
+
+.ingredients-content .title {
+    color: #FFFFFF !important;
+}
+
+.ingredients-content p {
+    color: #BFBFBF !important;
+}
+
+/* ============================================
+   FORMULA AREA - TEMA DARK MELHORADO
+   ============================================ */
+
+.formula-area {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2F2F2F 100%) !important;
+    position: relative;
+}
+
+.formula-area::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(226, 75, 47, 0.05);
+    pointer-events: none;
+}
+
+.formula-content .title {
+    color: #FFFFFF !important;
+}
+
+.formula-content .sub-title {
+    color: #E24B2F !important;
+}
+
+/* Lista de fórmula - Cards modernos */
+.formula-list {
+    margin: 0 0 50px !important;
+}
+
+.formula-list li {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(226, 75, 47, 0.08) !important;
+    border-left: 4px solid #E24B2F !important;
+    border-radius: 6px !important;
+    padding: 22px 26px 22px 22px !important;
+    margin-bottom: 14px !important;
+    margin-left: 0 !important;
+    color: #BFBFBF !important;
+    font-size: 17px !important;
+    line-height: 1.7 !important;
+    transition: all 0.3s ease !important;
+    display: block !important;
+    position: relative !important;
+    overflow: visible !important;
+    list-style: none !important;
+}
+
+/* Remover completamente todas as setas e ícones - Design limpo */
+.formula-list li::before {
+    display: none !important;
+    content: none !important;
+    background-image: none !important;
+    background: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.formula-list li::after {
+    display: none !important;
+    content: none !important;
+}
+
+.formula-list li .formula-arrow-icon,
+.formula-list li svg,
+.formula-list li .arrow,
+.formula-list li img[src*="arrow"],
+.formula-list li img[src*="right_arrow"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+.formula-item-content {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.formula-list li:hover {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    border-left-color: #FF5C3A !important;
+    border-left-width: 5px !important;
+    border-color: rgba(226, 75, 47, 0.15) !important;
+    box-shadow: 0 3px 12px rgba(226, 75, 47, 0.12) !important;
+}
+
+.formula-item-content strong {
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    display: block !important;
+    margin-bottom: 8px !important;
+    font-size: 19px !important;
+    letter-spacing: 0.2px !important;
+    line-height: 1.4 !important;
+}
+
+.formula-item-content span {
+    display: block !important;
+    color: #BFBFBF !important;
+    line-height: 1.7 !important;
+    font-size: 16px !important;
+}
+
+.formula-list li:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Botão da fórmula */
+.formula-content .btn-two {
+    background: linear-gradient(135deg, #E24B2F 0%, #B83A2A 100%) !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    padding: 15px 40px !important;
+    font-weight: 600 !important;
+    border-radius: 50px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(226, 75, 47, 0.3) !important;
+}
+
+.formula-content .btn-two:hover {
+    background: linear-gradient(135deg, #B83A2A 0%, #E24B2F 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(226, 75, 47, 0.4) !important;
+    color: #FFFFFF !important;
+}
+
+/* Pricing */
+.pricing-area.gray-bg {
+    background-color: #1a1a1a !important;
+}
+
+.pricing-area {
+    background-color: #1a1a1a !important;
+}
+
+.pricing-item {
+    background-color: #252525 !important;
+    border: 1px solid #2F2F2F;
+}
+
+.pricing-item .pricing-price .price {
+    color: #E24B2F !important;
+}
+
+.pricing-item .pricing-hade h3 {
+    color: #FFFFFF !important;
+}
+
+.pricing-item .pricing-hade span,
+.pricing-item .pricing-hade p {
+    color: #BFBFBF !important;
+}
+
+/* Testimonials */
+.testimonial-area {
+    background-color: #252525 !important;
+}
+
+.testimonial-item p {
+    color: #FFFFFF !important;
+}
+
+.testimonial-avatar-info .name {
+    color: #FFFFFF !important;
+}
+
+/* Blog */
+/* ============================================
+   FAQ AREA - TEMA DARK MELHORADO
+   ============================================ */
+
+.blog-post-area {
+    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%) !important;
+    position: relative;
+}
+
+.blog-post-area::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(226, 75, 47, 0.03);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.blog-post-area > .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Esconder formas decorativas claras no tema dark */
+.blog-bg-shape.one,
+.blog-bg-shape.two {
+    opacity: 0.1 !important;
+    background: rgba(226, 75, 47, 0.1) !important;
+}
+
+.blog-post-content .title a {
+    color: #FFFFFF !important;
+}
+
+.blog-post-content .title a:hover {
+    color: #E24B2F !important;
+}
+
+/* ============================================
+   FAQ ACCORDION - DESIGN MODERNO
+   ============================================ */
+
+.faq-wrapper .accordion-item {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(226, 75, 47, 0.15) !important;
+    border-radius: 12px !important;
+    margin-bottom: 18px !important;
+    padding: 0 !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+.faq-wrapper .accordion-item::after {
+    display: none !important;
+}
+
+.faq-wrapper .accordion-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    transition: all 0.4s ease !important;
+}
+
+.faq-wrapper .accordion-item:hover {
+    border-color: rgba(226, 75, 47, 0.3) !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    transform: translateX(5px) !important;
+    box-shadow: 0 4px 12px rgba(226, 75, 47, 0.15) !important;
+}
+
+.faq-wrapper .accordion-item.active-item {
+    background-color: rgba(226, 75, 47, 0.08) !important;
+    border-color: rgba(226, 75, 47, 0.4) !important;
+    box-shadow: 0 8px 24px rgba(226, 75, 47, 0.2) !important;
+    transform: translateX(0) !important;
+}
+
+.faq-wrapper .accordion-item.active-item::before {
+    background: linear-gradient(180deg, #E24B2F 0%, #B83A2A 100%) !important;
+}
+
+.faq-wrapper .accordion-button {
+    background: transparent !important;
+    border: none !important;
+    padding: 25px 30px !important;
+    font-size: 18px !important;
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    color: #FFFFFF !important;
+    letter-spacing: 0.5px !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    width: 100% !important;
+    text-align: left !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.faq-wrapper .accordion-button:hover {
+    color: #E24B2F !important;
+}
+
+.faq-wrapper .accordion-button:focus {
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.faq-wrapper .accordion-button .count {
+    color: #E24B2F !important;
+    margin-right: 15px !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    min-width: 40px !important;
+    transition: all 0.3s ease !important;
+}
+
+.faq-wrapper .accordion-item.active-item .accordion-button .count,
+.faq-wrapper .accordion-button:not(.collapsed) .count {
+    color: #FFC107 !important;
+    transform: scale(1.1) !important;
+}
+
+.faq-wrapper .accordion-button:not(.collapsed) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #FFFFFF !important;
+    padding-bottom: 15px !important;
+}
+
+.faq-wrapper .accordion-button::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23E24B2F'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+    width: 24px !important;
+    height: 24px !important;
+    background-size: 24px !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    margin-left: auto !important;
+    opacity: 0.7 !important;
+}
+
+.faq-wrapper .accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FFC107'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+    transform: rotate(180deg) !important;
+    opacity: 1 !important;
+}
+
+.faq-wrapper .accordion-button:hover::after {
+    opacity: 1 !important;
+    transform: scale(1.1) !important;
+}
+
+.faq-wrapper .accordion-button:not(.collapsed):hover::after {
+    transform: rotate(180deg) scale(1.1) !important;
+}
+
+.faq-wrapper .accordion-collapse {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.faq-wrapper .accordion-body {
+    padding: 0 30px 25px 85px !important;
+    background: transparent !important;
+    color: #BFBFBF !important;
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+    animation: fadeInDown 0.5s ease-out !important;
+}
+
+.faq-wrapper .accordion-body strong {
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+}
+
+/* Animação suave para abertura/fechamento */
+.faq-wrapper .accordion-collapse.collapsing {
+    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Título da seção FAQ */
+.faq-wrapper .section-title .sub-title {
+    color: #E24B2F !important;
+}
+
+.faq-wrapper .section-title .title {
+    color: #FFFFFF !important;
+}
+
+/* ============================================
+   LINHA VERTICAL DECORATIVA - REMOVIDA
+   ============================================ */
+
+/* Linha vertical decorativa removida para um design mais limpo no tema dark */
+.blog-inner-wrapper::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Fact/Stats */
+/* ============================================
+   FACT/STATS AREA - TEMA DARK
+   ============================================ */
+
+.fact-area {
+    background-color: #1a1a1a !important;
+}
+
+.fact-item {
+    background-color: #252525 !important;
+    border-color: #2F2F2F !important;
+}
+
+.fact-item .title {
+    color: #FFFFFF !important;
+}
+
+.fact-content span {
+    color: #BFBFBF !important;
+}
+
+/* Círculo de progresso */
+.fact-item .chart {
+    position: relative;
+}
+
+/* Porcentagem dentro do círculo - branco para contraste */
+.fact-item .percentage,
+.fact-item .chart .percentage {
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+}
+
+.fact-item .percentage small,
+.fact-item .chart .percentage small {
+    color: #BFBFBF !important;
+    font-weight: 400 !important;
+}
+
+/* Canvas do círculo de progresso */
+.fact-item .chart canvas {
+    filter: none;
+}
+
+/* Conteúdo do fact */
+.fact-content {
+    color: #BFBFBF !important;
+}
+
+.fact-content .title {
+    color: #FFFFFF !important;
+}
+
+/* ============================================
+   FOOTER - TEMA DARK
+   ============================================ */
+
+.footer-area {
+    background-color: #000000 !important;
+}
+
+.footer-top-wrap {
+    background-color: #000000 !important;
+}
+
+.footer-widget .fw-title {
+    color: #FFFFFF !important;
+}
+
+.footer-text {
+    color: #BFBFBF !important;
+}
+
+.footer-widget ul li a {
+    color: #BFBFBF !important;
+}
+
+.footer-widget ul li a:hover {
+    color: #E24B2F !important;
+}
+
+.footer-contact-wrap {
+    color: #BFBFBF !important;
+}
+
+.copyright-text {
+    color: #BFBFBF !important;
+}
+
+/* Footer logo */
+.footer-logo img {
+    max-height: 50px !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* ============================================
+   FORMULÁRIOS - TEMA DARK
+   ============================================ */
+
+input[type="text"],
+input[type="email"],
+textarea,
+select {
+    background-color: #252525 !important;
+    border-color: #2F2F2F !important;
+    color: #FFFFFF !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+    background-color: #252525 !important;
+    border-color: #E24B2F !important;
+    color: #FFFFFF !important;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+textarea::placeholder {
+    color: #7A7A7A !important;
+}
+
+/* ============================================
+   CARRINHO E ELEMENTOS ESPECIAIS - TEMA DARK
+   ============================================ */
+
+.header-mini-cart {
+    background-color: #252525 !important;
+    border: 1px solid #2F2F2F;
+}
+
+.header-mini-cart .product-title a {
+    color: #FFFFFF !important;
+}
+
+.header-mini-cart .woocommerce-Price-amount {
+    color: #E24B2F !important;
+}
+
+/* Search popup */
+.search-popup-wrap {
+    background-color: rgba(26, 26, 26, 0.98) !important;
+}
+
+.search-form input {
+    background-color: #252525 !important;
+    border-color: #2F2F2F !important;
+    color: #FFFFFF !important;
+}
+
+/* Offcanvas */
+.offCanvas-wrap {
+    background-color: #1a1a1a !important;
+}
+
+.offCanvas-content .title {
+    color: #FFFFFF !important;
+}
+
+.offCanvas-content .title span {
+    color: #E24B2F !important;
+}
+
+.offcanvas-contact {
+    color: #BFBFBF !important;
+}
+
+.offcanvas-contact .number,
+.offcanvas-contact .email {
+    color: #E24B2F !important;
+}
+
+/* ============================================
+   BOTÕES E LINKS - TEMA DARK
+   ============================================ */
+
+a,
+button {
+    color: #E24B2F !important;
+}
+
+a:hover {
+    color: #B83A2A !important;
+}
+
+/* ============================================
+   ELEMENTOS DE DESTAQUE - TEMA DARK
+   ============================================ */
+
+.discount {
+    background: #E24B2F !important;
+    color: #FFFFFF !important;
+}
+
+.scroll-top {
+    background: #E24B2F !important;
+    color: #FFFFFF !important;
+}
+
+.scroll-top:hover {
+    background: #B83A2A !important;
+}
+
+.video-btn a {
+    background: #E24B2F !important;
+}
+
+.video-btn a:hover {
+    background: #B83A2A !important;
+}
+
+/* ============================================
+   AJUSTES ESPECÍFICOS - TEMA DARK
+   ============================================ */
+
+/* ============================================
+   ELEMENTOS DECORATIVOS ENTRE SEÇÕES
+   Ajustar formas decorativas (shapes) vermelhas
+   ============================================ */
+
+/* Features Area - Formas decorativas */
+.features-bg::before {
+    opacity: 0.4 !important;
+    filter: brightness(0.5) saturate(1.5) hue-rotate(0deg) !important;
+    background-image: url(../img/bg/features_shape01.png) !important;
+    background-repeat: repeat-x !important;
+    background-position: center top !important;
+    background-size: auto 41px !important;
+    height: 41px !important;
+    top: -41px !important;
+    left: 0 !important;
+    width: 100% !important;
+    transform: translateY(0) !important;
+}
+
+.features-bg::after {
+    opacity: 0.4 !important;
+    filter: brightness(0.5) saturate(1.5) hue-rotate(0deg) !important;
+    background-image: url(../img/bg/features_shape02.png) !important;
+    background-repeat: repeat-x !important;
+    background-position: center bottom !important;
+    background-size: auto 50px !important;
+    height: 50px !important;
+    bottom: -50px !important;
+    left: 0 !important;
+    width: 100% !important;
+    transform: translateY(0) !important;
+}
+
+/* Formula Area - Formas decorativas */
+.formula-area::before,
+.formula-bg::before {
+    opacity: 0.35 !important;
+    filter: brightness(0.4) saturate(1.6) hue-rotate(0deg) !important;
+    background-image: url(../img/bg/formula_shape01.png) !important;
+    background-repeat: repeat-x !important;
+    background-position: center top !important;
+    background-size: auto 44px !important;
+    height: 44px !important;
+    top: -15px !important;
+    left: 0 !important;
+    width: 100% !important;
+    transform: translateY(0) !important;
+}
+
+.formula-area::after,
+.formula-bg::after {
+    opacity: 0.35 !important;
+    filter: brightness(0.4) saturate(1.6) hue-rotate(0deg) !important;
+    background-image: url(../img/bg/formula_shape02.png) !important;
+    background-repeat: repeat-x !important;
+    background-position: center bottom !important;
+    background-size: auto 47px !important;
+    height: 47px !important;
+    bottom: -17px !important;
+    left: 0 !important;
+    width: 100% !important;
+    transform: translateY(0) !important;
+}
+
+/* Video Area - Formas decorativas */
+.video-area::before,
+.video-bg::before {
+    opacity: 0.4 !important;
+    filter: brightness(0.5) saturate(1.5) hue-rotate(0deg) !important;
+    background-image: url(../img/bg/video_top_mask.png) !important;
+    background-repeat: repeat-x !important;
+    background-position: center top !important;
+    background-size: auto 46px !important;
+    height: 46px !important;
+    top: -6px !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 2 !important;
+    transform: translateY(0) !important;
+}
+
+.video-area::after,
+.video-bg::after {
+    opacity: 0.4 !important;
+    filter: brightness(0.5) saturate(1.5) hue-rotate(0deg) !important;
+    background-image: url(../img/bg/video_bottom_mask.png) !important;
+    background-repeat: repeat-x !important;
+    background-position: center bottom !important;
+    background-size: auto 36px !important;
+    height: 36px !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 2 !important;
+    transform: translateY(0) !important;
+}
+
+/* Testimonial Area - Formas decorativas */
+.testimonial-area::before,
+.testimonial-bg::before {
+    opacity: 0.35 !important;
+    filter: brightness(0.4) saturate(1.6) hue-rotate(0deg) !important;
+    background-image: url(../img/bg/testimonial_top_shape.png) !important;
+    background-repeat: repeat-x !important;
+    background-position: center top !important;
+    background-size: auto 33px !important;
+    height: 33px !important;
+    top: -10px !important;
+    left: 0 !important;
+    width: 100% !important;
+    transform: translateY(0) !important;
+}
+
+.testimonial-area::after,
+.testimonial-bg::after {
+    opacity: 0.35 !important;
+    filter: brightness(0.4) saturate(1.6) hue-rotate(0deg) !important;
+    background-image: url(../img/bg/testimonial_bottom_shape.png) !important;
+    background-repeat: repeat-x !important;
+    background-position: center bottom !important;
+    background-size: auto 36px !important;
+    height: 36px !important;
+    bottom: -9px !important;
+    left: 0 !important;
+    width: 100% !important;
+    transform: translateY(0) !important;
+}
+
+/* Ajustar margens e padding das seções para melhor alinhamento */
+.features-area.features-bg {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 97px !important;
+    padding-bottom: 97px !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+/* Remover margem original que causa desalinhamento */
+.features-bg {
+    margin: 0 !important;
+}
+
+.formula-area.formula-bg,
+.formula-area {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 145px !important;
+    padding-bottom: 150px !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+.formula-bg {
+    margin: 0 !important;
+}
+
+.testimonial-area.testimonial-bg,
+.testimonial-area {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 145px !important;
+    padding-bottom: 150px !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+.testimonial-bg {
+    margin: 0 !important;
+}
+
+.video-area.video-bg,
+.video-area {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+.video-bg {
+    margin: 0 !important;
+}
+
+/* Garantir que não haja sobreposição indesejada */
+section {
+    position: relative !important;
+    z-index: auto !important;
+}
+
+/* Ajustar z-index dos elementos decorativos para ficarem entre seções */
+.features-bg::before,
+.features-bg::after,
+.formula-area::before,
+.formula-area::after,
+.formula-bg::before,
+.formula-bg::after,
+.video-area::before,
+.video-area::after,
+.video-bg::before,
+.video-bg::after,
+.testimonial-area::before,
+.testimonial-area::after,
+.testimonial-bg::before,
+.testimonial-bg::after {
+    z-index: 1 !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    box-sizing: border-box !important;
+}
+
+/* Responsividade - Ajustar formas decorativas em telas menores */
+@media (max-width: 768px) {
+    .features-bg::before,
+    .features-bg::after,
+    .formula-area::before,
+    .formula-area::after,
+    .formula-bg::before,
+    .formula-bg::after,
+    .video-area::before,
+    .video-area::after,
+    .video-bg::before,
+    .video-bg::after,
+    .testimonial-area::before,
+    .testimonial-area::after,
+    .testimonial-bg::before,
+    .testimonial-bg::after {
+        opacity: 0.25 !important;
+    }
+}
+
+/* Preloader dark */
+#preloader {
+    background-color: #1a1a1a !important;
+}
+
+/* Garantir contraste em todos os elementos */
+.main-area {
+    background-color: #1a1a1a !important;
+}
+
+/* Features products */
+.features-products {
+    background-color: #1a1a1a !important;
+}
+
+.features-product-content .title a {
+    color: #FFFFFF !important;
+}
+
+.features-product-content h6 {
+    color: #BFBFBF !important;
+}
+
+.features-product-content p {
+    color: #BFBFBF !important;
+}
+
+/* Features product bottom - Preço */
+.features-product-bottom .price {
+    color: #E24B2F !important;
+    font-weight: 700 !important;
+    font-size: 20px !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Home shop area */
+.home-shop-area {
+    background-color: #1a1a1a !important;
+}
+
+/* Video area */
+.video-area {
+    background-color: #1a1a1a !important;
+}
+
+.video-bg-overlay {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Cards e containers */
+.card,
+.container-custom,
+.custom-container {
+    background-color: transparent !important;
+}
+
+/* Header action icons */
+.header-action ul li {
+    color: #FFFFFF !important;
+}
+
+.header-action ul li a i {
+    color: #FFFFFF !important;
+}
+
+/* Search popup input */
+.search-form input[type="text"] {
+    background-color: #252525 !important;
+    border-color: #2F2F2F !important;
+    color: #FFFFFF !important;
+}
+
+.search-form input[type="text"]::placeholder {
+    color: #7A7A7A !important;
+}
+
+/* Garantir que todos os textos sejam visíveis */
+.text-muted,
+.small,
+small {
+    color: #BFBFBF !important;
+}
+
+/* Links em geral */
+a {
+    color: #E24B2F !important;
+}
+
+a:hover {
+    color: #B83A2A !important;
+}
+
+/* Botões de ação do header */
+.header-action {
+    color: #FFFFFF !important;
+}
+
+/* Shopping cart no header */
+.header-shop-cart .cart-count {
+    color: #FFFFFF !important;
+}
+
+.header-shop-cart .cart-count i {
+    color: #FFFFFF !important;
+}
+
+.header-shop-cart .mini-cart-count {
+    background-color: #E24B2F !important;
+    color: #FFFFFF !important;
+}
+
+.header-search a {
+    color: #FFFFFF !important;
+}
+
+.header-search a i {
+    color: #FFFFFF !important;
+}
+
+.offCanvas-btn a {
+    color: #FFFFFF !important;
+}
+
+.offCanvas-btn a i {
+    color: #FFFFFF !important;
+}
+
+/* Links de navegação */
+.navigation li a {
+    color: #BFBFBF !important;
+}
+
+.navigation li.active a,
+.navigation li a:hover {
+    color: #E24B2F !important;
+}
+
+/* Rating stars */
+.home-shop-rating i {
+    color: #E24B2F !important;
+}
+
+.testimonial-rating i {
+    color: #E24B2F !important;
+}
+
+/* Mobile menu toggler */
+.mobile-nav-toggler {
+    color: #FFFFFF !important;
+}
+
+.mobile-nav-toggler i {
+    color: #FFFFFF !important;
+}
+
+/* Close button mobile menu */
+.close-btn {
+    color: #FFFFFF !important;
+}
+
+.close-btn i {
+    color: #FFFFFF !important;
+}
+

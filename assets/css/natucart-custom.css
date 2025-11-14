@@ -1,0 +1,2480 @@
+/*
+ * NATUCART - Cores Personalizadas
+ * 
+ * Paleta de Cores:
+ * - Preto profundo: #000000
+ * - Cinza escuro: #2F2F2F
+ * - Cinza médio: #7A7A7A
+ * - Cinza claro: #BFBFBF
+ * - Branco: #FFFFFF
+ * - Acento vermelho-alaranjado (vivo): #E24B2F
+ * - Acento vermelho-alaranjado (escuro): #B83A2A
+ * - Neutro frio: #38484E
+ */
+
+/* ============================================
+   ÍCONES DOS INGREDIENTES
+   Estilização dos ícones Font Awesome
+   ============================================ */
+:root,
+html {
+    scroll-behavior: smooth !important;
+}
+
+.ingredients-thumb {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.ingredients-thumb i {
+    font-size: 60px !important;
+    color: #E24B2F !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 120px !important;
+    height: 120px !important;
+    background: rgba(226, 75, 47, 0.1) !important;
+    border-radius: 20px !important;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%) !important;
+    transition: all 0.3s ease !important;
+    margin: 0 auto !important;
+    position: relative !important;
+    line-height: 120px !important;
+}
+
+.ingredients-item:hover .ingredients-thumb i {
+    color: #FFFFFF !important;
+    background: #E24B2F !important;
+    transform: translateY(-5px) scale(1.05) !important;
+    box-shadow: 0 10px 30px rgba(226, 75, 47, 0.3) !important;
+}
+
+[data-add-to-cart].added-to-cart {
+    transform: scale(0.97);
+    opacity: 0.75;
+    box-shadow: 0 0 0 3px rgba(226, 75, 47, 0.3);
+    transition: transform 0.25s ease, opacity 0.25s ease, box-shadow 0.25s ease;
+}
+
+.freight-area {
+    padding: 60px 0;
+    background: #0d0d0d;
+}
+
+.freight-card {
+    background: #161616;
+    border: 1px solid #2f2f2f;
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.45);
+}
+
+.freight-card__content {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.freight-title {
+    font-size: 28px;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.freight-description {
+    color: #BFBFBF;
+    margin-bottom: 25px;
+}
+
+.freight-form-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.freight-form-group input {
+    flex: 1;
+    min-width: 180px;
+    max-width: 260px;
+    background: #0f0f0f;
+    border: 1px solid #2f2f2f;
+    border-radius: 999px;
+    padding: 12px 18px;
+    color: #ffffff;
+}
+
+.freight-form-group button {
+    background: #E24B2F;
+    border: none;
+    border-radius: 999px;
+    padding: 12px 28px;
+    color: #ffffff !important;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.freight-form-group button:hover {
+    background: #B83A2A;
+}
+
+.freight-hint {
+    display: block;
+    color: #7A7A7A;
+    margin-top: 10px;
+}
+
+.freight-result {
+    margin-top: 20px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.header-shop-cart .header-mini-cart {
+    background: #161616 !important;
+    border: 1px solid #2F2F2F !important;
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.45) !important;
+    pointer-events: none;
+}
+
+.header-shop-cart:hover .header-mini-cart,
+.header-shop-cart.mini-cart-open .header-mini-cart {
+    pointer-events: auto;
+}
+
+.header-shop-cart.mini-cart-open .header-mini-cart {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
+.header-mini-cart .woocommerce-mini-cart__total {
+    border-top: 1px solid #2F2F2F !important;
+    color: #BFBFBF !important;
+}
+
+.header-mini-cart .woocommerce-mini-cart__total strong,
+.header-mini-cart .woocommerce-mini-cart__total .woocommerce-Price-amount {
+    color: #FFFFFF !important;
+}
+
+.header-shop-cart .header-mini-cart .checkout-link a {
+    display: block;
+    border-radius: 999px;
+    border: 1px solid #2F2F2F;
+    background: #121212;
+    color: #FFFFFF !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.header-shop-cart .header-mini-cart .checkout-link a.cart-checkout-link {
+    background: #E24B2F;
+    border-color: #E24B2F;
+}
+
+.header-shop-cart .header-mini-cart .checkout-link a.cart-checkout-link:hover {
+    background: #B83A2A;
+    border-color: #B83A2A;
+}
+
+.header-shop-cart .header-mini-cart .checkout-link a.cart-view-link {
+    background: transparent;
+    color: #FFFFFF !important;
+}
+
+#freight .btn.btn-two.checkout-submit {
+    border: none !important;
+}
+
+.checkout-summary {
+    margin: 25px auto 15px;
+    border: 1px solid #2f2f2f;
+    border-radius: 12px;
+    padding: 18px 22px;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.checkout-summary__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+}
+
+.checkout-summary__row:last-child {
+    margin-bottom: 0;
+}
+
+.checkout-submit {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.checkout-status {
+    display: block;
+    margin-top: 12px;
+    color: #BFBFBF;
+}
+
+.cart-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(18, 18, 18, 0.95);
+    border: 1px solid #2F2F2F;
+    border-radius: 16px;
+    padding: 16px 22px;
+    color: #FFFFFF;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
+}
+
+.cart-toast__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+}
+
+.cart-toast__content strong {
+    color: #FFFFFF;
+    font-size: 16px;
+}
+
+.cart-toast__content span {
+    color: #BFBFBF;
+}
+
+.cart-toast.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.header-mini-cart [data-remove-item] {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 20px;
+    line-height: 20px;
+    margin-left: 12px;
+    cursor: pointer;
+}
+
+/* ============================================
+   SUBSTITUIÇÃO GLOBAL DE CORES VERDES
+   Substituir #0D9B4D (verde) por #E24B2F (laranja)
+   ============================================ */
+
+/* Sobrescrever cores primárias - substituir #FAA432 por #E24B2F */
+a,
+button,
+a:hover,
+.portfolio-cat a:hover,
+.footer-menu li a:hover {
+    color: #E24B2F !important;
+}
+
+/* ============================================
+   BOTÕES PRIMÁRIOS - GARANTIR VISIBILIDADE DO TEXTO
+   ============================================ */
+/* Botões primários */
+.btn,
+.btn-two,
+button.btn,
+.btn:focus {
+    position: relative !important;
+    z-index: 1 !important;
+    color: #FFFFFF !important;
+}
+
+.btn::before {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+.btn:hover {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    color: #FFFFFF !important;
+    border-color: #E24B2F !important;
+}
+
+.btn:hover::before {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+.btn:hover,
+.btn-two:hover {
+    background: #B83A2A !important;
+    background-color: #B83A2A !important;
+    border-color: #B83A2A !important;
+    color: #FFFFFF !important;
+    z-index: 1 !important;
+    transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+/* Garantir que texto dentro de todos os botões sempre fique visível no hover */
+.btn:hover > *,
+.btn-two:hover > *,
+button:hover > * {
+    position: relative !important;
+    z-index: 10 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: #FFFFFF !important;
+}
+
+/* Garantir que o texto do botão não desapareça quando ::before se move */
+.btn:hover,
+.btn-two:hover {
+    overflow: visible !important;
+}
+
+.btn:hover *,
+.btn-two:hover * {
+    position: relative !important;
+    z-index: 10 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Garantir que texto dos botões seja sempre visível */
+.btn,
+.btn-two {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    overflow: visible !important;
+}
+
+/* Garantir que todos os elementos filhos do botão tenham z-index alto */
+.btn *,
+.btn-two * {
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Botão do banner - corrigir cor e borda */
+.banner-content .btn,
+.banner-content .btn-two,
+.banner-area .banner-content .btn,
+.banner-area .banner-content .btn-two {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    border: none !important;
+    border-color: transparent !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.banner-content .btn::before,
+.banner-content .btn-two::before {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+.banner-content .btn:hover,
+.banner-content .btn-two:hover {
+    background: #B83A2A !important;
+    background-color: #B83A2A !important;
+    border: none !important;
+    border-color: transparent !important;
+    color: #FFFFFF !important;
+    transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+.banner-content .btn:hover::before,
+.banner-content .btn-two:hover::before {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Garantir que o texto dentro do botão do banner sempre fique visível */
+.banner-content .btn > *,
+.banner-content .btn-two > *,
+.banner-area .banner-content .btn > *,
+.banner-area .banner-content .btn-two > * {
+    position: relative !important;
+    z-index: 10 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.btn:hover,
+.btn-two:hover {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Cores secundárias - substituir #0D9B4D por #E24B2F */
+.btn-success,
+.bg-success,
+.text-success {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    color: #fff !important;
+}
+
+/* ============================================
+   SUBSTITUIÇÃO DE TODOS OS ELEMENTOS VERDES
+   Substituir #0D9B4D por #E24B2F em elementos específicos
+   ============================================ */
+
+/* Setas de testimonials - sobrescrever verde */
+.testimonial-active .slick-arrow::before {
+    background: rgba(226, 75, 47, 0.2) !important;
+    border-color: rgba(226, 75, 47, 0.6) !important;
+}
+
+/* Dots de testimonials */
+.testimonial-active .slick-dots li.slick-active button {
+    background: #E24B2F !important;
+    box-shadow: 0px 3px 3px rgba(226, 75, 47, 0.22) !important;
+}
+
+/* Links e textos com cor verde */
+a[style*="#0D9B4D"],
+a[style*="#0d9b4d"],
+*[style*="color: #0D9B4D"],
+*[style*="color: #0d9b4d"] {
+    color: #E24B2F !important;
+}
+
+/* Backgrounds verdes */
+*[style*="background: #0D9B4D"],
+*[style*="background: #0d9b4d"],
+*[style*="background-color: #0D9B4D"],
+*[style*="background-color: #0d9b4d"] {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+}
+
+/* Borders verdes */
+*[style*="border-color: #0D9B4D"],
+*[style*="border-color: #0d9b4d"],
+*[style*="border:.*#0D9B4D"],
+*[style*="border:.*#0d9b4d"] {
+    border-color: #E24B2F !important;
+}
+
+/* Elementos com classes relacionadas a verde/success que não sejam do Bootstrap */
+.btn-success:not(.btn),
+.bg-success:not([class*="bs-"]),
+.text-success:not([class*="bs-"]) {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    color: #fff !important;
+    border-color: #E24B2F !important;
+}
+
+/* Sobrescrever elementos específicos do style.css que usam verde */
+.testimonial-active .slick-dots li button:hover,
+.testimonial-active .slick-dots li.slick-active button {
+    background: #E24B2F !important;
+    box-shadow: 0px 3px 3px rgba(226, 75, 47, 0.22) !important;
+}
+
+/* Qualquer elemento com background verde do style.css */
+.testimonial-active .slick-arrow::before {
+    background: rgba(226, 75, 47, 0.2) !important;
+}
+
+/* Links e hover com cor verde */
+a:hover[style*="#0D9B4D"],
+a:hover[style*="#0d9b4d"] {
+    color: #E24B2F !important;
+}
+
+/* Gradientes verdes */
+*[style*="linear-gradient"][style*="#0D9B4D"],
+*[style*="linear-gradient"][style*="#0d9b4d"] {
+    background-image: linear-gradient(to right, #E24B2F 0%, #E24B2F 50%, #E24B2F 100%) !important;
+}
+
+/* SVG e ícones verdes - aplicar filtro ou cor */
+svg path[fill="#0D9B4D"],
+svg path[fill="#0d9b4d"],
+svg path[fill="0D9B4D"],
+svg path[fill="0d9b4d"] {
+    fill: #E24B2F !important;
+}
+
+/* Sobrescrever qualquer elemento que tenha a cor verde especificada */
+* {
+    /* Usar filter para mudar verde para laranja - não funciona bem, melhor usar regras específicas */
+}
+
+/* Elementos de formulário com verde */
+input[type="submit"][style*="#0D9B4D"],
+input[type="button"][style*="#0D9B4D"],
+button[style*="#0D9B4D"] {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    border-color: #E24B2F !important;
+}
+
+/* ============================================
+   SOBRESCRITA ESPECÍFICA DE ELEMENTOS VERDES
+   Substituir diretamente elementos do style.css
+   ============================================ */
+
+/* Header e navegação com verde */
+.header-action a:hover,
+.header-shop-cart a:hover {
+    color: #E24B2F !important;
+}
+
+/* Elementos de shop/carrinho */
+.home-shop-item:hover .home-shop-thumb::before,
+.related-product-item:hover .related-product-thumb::before {
+    background: rgba(226, 75, 47, 0.8) !important;
+}
+
+/* Botões e ações com verde */
+.add-to-cart,
+.woocommerce-mini-cart__buttons .button,
+.checkout-button {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    border-color: #E24B2F !important;
+}
+
+.add-to-cart:hover,
+.woocommerce-mini-cart__buttons .button:hover,
+.checkout-button:hover {
+    background: #B83A2A !important;
+    border-color: #B83A2A !important;
+}
+
+/* Links e textos com verde em hover */
+a:hover,
+.portfolio-cat a:hover,
+.product-title a:hover {
+    color: #E24B2F !important;
+}
+
+/* Badges e labels com verde */
+.badge,
+.label,
+.discount-badge {
+    background: #E24B2F !important;
+    color: #fff !important;
+}
+
+/* Progress bars e elementos de progresso */
+.progress-bar,
+.skill-bar {
+    background: #E24B2F !important;
+}
+
+/* Elementos de lista com verde */
+.list-wrap li a:hover,
+.footer-widget ul li a:hover {
+    color: #E24B2F !important;
+}
+
+/* Tabs e navegação com verde */
+.nav-tabs .nav-link.active,
+.tab-content .tab-pane.active {
+    border-color: #E24B2F !important;
+    color: #E24B2F !important;
+}
+
+/* Accordion com verde */
+.accordion-button:not(.collapsed) {
+    color: #E24B2F !important;
+    border-color: #E24B2F !important;
+}
+
+/* Formulários - focus com verde */
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+    border-color: #E24B2F !important;
+    box-shadow: 0 0 0 0.2rem rgba(226, 75, 47, 0.25) !important;
+}
+
+/* Checkbox e radio com verde */
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    accent-color: #E24B2F !important;
+    border-color: #E24B2F !important;
+}
+
+/* Paginação com verde */
+.pagination .page-item.active .page-link,
+.pagination .page-link:hover {
+    background: #E24B2F !important;
+    border-color: #E24B2F !important;
+    color: #fff !important;
+}
+
+/* Breadcrumb com verde */
+.breadcrumb-item.active,
+.breadcrumb-item a:hover {
+    color: #E24B2F !important;
+}
+
+/* Alerts e mensagens com verde */
+.alert-success {
+    background-color: rgba(226, 75, 47, 0.1) !important;
+    border-color: #E24B2F !important;
+    color: #E24B2F !important;
+}
+
+/* Tooltips com verde */
+.tooltip-inner {
+    background: #E24B2F !important;
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: #E24B2F !important;
+}
+
+/* Modais com verde */
+.modal-header .btn-close:hover,
+.modal-footer .btn-primary {
+    background: #E24B2F !important;
+    border-color: #E24B2F !important;
+}
+
+/* Dropdowns com verde */
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item.active {
+    background: #E24B2F !important;
+    color: #fff !important;
+}
+
+/* ============================================
+   SOBRESCRITA FORÇADA DE ELEMENTOS VERDES
+   Usar seletores específicos para elementos do style.css
+   ============================================ */
+
+/* Video button - já ajustado acima, mas garantir */
+.video-btn a {
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Testimonials arrow - garantir que não tenha verde */
+.testimonial-active .slick-arrow::before {
+    background: rgba(226, 75, 47, 0.2) !important;
+    border-color: rgba(226, 75, 47, 0.6) !important;
+}
+
+/* Qualquer elemento que tenha background verde específico */
+.elementor-widget,
+.widget,
+.sidebar-widget {
+    /* Sobrescrever apenas se tiver verde */
+}
+
+/* Sobrescrever cores verdes em animações keyframes */
+@keyframes pulse-green {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(226, 75, 47, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(226, 75, 47, 0);
+    }
+}
+
+/* Garantir que nenhum elemento tenha cor verde visível */
+*:not(svg):not(path):not(circle):not(rect):not(line):not(polygon):not(ellipse) {
+    /* Aplicar apenas se necessário - muito abrangente */
+}
+
+/* Elementos específicos que podem ter verde inline */
+[class*="icon"]:not([class*="flaticon"]):not([class*="fa-"]):not([class*="fab"]):not([class*="fas"]):not([class*="far"]):not([class*="fal"]) {
+    color: inherit;
+}
+
+/* Garantir que elementos do header não tenham verde */
+.header-action .header-shop-cart .cart-count,
+.header-action .header-search a,
+.header-shop-cart a,
+.header-search a {
+    color: #2F2F2F !important;
+}
+
+.header-action .header-shop-cart .cart-count:hover,
+.header-action .header-search a:hover,
+.header-shop-cart a:hover,
+.header-search a:hover {
+    color: #E24B2F !important;
+}
+
+/* Ícones do header - garantir que não fiquem verdes */
+.header-shop-cart i,
+.header-search i,
+.flaticon-shopping-cart,
+.flaticon-search,
+.flaticon-layout {
+    color: inherit !important;
+}
+
+/* ============================================
+   BOTÕES DE MENU - CORRIGIR VERDE
+   ============================================ */
+
+/* Botão mobile menu toggler - substituir verde por laranja */
+.mobile-nav-toggler,
+.menu-area .mobile-nav-toggler,
+div.mobile-nav-toggler,
+.menu-area div.mobile-nav-toggler {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 50% !important;
+}
+
+.mobile-nav-toggler:hover,
+.menu-area .mobile-nav-toggler:hover,
+div.mobile-nav-toggler:hover,
+.menu-area div.mobile-nav-toggler:hover {
+    background: #B83A2A !important;
+    background-color: #B83A2A !important;
+    color: #FFFFFF !important;
+}
+
+.mobile-nav-toggler i,
+.menu-area .mobile-nav-toggler i,
+.mobile-nav-toggler .flaticon-layout,
+div.mobile-nav-toggler i,
+.menu-area div.mobile-nav-toggler i {
+    color: #FFFFFF !important;
+}
+
+/* Garantir formato e tamanho do botão mobile */
+.mobile-nav-toggler,
+.menu-area .mobile-nav-toggler,
+div.mobile-nav-toggler,
+.menu-area div.mobile-nav-toggler {
+    width: 60px !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    position: relative !important;
+    float: right !important;
+    text-align: center !important;
+    font-size: 25px !important;
+    margin-top: -2px !important;
+}
+
+/* FORÇAR substituição do verde - alta especificidade */
+body .menu-area .mobile-nav-toggler,
+body div.mobile-nav-toggler,
+html body .menu-area .mobile-nav-toggler {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    color: #FFFFFF !important;
+}
+
+body .menu-area .mobile-nav-toggler:hover,
+body div.mobile-nav-toggler:hover {
+    background: #B83A2A !important;
+    background-color: #B83A2A !important;
+}
+
+/* ============================================
+   CORRIGIR VISIBILIDADE DOS BOTÕES DE MENU
+   Mobile menu toggler APENAS no mobile/tablet
+   OffCanvas button APENAS no desktop (xl)
+   ============================================ */
+
+/* DESKTOP (1200px e acima) - OCULTAR mobile-nav-toggler, MOSTRAR offCanvas */
+/* CRÍTICO: Sobrescrever TODOS os estilos que possam mostrar mobile-nav-toggler no desktop */
+@media screen and (min-width: 1200px) {
+    /* Ocultar COMPLETAMENTE o botão mobile no desktop - SOBRESCREVER TUDO */
+    /* Incluir TODOS os seletores possíveis para garantir ocultação */
+    .mobile-nav-toggler,
+    div.mobile-nav-toggler,
+    .menu-area .mobile-nav-toggler,
+    .menu-area div.mobile-nav-toggler,
+    .nav-outer .mobile-nav-toggler,
+    header .mobile-nav-toggler,
+    header #sticky-header .mobile-nav-toggler,
+    .menu-area .mobile-nav-toggler[style*="display"],
+    .sticky-header .mobile-nav-toggler,
+    #sticky-header .mobile-nav-toggler {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        max-width: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+        top: -9999px !important;
+        z-index: -9999 !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+    }
+    
+    /* Ocultar também o ícone dentro do botão mobile */
+    .mobile-nav-toggler i,
+    .mobile-nav-toggler .flaticon-layout,
+    .menu-area .mobile-nav-toggler i,
+    div.mobile-nav-toggler i,
+    header .mobile-nav-toggler i {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        font-size: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+    
+    /* Garantir que o container do mobile-nav-toggler também não ocupe espaço */
+    .menu-area > .mobile-nav-toggler,
+    .row > .mobile-nav-toggler,
+    .col-12 > .mobile-nav-toggler {
+        display: none !important;
+    }
+    
+    /* A classe Bootstrap d-xl-none já oculta no desktop, mas garantir */
+    /* Não forçar display: none aqui, deixar o Bootstrap fazer o trabalho */
+    
+    /* Mostrar APENAS o botão offCanvas no desktop - SOBRESCREVER Bootstrap d-none */
+    .header-action ul li.offCanvas-btn.d-none.d-xl-block,
+    .header-action > ul > li.offCanvas-btn.d-none.d-xl-block,
+    li.offCanvas-btn.d-none.d-xl-block,
+    .offCanvas-btn.d-none.d-xl-block {
+        display: list-item !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: auto !important;
+        height: auto !important;
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        z-index: auto !important;
+        margin-left: 30px !important;
+    }
+    
+    .header-action > ul li.offCanvas-btn.d-none.d-xl-block a,
+    .header-action ul li.offCanvas-btn.d-none.d-xl-block a,
+    .navSidebar-button,
+    .offCanvas-btn.d-none.d-xl-block a,
+    li.offCanvas-btn.d-none.d-xl-block a {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 60px !important;
+        height: 60px !important;
+        position: relative !important;
+    }
+}
+
+/* Garantir que no desktop NUNCA apareça mais de um botão */
+@media screen and (min-width: 1200px) {
+    /* Se por algum motivo ambos aparecerem, esconder o mobile-nav-toggler */
+    .header-action ul li.offCanvas-btn ~ .mobile-nav-toggler,
+    .mobile-nav-toggler:has(~ .header-action ul li.offCanvas-btn) {
+        display: none !important;
+    }
+}
+
+/* MOBILE/TABLET (abaixo de 1200px) - MOSTRAR mobile-nav-toggler, OCULTAR offCanvas */
+@media (max-width: 1199.98px) {
+    /* Mostrar o botão mobile no mobile/tablet */
+    .mobile-nav-toggler,
+    div.mobile-nav-toggler,
+    .menu-area .mobile-nav-toggler,
+    .nav-outer .mobile-nav-toggler {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 60px !important;
+        height: 60px !important;
+        position: relative !important;
+        float: right !important;
+    }
+    
+    /* Ocultar completamente o botão offCanvas no mobile/tablet - FORÇAR */
+    .offCanvas-btn,
+    .header-action > ul li.offCanvas-btn,
+    .header-action ul li.offCanvas-btn,
+    li.offCanvas-btn,
+    li.offCanvas-btn.d-none.d-xl-block,
+    .offCanvas-btn.d-none.d-xl-block,
+    .navSidebar-button {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: absolute !important;
+        left: -9999px !important;
+    }
+    
+    .header-action > ul li.offCanvas-btn a,
+    .header-action ul li.offCanvas-btn a,
+    .navSidebar-button {
+        display: none !important;
+        visibility: hidden !important;
+    }
+}
+
+/* Botão offCanvas/Sidebar - substituir verde por laranja */
+.offCanvas-btn,
+.offCanvas-btn a,
+.header-action > ul li.offCanvas-btn,
+.header-action > ul li.offCanvas-btn a,
+.navSidebar-button,
+.header-action ul li.offCanvas-btn a {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 50% !important;
+}
+
+.offCanvas-btn:hover,
+.offCanvas-btn a:hover,
+.header-action > ul li.offCanvas-btn:hover,
+.header-action > ul li.offCanvas-btn a:hover,
+.navSidebar-button:hover,
+.header-action ul li.offCanvas-btn a:hover {
+    background: #B83A2A !important;
+    background-color: #B83A2A !important;
+}
+
+.offCanvas-btn a i,
+.header-action > ul li.offCanvas-btn a i,
+.navSidebar-button i,
+.offCanvas-btn .flaticon-layout,
+.navSidebar-button .flaticon-layout,
+.header-action ul li.offCanvas-btn a i {
+    color: #FFFFFF !important;
+}
+
+/* Garantir que o botão tenha formato circular */
+.offCanvas-btn a,
+.header-action > ul li.offCanvas-btn a,
+.navSidebar-button {
+    width: 60px !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    text-align: center !important;
+    font-size: 25px !important;
+}
+
+/* FORÇAR substituição do verde no botão offCanvas - alta especificidade */
+body .header-action > ul li.offCanvas-btn a,
+body .offCanvas-btn a,
+body .navSidebar-button,
+html body .header-action > ul li.offCanvas-btn a,
+html body .offCanvas-btn a {
+    background: #E24B2F !important;
+    background-color: #E24B2F !important;
+    color: #FFFFFF !important;
+    border: none !important;
+}
+
+body .header-action > ul li.offCanvas-btn a:hover,
+body .offCanvas-btn a:hover,
+body .navSidebar-button:hover {
+    background: #B83A2A !important;
+    background-color: #B83A2A !important;
+    color: #FFFFFF !important;
+}
+
+/* Mini cart - garantir cores corretas */
+.header-mini-cart .woocommerce-mini-cart__buttons .button,
+.header-mini-cart .checkout-button {
+    background: #E24B2F !important;
+    border-color: #E24B2F !important;
+}
+
+.header-mini-cart .woocommerce-mini-cart__buttons .button:hover,
+.header-mini-cart .checkout-button:hover {
+    background: #B83A2A !important;
+    border-color: #B83A2A !important;
+}
+
+/* Contador do carrinho */
+.mini-cart-count {
+    background: #E24B2F !important;
+    color: #fff !important;
+}
+
+/* Garantir que todos os elementos com cor verde sejam substituídos */
+* {
+    /* Usar CSS custom properties para substituição global */
+}
+
+/* Sobrescrever qualquer background verde remanescente */
+[style*="background"] {
+    /* Não fazer nada - muito abrangente */
+}
+
+/* Focar em elementos específicos que podem ter verde */
+.related-product-active .slick-arrow::before,
+.home-shop-active .slick-arrow::before {
+    background: rgba(226, 75, 47, 0.2) !important;
+    border-color: rgba(226, 75, 47, 0.6) !important;
+}
+
+/* ============================================
+   SUBSTITUIÇÃO FINAL - ELEMENTOS VERDES RESTANTES
+   ============================================ */
+
+/* Sobrescrever elementos que ainda possam ter verde do style.css */
+/* Usar alta especificidade para garantir precedência */
+
+body .video-btn a,
+body .testimonial-active .slick-arrow::before,
+body .testimonial-active .slick-dots li.slick-active button,
+body .header-action a,
+body .header-shop-cart a,
+body .header-search a {
+    /* Cores já definidas acima */
+}
+
+/* Garantir que elementos inline com style verde sejam sobrescritos */
+[style*="#0D9B4D"]:not(svg):not(path):not(circle),
+[style*="#0d9b4d"]:not(svg):not(path):not(circle) {
+    background-color: #E24B2F !important;
+    background: #E24B2F !important;
+    border-color: #E24B2F !important;
+    color: #E24B2F !important;
+}
+
+/* SVG - usar filtro CSS para converter verde em laranja */
+/* Nota: Isso pode afetar outros elementos, usar com cuidado */
+svg[style*="#0D9B4D"],
+svg[style*="#0d9b4d"] {
+    filter: hue-rotate(280deg) saturate(1.5) brightness(0.9) !important;
+}
+
+/* Alternativa: usar CSS para mudar fill de SVGs */
+svg path[fill="#0D9B4D"],
+svg path[fill="#0d9b4d"],
+svg circle[fill="#0D9B4D"],
+svg circle[fill="#0d9b4d"],
+svg rect[fill="#0D9B4D"],
+svg rect[fill="#0d9b4d"] {
+    fill: #E24B2F !important;
+}
+
+/* Cores de texto */
+body {
+    color: #7A7A7A;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2F2F2F !important;
+}
+
+/* Links e hover */
+a:focus,
+a:hover {
+    color: #E24B2F !important;
+}
+
+/* Header e navegação */
+#sticky-header.sticky-header {
+    background-color: #fff;
+}
+
+.main-menu ul li a:hover,
+.main-menu ul li.active a {
+    color: #E24B2F !important;
+}
+
+/* Logo */
+.logo img {
+    max-height: 60px;
+    width: auto;
+    height: auto;
+}
+
+.footer-logo img {
+    max-height: 50px;
+    width: auto;
+    height: auto;
+}
+
+/* ============================================
+   BANNER AREA - ESTILOS GERAIS
+   ============================================ */
+
+.banner-area {
+    background-color: #f8f8f8;
+}
+
+.banner-content .title {
+    color: #2F2F2F;
+}
+
+.banner-caption {
+    color: #E24B2F;
+}
+
+/* ============================================
+   BANNER AREA - AJUSTES TABLET E MOBILE
+   IMPORTANTE: Estilos com alta especificidade para sobrescrever outros CSS
+   ============================================ */
+
+/* Tablets - ajustes intermediários */
+@media screen and (max-width: 991.98px) and (min-width: 768px) {
+    .banner-area .banner-content .title {
+        font-size: 42px !important;
+        line-height: 1.25 !important;
+        margin: 0 0 35px !important;
+    }
+    
+    .banner-area .banner-content .banner-caption {
+        font-size: 13px !important;
+        margin: 0 0 20px !important;
+    }
+    
+    .banner-area .banner-content .banner-description {
+        font-size: 15px !important;
+        margin: 0 0 30px !important;
+    }
+    
+    .banner-area .banner-images .main-img {
+        max-width: 85% !important;
+    }
+    
+    .banner-area .banner-shape {
+        opacity: 0.1 !important;
+    }
+}
+
+/* Mobile - ajustes principais - SOBRESCREVE responsive.css */
+@media screen and (max-width: 767.98px) {
+    /* Ajustar padding do banner no mobile */
+    section.banner-area,
+    .banner-area {
+        padding: 30px 0 20px !important;
+        min-height: auto !important;
+        background-color: #1a1a1a !important;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2F2F2F 100%) !important;
+    }
+    
+    /* Título principal - FORÇAR redução de tamanho */
+    .banner-area .banner-content .title,
+    .banner-area .banner-content h2.title,
+    section.banner-area .banner-content .title {
+        font-size: 28px !important;
+        line-height: 1.2 !important;
+        margin: 0 0 20px !important;
+        padding: 0 10px !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Caption - ajustar tamanho */
+    .banner-area .banner-content .banner-caption,
+    section.banner-area .banner-content .banner-caption {
+        font-size: 11px !important;
+        margin: 0 0 12px !important;
+        padding: 0 15px !important;
+        letter-spacing: 0.05em !important;
+        color: #E24B2F !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Descrição - ajustar tamanho e espaçamento */
+    .banner-area .banner-content .banner-description,
+    .banner-area .banner-content p.banner-description,
+    section.banner-area .banner-content .banner-description {
+        font-size: 13px !important;
+        line-height: 1.6 !important;
+        margin: 0 0 20px !important;
+        padding: 0 15px !important;
+        color: #BFBFBF !important;
+    }
+    
+    /* Botão - ajustar tamanho e padding */
+    .banner-area .banner-content .btn,
+    .banner-area .banner-content .btn-two,
+    section.banner-area .banner-content .btn,
+    section.banner-area .banner-content .btn-two {
+        padding: 12px 28px !important;
+        font-size: 15px !important;
+        width: auto !important;
+        display: inline-block !important;
+        margin: 0 auto !important;
+        min-width: 200px !important;
+    }
+    
+    /* Container do conteúdo */
+    .banner-area .banner-content,
+    section.banner-area .banner-content {
+        margin: 0 0 25px !important;
+        padding: 0 10px !important;
+        text-align: center !important;
+    }
+    
+    /* Imagens do banner - otimizar para mobile */
+    .banner-area .banner-images,
+    section.banner-area .banner-images {
+        margin-top: 15px !important;
+        padding: 0 15px !important;
+        position: relative !important;
+    }
+    
+    .banner-area .banner-images .main-img,
+    section.banner-area .banner-images .main-img {
+        max-width: 100% !important;
+        width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+    
+    .banner-area .banner-images .bg-shape,
+    section.banner-area .banner-images .bg-shape {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    
+    /* Remover efeito de sombra no mobile */
+    .banner-area .banner-images::after,
+    section.banner-area .banner-images::after {
+        display: none !important;
+        content: none !important;
+    }
+    
+    /* Formas decorativas - FORÇAR ocultação */
+    .banner-area .banner-shape,
+    .banner-area .banner-shape.one,
+    .banner-area .banner-shape.two,
+    .banner-area .banner-shape.three,
+    section.banner-area .banner-shape,
+    section.banner-area .banner-shape.one,
+    section.banner-area .banner-shape.two,
+    section.banner-area .banner-shape.three {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+    
+    /* Ajustar container */
+    .banner-area .container,
+    section.banner-area .container {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        max-width: 100% !important;
+    }
+    
+    /* Melhorar espaçamento vertical geral */
+    .banner-area .row,
+    section.banner-area .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    /* Garantir que o texto não fique muito apertado */
+    .banner-area .banner-content p,
+    .banner-area .banner-content h2,
+    section.banner-area .banner-content p,
+    section.banner-area .banner-content h2 {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+    }
+}
+
+/* Mobile pequeno - telas muito pequenas */
+@media screen and (max-width: 575.98px) {
+    section.banner-area,
+    .banner-area {
+        padding: 20px 0 15px !important;
+    }
+    
+    .banner-area .banner-content .title,
+    section.banner-area .banner-content .title {
+        font-size: 24px !important;
+        line-height: 1.15 !important;
+        margin: 0 0 15px !important;
+        padding: 0 5px !important;
+    }
+    
+    .banner-area .banner-content .banner-caption,
+    section.banner-area .banner-content .banner-caption {
+        font-size: 10px !important;
+        margin: 0 0 10px !important;
+        padding: 0 10px !important;
+    }
+    
+    .banner-area .banner-content .banner-description,
+    section.banner-area .banner-content .banner-description {
+        font-size: 12px !important;
+        margin: 0 0 18px !important;
+        padding: 0 10px !important;
+    }
+    
+    .banner-area .banner-content .btn,
+    .banner-area .banner-content .btn-two,
+    section.banner-area .banner-content .btn,
+    section.banner-area .banner-content .btn-two {
+        padding: 10px 22px !important;
+        font-size: 14px !important;
+        width: 100% !important;
+        max-width: 260px !important;
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    
+    .banner-area .banner-images,
+    section.banner-area .banner-images {
+        margin-top: 10px !important;
+        padding: 0 10px !important;
+    }
+    
+    .banner-area .banner-images .main-img,
+    section.banner-area .banner-images .main-img {
+        max-width: 95% !important;
+    }
+    
+    .banner-area .container,
+    section.banner-area .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+}
+
+/* ============================================
+   BANNER MOBILE - SOBRESCREVER natucart-image-fixes.css
+   Estilos no final do arquivo para máxima precedência
+   ============================================ */
+
+@media screen and (max-width: 767.98px) {
+    /* SOBRESCREVER padding do natucart-image-fixes.css */
+    .banner-area {
+        padding: 30px 0 20px !important;
+        overflow: visible !important;
+    }
+    
+    /* SOBRESCREVER min-height do banner-images */
+    .banner-area .banner-images {
+        min-height: auto !important;
+        height: auto !important;
+        margin-top: 15px !important;
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+    }
+    
+    /* SOBRESCREVER tamanhos mínimos da imagem principal */
+    .banner-area .banner-images .main-img {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 auto !important;
+        position: relative !important;
+    }
+    
+    /* FORÇAR ocultação do bg-shape no mobile */
+    .banner-area .banner-images .bg-shape {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+    }
+    
+    /* SOBRESCREVER margin do banner-content */
+    .banner-area .banner-content {
+        margin-bottom: 25px !important;
+        margin-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+}
+
+@media screen and (max-width: 575.98px) {
+    .banner-area {
+        padding: 20px 0 15px !important;
+    }
+    
+    .banner-area .banner-images {
+        min-height: auto !important;
+        margin-top: 10px !important;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+    
+    .banner-area .banner-images .main-img {
+        max-width: 95% !important;
+        margin: 0 auto !important;
+    }
+    
+    .banner-area .banner-content {
+        margin-bottom: 20px !important;
+    }
+}
+
+/* Features */
+.features-item .features-content .title {
+    color: #2F2F2F;
+}
+
+/* Products */
+.home-shop-item .home-shop-content .title a {
+    color: #2F2F2F;
+}
+
+.home-shop-item .home-shop-content .title a:hover {
+    color: #E24B2F;
+}
+
+.home-shop-price {
+    color: #E24B2F;
+}
+
+/* ============================================
+   PRICING AREA - ESTILIZAÇÃO MODERNA
+   ============================================ */
+
+/* Fundo da seção de pricing */
+.pricing-area.gray-bg {
+    background-color: #1a1a1a !important;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2F2F2F 100%) !important;
+}
+
+/* Cards de pricing - base branca */
+.pricing-item .pricing__box {
+    background: #FFFFFF !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+    border-width: 2px !important;
+}
+
+/* Card regular (1 frasco) - borda preta */
+.pricing-item.regular .pricing__box {
+    border: 2px solid #000000 !important;
+}
+
+/* Card popular (3 frascos) - borda vermelha */
+.pricing-item.popular-plan .pricing__box {
+    border: 2px solid #E24B2F !important;
+    border-top: none !important;
+    box-shadow: 0 8px 30px rgba(226, 75, 47, 0.2) !important;
+    border-radius: 0 0 12px 12px !important;
+}
+
+/* Card melhor valor (6 frascos) - borda laranja */
+.pricing-item.best-value-plan .pricing__box {
+    border: 2px solid #E24B2F !important;
+    border-top: none !important;
+    box-shadow: 0 8px 30px rgba(226, 75, 47, 0.2) !important;
+    border-radius: 0 0 12px 12px !important;
+}
+
+/* Container do pricing item para conectar header e box */
+.pricing-item.popular-plan,
+.pricing-item.best-value-plan {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+}
+
+/* Garantir que o box e header tenham a mesma largura */
+.pricing-item.popular-plan .pricing-title,
+.pricing-item.best-value-plan .pricing-title {
+    width: 100% !important;
+}
+
+.pricing-item.popular-plan .pricing__box,
+.pricing-item.best-value-plan .pricing__box {
+    width: 100% !important;
+}
+
+/* Header "MAIS POPULAR" - fundo cinza integrado ao card */
+.pricing-item.popular-plan .pricing-title {
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+}
+
+.pricing-item.popular-plan .pricing-title .title {
+    background: #7A7A7A !important;
+    color: #FFFFFF !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    padding: 12px 20px !important;
+    border-radius: 12px 12px 0 0 !important;
+    margin-bottom: 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    border: 2px solid #7A7A7A !important;
+    border-bottom: none !important;
+    display: block !important;
+}
+
+/* Header "MELHOR VALOR" - fundo laranja integrado ao card */
+.pricing-item.best-value-plan .pricing-title {
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+}
+
+.pricing-item.best-value-plan .pricing-title .title {
+    background: #E24B2F !important;
+    color: #FFFFFF !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    padding: 12px 20px !important;
+    border-radius: 12px 12px 0 0 !important;
+    margin-bottom: 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    border: 2px solid #E24B2F !important;
+    border-bottom: none !important;
+    display: block !important;
+}
+
+/* Texto do título do produto */
+.pricing-item .pricing-hade > span {
+    color: #2F2F2F !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    margin-bottom: 5px !important;
+}
+
+.pricing-item .pricing-hade .title {
+    color: #2F2F2F !important;
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    margin-bottom: 5px !important;
+}
+
+.pricing-item .pricing-hade > p {
+    color: #7A7A7A !important;
+    font-size: 16px !important;
+    margin-bottom: 20px !important;
+}
+
+/* Preço - grande e em laranja */
+.pricing-item .pricing-price .price {
+    color: #E24B2F !important;
+    font-size: 48px !important;
+    font-weight: 700 !important;
+    letter-spacing: -2px !important;
+}
+
+.pricing-item .pricing-price span {
+    color: #7A7A7A !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+/* Total */
+.pricing-item .total {
+    color: #7A7A7A !important;
+    font-size: 16px !important;
+    margin-bottom: 10px !important;
+}
+
+/* Economia */
+.pricing-item .price-savings .save {
+    color: #E24B2F !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    margin-bottom: 5px !important;
+}
+
+/* "+ Frete Grátis" - em laranja */
+.pricing-item .price-savings > span {
+    color: #E24B2F !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    margin-bottom: 20px !important;
+}
+
+/* Se o span tiver apenas espaço (&nbsp;), esconder visualmente */
+.pricing-item .price-savings > span:only-child:empty {
+    display: none !important;
+}
+
+/* Botão Comprar Agora - laranja */
+.pricing-item .pricing-btn a {
+    background: #E24B2F !important;
+    color: #FFFFFF !important;
+    border: 2px solid #E24B2F !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    padding: 15px 25px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    display: block !important;
+    text-align: center !important;
+    margin-top: 25px !important;
+}
+
+/* ============================================
+   CORRIGIR VISIBILIDADE DO TEXTO EM BOTÕES COM HOVER
+   Garantir que o texto sempre seja visível durante animações
+   ============================================ */
+
+/* Botões de pricing - garantir visibilidade do texto */
+.pricing-item .pricing-btn a {
+    position: relative !important;
+    z-index: 1 !important;
+    overflow: visible !important;
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.pricing-item .pricing-btn a:hover {
+    background: #B83A2A !important;
+    border-color: #B83A2A !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(226, 75, 47, 0.4) !important;
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Corrigir elemento ::before para não sobrepor o texto - manter atrás */
+.pricing-item .pricing-btn a::before,
+.pricing__box .pricing-btn a::before {
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+.pricing-item .pricing-btn a:hover::before,
+.pricing__box .pricing-btn a:hover::before {
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Texto do botão - garantir que fique sempre acima */
+.pricing-item .pricing-btn a,
+.pricing__box .pricing-btn a {
+    color: #FFFFFF !important;
+}
+
+.pricing-item .pricing-btn a:hover,
+.pricing__box .pricing-btn a:hover {
+    color: #FFFFFF !important;
+    background: #B83A2A !important;
+    background-color: #B83A2A !important;
+}
+
+/* Sobrescrever regra do style.css que deixa transparente - FORÇAR */
+.pricing__box .pricing-btn a:hover,
+body .pricing__box .pricing-btn a:hover,
+html body .pricing__box .pricing-btn a:hover {
+    background: #B83A2A !important;
+    background-color: #B83A2A !important;
+    background-image: none !important;
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+}
+
+/* Garantir que texto dentro do botão de pricing seja sempre visível */
+.pricing__box .pricing-btn a,
+.pricing-item .pricing-btn a {
+    color: #FFFFFF !important;
+}
+
+.pricing__box .pricing-btn a:hover,
+.pricing-item .pricing-btn a:hover {
+    color: #FFFFFF !important;
+}
+
+/* Garantir que o texto do botão (não o span de garantia) seja sempre branco */
+.pricing__box .pricing-btn a:not(span),
+.pricing-item .pricing-btn a:not(span) {
+    color: #FFFFFF !important;
+}
+
+/* Texto de garantia abaixo do botão */
+.pricing-item .pricing-btn a > span {
+    display: block !important;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+    color: #7A7A7A !important;
+    margin-top: 8px !important;
+    text-transform: none !important;
+    line-height: 1.4 !important;
+    position: relative !important;
+    z-index: 3 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Garantir que o texto de garantia seja visível no hover */
+.pricing-item .pricing-btn a:hover > span {
+    color: #7A7A7A !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Imagens dos produtos */
+.pricing-item .pricing-img {
+    padding: 25px 0 20px !important;
+    margin: 15px 0 !important;
+}
+
+.pricing-item .pricing-img img {
+    max-height: 180px !important;
+    width: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+/* Hover effects */
+.pricing-item:hover .pricing__box {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+.pricing-item.popular-plan:hover .pricing__box {
+    box-shadow: 0 12px 40px rgba(226, 75, 47, 0.3) !important;
+}
+
+.pricing-item.best-value-plan:hover .pricing__box {
+    box-shadow: 0 12px 40px rgba(226, 75, 47, 0.3) !important;
+}
+
+/* Título da seção */
+.pricing-area .section-title .title {
+    color: #FFFFFF !important;
+}
+
+.pricing-area .section-title .sub-title {
+    color: #E24B2F !important;
+}
+
+/* Footer */
+.footer-area {
+    background-color: #2F2F2F;
+}
+
+.footer-widget .fw-title {
+    color: #fff;
+}
+
+.footer-text {
+    color: #BFBFBF;
+}
+
+.footer-widget ul li a {
+    color: #BFBFBF;
+}
+
+.footer-widget ul li a:hover {
+    color: #E24B2F;
+}
+
+.footer-contact-wrap {
+    color: #BFBFBF;
+}
+
+.copyright-text {
+    color: #BFBFBF;
+}
+
+/* Section titles */
+.section-title .title {
+    color: #2F2F2F;
+}
+
+.section-title .sub-title {
+    color: #E24B2F;
+}
+
+/* ============================================
+   TESTIMONIALS - SETAS DE NAVEGAÇÃO
+   ============================================ */
+
+.testimonial-item p {
+    color: #fff;
+}
+
+.testimonial-rating i {
+    color: #E24B2F;
+}
+
+/* Setas de navegação do carrossel de testimonials */
+.testimonial-active .slick-arrow {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 0 !important;
+    color: #FFFFFF !important;
+    z-index: 10 !important;
+    width: 60px !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    opacity: 0.9 !important;
+    line-height: 1 !important;
+}
+
+.testimonial-active .slick-arrow:hover {
+    opacity: 1 !important;
+}
+
+.testimonial-active .slick-arrow:focus {
+    outline: none !important;
+}
+
+/* Seta anterior (esquerda) */
+.testimonial-active .slick-arrow.slick-prev {
+    left: -80px !important;
+    right: auto !important;
+}
+
+/* Seta próxima (direita) */
+.testimonial-active .slick-arrow.slick-next {
+    left: auto !important;
+    right: -80px !important;
+}
+
+/* Círculo de fundo das setas */
+.testimonial-active .slick-arrow::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 60px !important;
+    height: 60px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 2px solid rgba(226, 75, 47, 0.6) !important;
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+    z-index: 1 !important;
+    opacity: 1 !important;
+    backdrop-filter: blur(5px) !important;
+}
+
+.testimonial-active .slick-arrow:hover::before {
+    background: rgba(226, 75, 47, 0.25) !important;
+    border-color: #E24B2F !important;
+    transform: translate(-50%, -50%) scale(1.15) !important;
+    box-shadow: 0 6px 20px rgba(226, 75, 47, 0.5) !important;
+}
+
+/* Ajustar posicionamento do círculo para seta próxima */
+.testimonial-active .slick-arrow.slick-next::before {
+    left: 50% !important;
+    right: auto !important;
+}
+
+/* Ícones das setas (flaticon) */
+.testimonial-active .slick-arrow i,
+.testimonial-active .slick-arrow .flaticon-left-arrow,
+.testimonial-active .slick-arrow .flaticon-right-arrow {
+    position: relative !important;
+    z-index: 3 !important;
+    font-size: 22px !important;
+    color: #FFFFFF !important;
+    display: inline-block !important;
+    line-height: 1 !important;
+    transition: all 0.3s ease !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.testimonial-active .slick-arrow:hover i {
+    color: #E24B2F !important;
+    transform: scale(1.15) !important;
+    text-shadow: 0 2px 8px rgba(226, 75, 47, 0.5) !important;
+}
+
+.testimonial-active .slick-arrow.slick-prev i::before,
+.testimonial-active .slick-arrow.slick-next i::before {
+    font-weight: 900 !important;
+}
+
+/* Responsividade - ajustar posição em telas menores */
+@media (max-width: 1400px) {
+    .testimonial-active .slick-arrow.slick-prev {
+        left: -60px !important;
+    }
+    
+    .testimonial-active .slick-arrow.slick-next {
+        right: -60px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .testimonial-active .slick-arrow.slick-prev {
+        left: -40px !important;
+    }
+    
+    .testimonial-active .slick-arrow.slick-next {
+        right: -40px !important;
+    }
+    
+    .testimonial-active .slick-arrow::before {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .testimonial-active .slick-arrow {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 32px !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .testimonial-active .slick-arrow.slick-prev {
+        left: 10px !important;
+    }
+    
+    .testimonial-active .slick-arrow.slick-next {
+        right: 10px !important;
+    }
+    
+    .testimonial-active .slick-arrow::before {
+        background: rgba(226, 75, 47, 0.4) !important;
+        border-color: rgba(226, 75, 47, 0.8) !important;
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .testimonial-active .slick-arrow {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .testimonial-active .slick-arrow i {
+        font-size: 18px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .testimonial-active .slick-arrow.slick-prev {
+        left: 5px !important;
+    }
+    
+    .testimonial-active .slick-arrow.slick-next {
+        right: 5px !important;
+    }
+    
+    .testimonial-active .slick-arrow::before {
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    .testimonial-active .slick-arrow {
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    .testimonial-active .slick-arrow i {
+        font-size: 16px !important;
+    }
+}
+
+/* FAQ */
+.accordion-button {
+    color: #2F2F2F;
+}
+
+.accordion-button:not(.collapsed) {
+    color: #E24B2F;
+    background-color: #f8f8f8;
+}
+
+/* Forms */
+input[type="text"],
+input[type="email"],
+textarea {
+    border-color: #7A7A7A;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    border-color: #E24B2F;
+    outline-color: #E24B2F;
+}
+
+/* Shopping cart */
+.header-shop-cart .cart-count {
+    color: #2F2F2F;
+}
+
+.header-mini-cart .woocommerce-Price-amount {
+    color: #E24B2F;
+}
+
+/* Discount badges */
+.discount {
+    background: #E24B2F;
+    color: #fff;
+}
+
+/* ============================================
+   ELEMENTO DE PREÇO "A PARTIR DE R$ 99"
+   Estilo: FUNDO PRETO com TEXTO VERMELHO
+   Remover qualquer verde ou laranja
+   ============================================ */
+
+/* Preço na seção features - estilo vermelho e preto - ALTA ESPECIFICIDADE */
+.features-product-bottom .price,
+body .features-product-bottom .price,
+html body .features-product-bottom .price,
+.features-product-bottom span.price {
+    color: #E24B2F !important;
+    background: #000000 !important;
+    background-color: #000000 !important;
+    background-image: none !important;
+    -webkit-background-image: none !important;
+    -moz-background-image: none !important;
+    -o-background-image: none !important;
+    position: relative !important;
+    padding: 12px 20px !important;
+    margin-left: 30px !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    font-family: 'Oswald', sans-serif !important;
+    border-radius: 8px !important;
+    display: inline-block !important;
+    border: 2px solid #E24B2F !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+    /* Remover qualquer gradiente ou cor verde/laranja */
+    background-clip: padding-box !important;
+    -webkit-background-clip: padding-box !important;
+    background-origin: padding-box !important;
+    background-size: auto !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll !important;
+}
+
+/* Remover QUALQUER background verde ou gradiente */
+.features-product-bottom .price::before,
+.features-product-bottom .price::after {
+    display: none !important;
+    content: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* Garantir que não haja gradiente ou cores múltiplas - FORÇAR */
+.features-product-bottom .price,
+body .features-product-bottom .price,
+html body .features-product-bottom .price {
+    background: #000000 !important;
+    background-color: #000000 !important;
+    background-image: none !important;
+    -webkit-background-image: none !important;
+    -moz-background-image: none !important;
+    -o-background-image: none !important;
+    background-clip: padding-box !important;
+    -webkit-background-clip: padding-box !important;
+    /* Remover qualquer divisão de cores */
+    border-top-color: #E24B2F !important;
+    border-bottom-color: #E24B2F !important;
+    border-left-color: #E24B2F !important;
+    border-right-color: #E24B2F !important;
+}
+
+/* Remover qualquer verde do elemento pai ou wrapper */
+.features-product-bottom {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+.features-product-bottom > *:not(.price) {
+    background: transparent !important;
+}
+
+/* Garantir que o texto seja sempre vermelho */
+.features-product-bottom .price,
+.features-product-bottom .price * {
+    color: #E24B2F !important;
+}
+
+/* Hover - manter preto e vermelho */
+.features-product-bottom .price:hover {
+    background: #1a1a1a !important;
+    color: #E24B2F !important;
+    border-color: #E24B2F !important;
+}
+
+/* Remover qualquer elemento com verde que possa estar próximo */
+.features-product-bottom .price[style*="green"],
+.features-product-bottom .price[style*="#0D9B4D"],
+.features-product-bottom .price[style*="#0d9b4d"] {
+    background: #000000 !important;
+    color: #E24B2F !important;
+}
+
+/* Sobrescrever QUALQUER gradiente que possa estar sendo aplicado */
+.features-product-bottom .price[style*="gradient"],
+.features-product-bottom .price[style*="linear-gradient"] {
+    background: #000000 !important;
+    background-image: none !important;
+    background-color: #000000 !important;
+    color: #E24B2F !important;
+}
+
+/* Se houver um wrapper ou container com duas cores, corrigir */
+.features-product-bottom .price-wrapper,
+.features-product-bottom .price-container,
+.features-product-bottom .price-badge {
+    background: #000000 !important;
+    background-image: none !important;
+    background-color: #000000 !important;
+}
+
+/* Garantir que não haja nenhum elemento filho com cores diferentes */
+.features-product-bottom .price * {
+    color: #E24B2F !important;
+    background: transparent !important;
+}
+
+/* Remover qualquer border ou outline verde */
+.features-product-bottom .price,
+body .features-product-bottom .price {
+    border-color: #E24B2F !important;
+    outline-color: #E24B2F !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ============================================
+   REGRA GLOBAL - REMOVER VERDE DE ELEMENTOS DE PREÇO
+   Garantir que TODOS os elementos relacionados a preço
+   tenham apenas VERMELHO (#E24B2F) e PRETO (#000000)
+   ============================================ */
+
+/* Remover verde de qualquer elemento que contenha "price" ou "preço" */
+[class*="price"]:not([class*="price-savings"]):not([class*="pricing"]) {
+    /* Não aplicar aqui para evitar conflitos */
+}
+
+/* Especificamente para o elemento de preço na seção features */
+.features-product-bottom span.price,
+.features-product-bottom .price,
+.features-product-bottom a.price {
+    /* Já aplicado acima */
+}
+
+/* Se houver um elemento com duas cores (gradiente verde/laranja), forçar preto e vermelho */
+.features-product-bottom *[style*="green"],
+.features-product-bottom *[style*="#0D9B4D"],
+.features-product-bottom *[style*="linear-gradient"][style*="green"],
+.features-product-bottom *[style*="linear-gradient"][style*="#0D9B4D"] {
+    background: #000000 !important;
+    background-image: none !important;
+    background-color: #000000 !important;
+    color: #E24B2F !important;
+}
+
+/* Scroll to top */
+.scroll-top {
+    background: #E24B2F;
+    color: #fff;
+}
+
+.scroll-top:hover {
+    background: #B83A2A;
+}
+
+/* ============================================
+   VIDEO PLAY BUTTON - ESTILO MODERNO
+   ============================================ */
+
+/* Botão de vídeo - garantir visibilidade do texto/ícone */
+.video-btn a {
+    position: relative !important;
+    z-index: 1 !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #2F2F2F !important;
+    border: 3px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    overflow: visible !important;
+}
+
+/* Garantir que ::before não sobreponha o conteúdo */
+.video-btn a::before {
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+.video-btn a:hover {
+    background: rgba(255, 255, 255, 1) !important;
+    color: #E24B2F !important;
+    border-color: #E24B2F !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 12px 40px rgba(226, 75, 47, 0.4) !important;
+}
+
+.video-btn a:hover::before {
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+.video-btn a i {
+    position: relative !important;
+    z-index: 2 !important;
+    margin-left: 4px !important;
+    font-size: 28px !important;
+    transition: all 0.3s ease !important;
+    color: inherit !important;
+    display: inline-block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.video-btn a:hover i {
+    color: #E24B2F !important;
+    transform: scale(1.1) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Garantir que texto dentro do botão seja sempre visível */
+.video-btn a,
+.video-btn a * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* ============================================
+   REGRA GERAL - GARANTIR VISIBILIDADE DO TEXTO EM BOTÕES
+   Prevenir que animações ::before/:before ocultem o texto
+   ============================================ */
+
+/* Remover efeito de animação de todos os botões */
+.btn::before,
+.btn-two::before,
+button::before,
+a.btn::before,
+.pricing-btn a::before,
+.btn:hover::before,
+.btn-two:hover::before,
+button:hover::before,
+a.btn:hover::before {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+}
+
+/* Texto dentro de botões - sempre acima dos elementos ::before */
+.btn,
+.btn-two,
+button,
+a.btn,
+.pricing-btn a,
+.video-btn a {
+    position: relative !important;
+}
+
+.btn > *,
+.btn-two > *,
+button > *,
+a.btn > *,
+.pricing-btn a > *:not(span),
+.video-btn a > * {
+    position: relative !important;
+    z-index: 10 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Garantir contraste adequado - botões com fundo escuro têm texto branco */
+.btn:hover,
+.btn-two:hover,
+button:hover:not(.video-btn a),
+a.btn:hover:not(.video-btn a),
+.pricing-btn a:hover {
+    color: #FFFFFF !important;
+}
+
+/* Botão de vídeo tem fundo claro, então texto escuro/laranja */
+.video-btn a:hover {
+    color: #E24B2F !important;
+}
+
+/* Prevenir que transform/scale afetem visibilidade do texto */
+.btn:hover *,
+.btn-two:hover *,
+.pricing-btn a:hover *,
+.video-btn a:hover * {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Ajustar animação ripple para ser mais sutil */
+.ripple-white {
+    animation: ripple-white 2s ease-out infinite !important;
+    -webkit-animation: ripple-white 2s ease-out infinite !important;
+}
+
+@keyframes ripple-white {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4),
+                    0 0 0 0 rgba(255, 255, 255, 0.3),
+                    0 0 0 0 rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 0 20px rgba(255, 255, 255, 0),
+                    0 0 0 40px rgba(255, 255, 255, 0),
+                    0 0 0 60px rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 40px rgba(255, 255, 255, 0),
+                    0 0 0 80px rgba(255, 255, 255, 0),
+                    0 0 0 120px rgba(255, 255, 255, 0);
+    }
+}
+
+@-webkit-keyframes ripple-white {
+    0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4),
+                            0 0 0 0 rgba(255, 255, 255, 0.3),
+                            0 0 0 0 rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4),
+                    0 0 0 0 rgba(255, 255, 255, 0.3),
+                    0 0 0 0 rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        -webkit-box-shadow: 0 0 0 20px rgba(255, 255, 255, 0),
+                            0 0 0 40px rgba(255, 255, 255, 0),
+                            0 0 0 60px rgba(255, 255, 255, 0);
+        box-shadow: 0 0 0 20px rgba(255, 255, 255, 0),
+                    0 0 0 40px rgba(255, 255, 255, 0),
+                    0 0 0 60px rgba(255, 255, 255, 0);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 40px rgba(255, 255, 255, 0),
+                            0 0 0 80px rgba(255, 255, 255, 0),
+                            0 0 0 120px rgba(255, 255, 255, 0);
+        box-shadow: 0 0 0 40px rgba(255, 255, 255, 0),
+                    0 0 0 80px rgba(255, 255, 255, 0),
+                    0 0 0 120px rgba(255, 255, 255, 0);
+    }
+}
+
+/* Fact/Stats */
+.fact-item .title {
+    color: #2F2F2F;
+}
+
+.fact-content span {
+    color: #7A7A7A;
+}
+
+/* Blog */
+.blog-post-content .title a {
+    color: #2F2F2F;
+}
+
+.blog-post-content .title a:hover {
+    color: #E24B2F;
+}
+
+/* Ingredients */
+.ingredients-content .title {
+    color: #2F2F2F;
+}
+
+/* Formula section */
+.formula-area {
+    background-color: #38484E;
+}
+
+.formula-content .title {
+    color: #fff;
+}
+
+.formula-list li {
+    color: #BFBFBF;
+}
+
+/* Brand area */
+.brand-title .title {
+    color: #2F2F2F;
+}
+
+/* Offcanvas */
+.offCanvas-content .title {
+    color: #2F2F2F;
+}
+
+.offCanvas-content .title span {
+    color: #E24B2F;
+}
+
+.offcanvas-contact {
+    color: #7A7A7A;
+}
+
+.offcanvas-contact .number,
+.offcanvas-contact .email {
+    color: #E24B2F;
+}
+
