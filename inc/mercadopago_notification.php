@@ -58,7 +58,7 @@ if (!isset($_GET['topic']) && !isset($_GET['id']) && !isset($_GET['type']) && !i
 } else {
     // Notificação via GET (IPN - Instant Payment Notification)
     $topic = $_GET['topic'] ?? ($_GET['type'] ?? '');
-    $paymentId = $_GET['id'] ?? ($_GET['data.id'] ?? '');
+    $paymentId = $_GET['id'] ?? ($_GET['data.id'] ?? ($_GET['data_id'] ?? ''));
 }
 
 if (empty($paymentId)) {
