@@ -12,8 +12,8 @@ declare(strict_types=1);
  */
 
 // Access Token do Mercado Pago (NUNCA exponha no frontend)
-// CREDENCIAL DE TESTE - Use apenas em desenvolvimento
-const MP_FALLBACK_ACCESS_TOKEN = 'TEST-174327649585109-112508-b5556707665f235f4eb8c89fe2ac9346-3000462520';
+// CREDENCIAL DE PRODUÇÃO
+const MP_FALLBACK_ACCESS_TOKEN = 'APP_USR-4377085117917669-112408-2af68f55fefdd24495c2288210b3dd37-3000462520';
 
 // Headers CORS e Content-Type
 header('Content-Type: application/json; charset=utf-8');

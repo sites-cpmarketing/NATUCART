@@ -13,7 +13,10 @@
         binaryMode: false,
         expires: false,
         expirationDateFrom: null,
-        expirationDateTo: null
+        expirationDateTo: null,
+        // Personalização do Checkout Pro
+        theme: null, // 'dark' ou 'light' (padrão: definido no painel)
+        purpose: null // 'wallet_purchase' ou 'onboarding_credits' (opcional)
     };
 
     const config = { ...DEFAULT_CONFIG };
@@ -67,7 +70,10 @@
             metadata: {
                 orderId: order.orderId || '',
                 customerEmail: order.customer?.email || ''
-            }
+            },
+            // Personalização (opcional)
+            theme: config.theme || undefined,
+            purpose: config.purpose || undefined
         };
     };
 
