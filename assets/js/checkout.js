@@ -202,7 +202,7 @@
                 }
             };
 
-            // Salvar dados do pedido no localStorage
+            // Salvar dados do pedido no localStorage (backup)
             const orderDataToSave = {
                 customer: customerValidation.data,
                 address: addressData,
@@ -214,7 +214,28 @@
                 timestamp: new Date().toISOString()
             };
             localStorage.setItem('natucart_pending_order', JSON.stringify(orderDataToSave));
-            console.log('[Checkout] Dados do pedido salvos:', orderDataToSave);
+            console.log('[Checkout] Dados do pedido salvos no localStorage:', orderDataToSave);
+
+            // Salvar dados do pedido no backend (para o webhook recuperar)
+            try {
+                const saveResponse = await fetch('https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/save_order.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        orderData: orderDataToSave
+                    })
+                });
+                
+                if (saveResponse.ok) {
+                    console.log('[Checkout] Dados do pedido salvos no backend');
+                } else {
+                    console.warn('[Checkout] Aviso: não foi possível salvar pedido no backend, mas continuando...');
+                }
+            } catch (saveError) {
+                console.warn('[Checkout] Erro ao salvar pedido no backend:', saveError);
+                // Não bloquear o fluxo se falhar
+            }
 
             if (!mercadoPago) {
                 throw new Error('Serviço do Mercado Pago não está disponível.');

@@ -194,18 +194,57 @@ function handleApprovedPayment(array $paymentInfo): void
     
     logNotification("Pagamento APROVADO - ID: {$paymentId}, Pedido: {$externalReference}");
     
-    // Aqui você pode:
-    // 1. Atualizar o status do pedido no banco de dados
-    // 2. Enviar e-mail de confirmação para o cliente
-    // 3. Gerar nota fiscal
-    // 4. Preparar envio do produto
-    // 5. Integrar com sistema de estoque
+    // Carregar funções de armazenamento de pedidos
+    require_once __DIR__ . '/order_storage.php';
     
-    // Exemplo: Salvar no banco de dados
-    // updateOrderStatus($externalReference, 'approved', $paymentId);
+    // Carregar funções do Melhor Envio
+    require_once __DIR__ . '/melhorenvio_shipment.php';
+    
+    // 1. Recuperar dados do pedido
+    $orderData = getOrder($externalReference);
+    
+    if (!$orderData) {
+        logNotification("Pedido {$externalReference} não encontrado. Não é possível criar envio.");
+        return;
+    }
+    
+    // 2. Atualizar status do pedido
+    updateOrderStatus($externalReference, 'approved', [
+        'paymentId' => $paymentId,
+        'paymentStatus' => 'approved',
+        'approvedAt' => date('Y-m-d H:i:s')
+    ]);
+    
+    // 3. Criar envio no Melhor Envio
+    try {
+        logNotification("Criando envio no Melhor Envio para pedido {$externalReference}...");
+        
+        $shipmentResult = processMelhorEnvioShipment($orderData);
+        
+        if ($shipmentResult && isset($shipmentResult['shipmentId'])) {
+            // Salvar informações do envio
+            updateOrderStatus($externalReference, 'shipping_created', [
+                'shipmentId' => $shipmentResult['shipmentId'],
+                'labelUrl' => $shipmentResult['labelUrl'] ?? null,
+                'shipmentCreatedAt' => date('Y-m-d H:i:s')
+            ]);
+            
+            logNotification("Envio criado com sucesso! ID: {$shipmentResult['shipmentId']}, URL Etiqueta: " . ($shipmentResult['labelUrl'] ?? 'N/A'));
+        } else {
+            logNotification("Erro ao criar envio no Melhor Envio para pedido {$externalReference}");
+        }
+    } catch (Exception $e) {
+        logNotification("Exceção ao criar envio: " . $e->getMessage());
+    }
+    
+    // 4. Aqui você pode também:
+    // - Enviar e-mail de confirmação para o cliente
+    // - Gerar nota fiscal
+    // - Integrar com sistema de estoque
+    // - Notificar administrador
     
     // Exemplo: Enviar e-mail
-    // sendConfirmationEmail($externalReference);
+    // sendConfirmationEmail($externalReference, $paymentId);
 }
 
 /**
