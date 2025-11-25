@@ -3,432 +3,253 @@
 
     const DEFAULT_CONFIG = {
         publicKey: '',
-        paymentEndpoint: '/inc/mercadopago_checkout.php',
-        notificationUrl: '',
+        accessToken: '', // Para criar preferência (pode ser feito no backend)
+        preferenceEndpoint: '/inc/mercadopago_preference.php', // Endpoint para criar preferência
+        baseUrl: 'https://natucart.vercel.app', // URL base do site
         locale: 'pt-BR'
     };
 
     const config = { ...DEFAULT_CONFIG };
 
-    const callbackRegistry = {
-        onPaymentSuccess: null,
-        onPaymentPending: null,
-        onPaymentError: null,
-        onPixGenerated: null,
-        onBoletoGenerated: null
-    };
+    /**
+     * Formata itens para o formato do Mercado Pago
+     * @param {Array} items - Itens do carrinho
+     * @param {Object} freight - Dados do frete
+     * @returns {Array} Itens formatados
+     */
+    const formatItems = (items = [], freight = null) => {
+        const formattedItems = items.map((item) => ({
+            title: item.name,
+            description: item.description || `${item.name} - Natucart`,
+            quantity: item.quantity,
+            unit_price: parseFloat(item.price)
+        }));
 
-    let mercadoPagoInstance = null;
-    let sdkReadyPromise = null;
-
-    const waitForSDK = () => {
-        if (window.MercadoPago) {
-            return Promise.resolve();
-        }
-        if (sdkReadyPromise) {
-            return sdkReadyPromise;
-        }
-        sdkReadyPromise = new Promise((resolve, reject) => {
-            let attempts = 0;
-            const interval = setInterval(() => {
-                attempts += 1;
-                if (window.MercadoPago) {
-                    clearInterval(interval);
-                    resolve();
-                } else if (attempts > 200) {
-                    clearInterval(interval);
-                    reject(new Error('SDK do Mercado Pago não foi carregado.'));
-                }
-            }, 50);
-        });
-        return sdkReadyPromise;
-    };
-
-    const ensureInstance = async () => {
-        await waitForSDK();
-        if (!config.publicKey) {
-            throw new Error('Public Key do Mercado Pago não configurada.');
-        }
-        if (!mercadoPagoInstance) {
-            mercadoPagoInstance = new window.MercadoPago(config.publicKey, {
-                locale: config.locale
+        // Adicionar frete como item separado
+        if (freight && freight.price > 0) {
+            formattedItems.push({
+                title: `Frete - ${freight.service || 'Entrega'}`,
+                description: `Frete: ${freight.service || 'Entrega'} - Prazo: ${freight.deliveryTime || 'N/A'} dia(s) útil(eis)`,
+                quantity: 1,
+                unit_price: parseFloat(freight.price)
             });
         }
-        return mercadoPagoInstance;
+
+        return formattedItems;
     };
 
     /**
-     * Tokeniza os dados do cartão usando o SDK do Mercado Pago
-     * Cria campos temporários para tokenização
-     * @param {Object} cardData - Dados do cartão
-     * @returns {Promise<string>} Token do cartão
+     * Formata dados do pagador
+     * @param {Object} customer - Dados do cliente
+     * @returns {Object} Pagador formatado
      */
-    const createCardToken = async (cardData) => {
-        const mp = await ensureInstance();
+    const formatPayer = (customer = {}) => {
+        const phone = (customer.cellphone || '').replace(/\D/g, '');
+        const areaCode = phone.substring(0, 2) || '11';
+        const number = phone.substring(2) || '999999999';
+        const taxId = (customer.taxId || '').replace(/\D/g, '');
+
+        return {
+            name: customer.name || '',
+            surname: customer.name?.split(' ').slice(1).join(' ') || customer.name || '',
+            email: customer.email || '',
+            phone: {
+                area_code: areaCode,
+                number: number
+            },
+            identification: {
+                type: 'CPF',
+                number: taxId
+            }
+        };
+    };
+
+    /**
+     * Cria uma preferência de pagamento (Checkout Pro)
+     * @param {Object} orderContext - Contexto do pedido
+     * @returns {Promise<string>} URL de pagamento (init_point)
+     */
+    const createPreference = async (orderContext) => {
+        const items = formatItems(orderContext.items || [], orderContext.freight);
+        const payer = formatPayer(orderContext.customer);
+
+        // Construir URLs de retorno usando a URL base configurada
+        const baseUrl = config.baseUrl || 'https://natucart.vercel.app';
         
-        // Criar container temporário para os campos
-        let tempContainer = document.getElementById('mp-temp-token-container');
-        if (!tempContainer) {
-            tempContainer = document.createElement('div');
-            tempContainer.id = 'mp-temp-token-container';
-            tempContainer.style.cssText = 'position: absolute; left: -9999px; opacity: 0; pointer-events: none;';
-            document.body.appendChild(tempContainer);
+        // URLs de retorno para o Checkout Pro
+        const successUrl = `${baseUrl}/checkout.html?payment=completed`;
+        const failureUrl = `${baseUrl}/checkout.html?payment=failed`;
+        const pendingUrl = `${baseUrl}/checkout.html?payment=pending`;
+
+        // Validar URLs
+        try {
+            const successUrlObj = new URL(successUrl);
+            const failureUrlObj = new URL(failureUrl);
+            const pendingUrlObj = new URL(pendingUrl);
+            
+            // Garantir que as URLs são HTTPS válidas
+            if (successUrlObj.protocol !== 'https:') {
+                throw new Error('URLs de retorno devem usar HTTPS');
+            }
+            
+            if (!successUrlObj.hostname || successUrlObj.hostname === 'localhost' || successUrlObj.hostname === '127.0.0.1') {
+                console.warn('[MercadoPago] Aviso: URLs de retorno devem apontar para um domínio real, não localhost');
+            }
+        } catch (e) {
+            throw new Error(`Erro ao construir URLs de retorno: ${e.message}`);
         }
 
-        // Limpar campos anteriores
-        tempContainer.innerHTML = `
-            <div id="mp-card-number"></div>
-            <div id="mp-cardholder-name"></div>
-            <div id="mp-expiration-date"></div>
-            <div id="mp-security-code"></div>
-        `;
+        // Validar dados antes de criar preferência
+        if (!items || items.length === 0) {
+            throw new Error('Nenhum item encontrado no pedido.');
+        }
 
-        try {
-            // Criar e montar campos
-            const cardNumberField = mp.fields.create('cardNumber', {
-                placeholder: 'Número do cartão'
-            }).mount('#mp-card-number');
+        if (!payer || !payer.email) {
+            throw new Error('Dados do pagador incompletos.');
+        }
 
-            const cardholderNameField = mp.fields.create('cardholderName', {
-                placeholder: 'Nome do titular'
-            }).mount('#mp-cardholder-name');
+        // Montar objeto de preferência conforme documentação do Mercado Pago
+        const preferenceData = {
+            items: items,
+            payer: payer,
+            back_urls: {
+                success: successUrl,
+                failure: failureUrl,
+                pending: pendingUrl
+            },
+            external_reference: orderContext.externalReference || orderContext.orderId || `natucart_${Date.now()}`,
+            statement_descriptor: 'NATUCART'
+        };
 
-            const expirationDateField = mp.fields.create('expirationDate', {
-                placeholder: 'MM/AA'
-            }).mount('#mp-expiration-date');
+        // Adicionar auto_return apenas se back_urls.success estiver definido e válido
+        // Isso evita o erro "back_url.success must be defined"
+        if (successUrl && successUrl.startsWith('http')) {
+            preferenceData.auto_return = 'approved';
+        }
 
-            const securityCodeField = mp.fields.create('securityCode', {
-                placeholder: 'CVV'
-            }).mount('#mp-security-code');
+        // Adicionar metadata apenas se houver dados
+        if (orderContext.orderId || orderContext.customer?.email) {
+            preferenceData.metadata = {
+                orderId: orderContext.orderId || '',
+                customerEmail: orderContext.customer?.email || '',
+                ...(orderContext.metadata || {})
+            };
+        }
 
-            // Preencher campos com os dados
-            cardNumberField.setValue(cardData.cardNumber.replace(/\s/g, ''));
-            cardholderNameField.setValue(cardData.cardholderName);
-            expirationDateField.setValue(`${cardData.expirationMonth}/${cardData.expirationYear.slice(-2)}`);
-            securityCodeField.setValue(cardData.securityCode);
+        // Adicionar notification_url apenas se configurado (não é obrigatório)
+        if (config.notificationUrl && config.notificationUrl.trim() !== '') {
+            preferenceData.notification_url = config.notificationUrl.trim();
+        }
 
-            // Aguardar um pouco para os campos processarem
-            await new Promise(resolve => setTimeout(resolve, 500));
+        // Log para debug
+        console.log('[MercadoPago] Criando preferência:', {
+            itemsCount: items.length,
+            payerEmail: payer.email,
+            back_urls: {
+                success: successUrl,
+                failure: failureUrl,
+                pending: pendingUrl
+            },
+            external_reference: preferenceData.external_reference
+        });
 
-            // Criar token
-            return new Promise((resolve, reject) => {
-                const tokenData = {
-                    cardholderName: cardData.cardholderName,
-                    identificationType: cardData.identificationType || 'CPF',
-                    identificationNumber: cardData.identificationNumber.replace(/\D/g, '')
-                };
+        // Tentar criar preferência via backend primeiro
+        if (config.preferenceEndpoint) {
+            try {
+                const response = await fetch(config.preferenceEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        preference: preferenceData
+                    })
+                });
 
-                mp.fields.createCardToken(tokenData, (status, response) => {
-                    // Limpar campos temporários
-                    if (tempContainer) {
-                        tempContainer.innerHTML = '';
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.init_point || result.initPoint) {
+                        return result.init_point || result.initPoint;
                     }
+                } else if (response.status === 405 || response.status === 404) {
+                    // Servidor não suporta PHP ou endpoint não existe - usar fallback
+                    console.warn('[MercadoPago] Endpoint PHP não disponível (405/404), usando fallback direto com API do Mercado Pago');
+                    // Continuar para o fallback abaixo
+                } else {
+                    // Outro erro - tentar parsear e mostrar
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || `Erro do servidor: ${response.status}`);
+                }
+            } catch (error) {
+                // Se for erro de rede ou 405/404, tentar fallback
+                if (error.message.includes('Failed to fetch') || error.message.includes('405') || error.message.includes('404')) {
+                    console.warn('[MercadoPago] Erro ao criar preferência via backend, tentando fallback direto:', error.message);
+                } else {
+                    // Outro erro - relançar
+                    throw error;
+                }
+            }
+        }
 
-                    if (status === 200 || status === 201) {
-                        if (response && response.id) {
-                            resolve(response.id);
-                        } else {
-                            reject(new Error('Resposta inválida ao tokenizar cartão.'));
+        // Fallback: criar preferência via frontend (requer Access Token - não recomendado em produção)
+        if (config.accessToken) {
+            try {
+                // Log do payload que será enviado
+                console.log('[MercadoPago] Payload completo:', JSON.stringify(preferenceData, null, 2));
+                
+                const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${config.accessToken}`
+                    },
+                    body: JSON.stringify(preferenceData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.init_point) {
+                        console.log('[MercadoPago] Preferência criada com sucesso:', result.id);
+                        return result.init_point;
+                    }
+                    throw new Error('Resposta inválida: init_point não encontrado.');
+                } else {
+                    // Tentar extrair mensagem de erro detalhada
+                    const errorData = await response.json().catch(() => ({}));
+                    
+                    // Extrair mensagem de erro do Mercado Pago
+                    let errorMessage = 'Erro ao criar preferência de pagamento.';
+                    
+                    if (errorData.message) {
+                        errorMessage = errorData.message;
+                    } else if (errorData.cause && Array.isArray(errorData.cause) && errorData.cause.length > 0) {
+                        // Mercado Pago retorna erros em cause[]
+                        const causes = errorData.cause.map(c => c.description || c.message || '').filter(Boolean);
+                        if (causes.length > 0) {
+                            errorMessage = causes.join(' ');
                         }
-                    } else {
-                        const errorMessage = response?.message || response?.error || 'Erro ao tokenizar cartão.';
-                        reject(new Error(errorMessage));
+                    } else if (errorData.error) {
+                        errorMessage = errorData.error;
                     }
-                });
-            });
-        } catch (error) {
-            // Limpar campos temporários em caso de erro
-            if (tempContainer) {
-                tempContainer.innerHTML = '';
-            }
-            console.error('[MercadoPago] Erro ao tokenizar cartão:', error);
-            throw new Error(error.message || 'Erro ao processar dados do cartão.');
-        }
-    };
-
-    /**
-     * Obtém os métodos de pagamento disponíveis
-     * @param {string} bin - Primeiros 6 dígitos do cartão
-     * @returns {Promise<Object>} Informações do método de pagamento
-     */
-    const getPaymentMethods = async (bin) => {
-        const mp = await ensureInstance();
-        return new Promise((resolve) => {
-            try {
-                mp.getPaymentMethods({ bin }, (status, response) => {
-                    if (status === 200 && response && response.results && response.results.length > 0) {
-                        resolve(response.results[0]);
-                    } else {
-                        resolve(null);
-                    }
-                });
+                    
+                    console.error('[MercadoPago] Erro da API:', {
+                        status: response.status,
+                        error: errorData
+                    });
+                    
+                    throw new Error(errorMessage);
+                }
             } catch (error) {
-                console.error('[MercadoPago] Erro ao obter métodos de pagamento:', error);
-                resolve(null);
+                console.error('[MercadoPago] Erro ao criar preferência:', error);
+                // Se já é um Error com mensagem, relançar
+                if (error instanceof Error) {
+                    throw error;
+                }
+                throw new Error(error.message || 'Não foi possível criar a preferência de pagamento.');
             }
-        });
-    };
-
-    /**
-     * Obtém as parcelas disponíveis
-     * @param {Object} params - Parâmetros (amount, bin, paymentTypeId)
-     * @returns {Promise<Array>} Lista de parcelas
-     */
-    const getInstallments = async (params) => {
-        const mp = await ensureInstance();
-        return new Promise((resolve) => {
-            try {
-                mp.getInstallments({
-                    amount: String(params.amount),
-                    bin: params.bin,
-                    paymentTypeId: params.paymentTypeId || 'credit_card'
-                }, (status, response) => {
-                    if (status === 200 && response && response.length > 0) {
-                        resolve(response[0].payer_costs || []);
-                    } else {
-                        resolve([]);
-                    }
-                });
-            } catch (error) {
-                console.error('[MercadoPago] Erro ao obter parcelas:', error);
-                resolve([]);
-            }
-        });
-    };
-
-    /**
-     * Obtém os tipos de documento disponíveis
-     * @returns {Promise<Array>} Lista de tipos de documento
-     */
-    const getIdentificationTypes = async () => {
-        const mp = await ensureInstance();
-        return new Promise((resolve) => {
-            try {
-                mp.getIdentificationTypes((status, response) => {
-                    if (status === 200 && response) {
-                        resolve(response);
-                    } else {
-                        resolve([{ id: 'CPF', name: 'CPF' }]);
-                    }
-                });
-            } catch (error) {
-                console.error('[MercadoPago] Erro ao obter tipos de documento:', error);
-                resolve([{ id: 'CPF', name: 'CPF' }]);
-            }
-        });
-    };
-
-    /**
-     * Envia o pagamento para o backend
-     * @param {Object} paymentData - Dados do pagamento
-     * @param {Object} orderContext - Contexto do pedido
-     * @returns {Promise<Object>} Resposta do pagamento
-     */
-    const sendPaymentToBackend = async (paymentData, orderContext) => {
-        if (!orderContext) {
-            throw new Error('Dados do pedido não configurados.');
         }
 
-        try {
-            const response = await fetch(config.paymentEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    paymentData,
-                    order: orderContext
-                })
-            });
-
-            // Verificar se o endpoint existe
-            if (response.status === 404) {
-                throw new Error('Endpoint de pagamento não encontrado. Verifique se o arquivo PHP está no servidor.');
-            }
-
-            // Verificar se o método é permitido
-            if (response.status === 405) {
-                throw new Error('Servidor não permite requisições POST. Verifique a configuração do servidor PHP.');
-            }
-
-            const payload = await response.json().catch(() => {
-                // Se não conseguir parsear JSON, pode ser erro do servidor
-                return { 
-                    error: 'server_error',
-                    message: `Erro do servidor (${response.status}): ${response.statusText}`
-                };
-            });
-            
-            if (!response.ok || payload?.error) {
-                const errorMessage = payload?.message || payload?.error || `Erro ao processar pagamento (${response.status}).`;
-                const error = new Error(errorMessage);
-                error.details = payload;
-                error.status = response.status;
-                throw error;
-            }
-
-            return payload;
-        } catch (error) {
-            // Se for erro de rede
-            if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                throw new Error('Não foi possível conectar ao servidor. Verifique se o servidor PHP está rodando e acessível.');
-            }
-            throw error;
-        }
-    };
-
-    /**
-     * Processa a resposta do pagamento e dispara callbacks apropriados
-     * @param {Object} paymentResponse - Resposta do Mercado Pago
-     */
-    const handlePaymentResponse = (paymentResponse) => {
-        const status = paymentResponse?.status;
-        
-        console.log('[MercadoPago] Resposta do pagamento:', paymentResponse);
-
-        if (status === 'approved') {
-            callbackRegistry.onPaymentSuccess?.(paymentResponse);
-            return paymentResponse;
-        }
-
-        if (status === 'pending' || status === 'in_process') {
-            // Verificar se é PIX ou Boleto
-            const paymentMethodId = paymentResponse?.payment_method_id;
-            const pointOfInteraction = paymentResponse?.point_of_interaction;
-            
-            if (paymentMethodId === 'pix') {
-                // Extrair dados do QR Code PIX
-                const transactionData = pointOfInteraction?.transaction_data || {};
-                const pixData = {
-                    qrCode: transactionData.qr_code || '',
-                    qrCodeBase64: transactionData.qr_code_base64 || '',
-                    ticketUrl: transactionData.ticket_url || '',
-                    expirationDate: paymentResponse?.date_of_expiration || ''
-                };
-                
-                // Se não encontrou no transaction_data, tentar outros lugares
-                if (!pixData.qrCode && pointOfInteraction?.transaction_data?.qr_code_base64) {
-                    pixData.qrCodeBase64 = pointOfInteraction.transaction_data.qr_code_base64;
-                }
-                
-                callbackRegistry.onPixGenerated?.(pixData, paymentResponse);
-            } else if (paymentMethodId === 'bolbradesco' || paymentResponse?.payment_type_id === 'ticket') {
-                // Extrair dados do Boleto
-                const transactionDetails = paymentResponse?.transaction_details || {};
-                const boletoData = {
-                    barcode: paymentResponse?.barcode?.content || paymentResponse?.barcode || '',
-                    ticketUrl: transactionDetails.external_resource_url || paymentResponse?.transaction_details?.external_resource_url || '',
-                    expirationDate: paymentResponse?.date_of_expiration || ''
-                };
-                
-                callbackRegistry.onBoletoGenerated?.(boletoData, paymentResponse);
-            }
-
-            callbackRegistry.onPaymentPending?.(paymentResponse);
-            return paymentResponse;
-        }
-
-        // Pagamento rejeitado
-        const statusDetail = paymentResponse?.status_detail || 'unknown';
-        const errorMessages = {
-            'cc_rejected_bad_filled_card_number': 'Número do cartão inválido.',
-            'cc_rejected_bad_filled_date': 'Data de validade inválida.',
-            'cc_rejected_bad_filled_other': 'Dados do cartão inválidos.',
-            'cc_rejected_bad_filled_security_code': 'Código de segurança inválido.',
-            'cc_rejected_blacklist': 'Pagamento não autorizado.',
-            'cc_rejected_call_for_authorize': 'Ligue para a operadora do cartão.',
-            'cc_rejected_card_disabled': 'Cartão desabilitado. Ative-o primeiro.',
-            'cc_rejected_duplicated_payment': 'Pagamento duplicado.',
-            'cc_rejected_high_risk': 'Pagamento recusado por segurança.',
-            'cc_rejected_insufficient_amount': 'Saldo insuficiente.',
-            'cc_rejected_invalid_installments': 'Parcelas inválidas.',
-            'cc_rejected_max_attempts': 'Limite de tentativas atingido.',
-            'cc_rejected_other_reason': 'Pagamento recusado.'
-        };
-
-        const error = new Error(errorMessages[statusDetail] || 'Pagamento não aprovado.');
-        error.details = paymentResponse;
-        callbackRegistry.onPaymentError?.(error);
-        throw error;
-    };
-
-    /**
-     * Cria um pagamento com cartão de crédito/débito
-     * @param {Object} cardData - Dados do cartão
-     * @param {Object} orderContext - Contexto do pedido
-     * @returns {Promise<Object>} Resposta do pagamento
-     */
-    const payWithCard = async (cardData, orderContext) => {
-        // Tokenizar o cartão
-        const token = await createCardToken(cardData);
-
-        const paymentData = {
-            token,
-            payment_method_id: cardData.paymentMethodId,
-            installments: cardData.installments || 1,
-            payer: {
-                email: orderContext.customer?.email,
-                identification: {
-                    type: cardData.identificationType || 'CPF',
-                    number: cardData.identificationNumber.replace(/\D/g, '')
-                }
-            }
-        };
-
-        const response = await sendPaymentToBackend(paymentData, orderContext);
-        return handlePaymentResponse(response);
-    };
-
-    /**
-     * Cria um pagamento com PIX
-     * @param {Object} orderContext - Contexto do pedido
-     * @returns {Promise<Object>} Resposta do pagamento
-     */
-    const payWithPix = async (orderContext) => {
-        const paymentData = {
-            payment_method_id: 'pix',
-            payer: {
-                email: orderContext.customer?.email,
-                identification: {
-                    type: 'CPF',
-                    number: (orderContext.customer?.taxId || '').replace(/\D/g, '')
-                }
-            }
-        };
-
-        const response = await sendPaymentToBackend(paymentData, orderContext);
-        return handlePaymentResponse(response);
-    };
-
-    /**
-     * Cria um pagamento com Boleto
-     * @param {Object} orderContext - Contexto do pedido
-     * @returns {Promise<Object>} Resposta do pagamento
-     */
-    const payWithBoleto = async (orderContext) => {
-        const paymentData = {
-            payment_method_id: 'bolbradesco',
-            payer: {
-                email: orderContext.customer?.email,
-                first_name: orderContext.customer?.name?.split(' ')[0] || '',
-                last_name: orderContext.customer?.name?.split(' ').slice(1).join(' ') || '',
-                identification: {
-                    type: 'CPF',
-                    number: (orderContext.customer?.taxId || '').replace(/\D/g, '')
-                },
-                address: {
-                    zip_code: orderContext.address?.postalCode || '',
-                    street_name: orderContext.address?.street || '',
-                    street_number: orderContext.address?.number || '',
-                    neighborhood: orderContext.address?.district || '',
-                    city: orderContext.address?.city || '',
-                    federal_unit: orderContext.address?.state || ''
-                }
-            }
-        };
-
-        const response = await sendPaymentToBackend(paymentData, orderContext);
-        return handlePaymentResponse(response);
+        throw new Error('Endpoint de preferência não configurado. Configure preferenceEndpoint ou accessToken.');
     };
 
     /**
@@ -445,31 +266,10 @@
      */
     const getConfig = () => ({ ...config });
 
-    /**
-     * Define os callbacks de eventos
-     * @param {Object} callbacks - Callbacks
-     */
-    const setCallbacks = (callbacks = {}) => {
-        Object.keys(callbacks).forEach((key) => {
-            if (typeof callbacks[key] === 'function' && key in callbackRegistry) {
-                callbackRegistry[key] = callbacks[key];
-            }
-        });
-    };
-
     const MercadoPagoService = {
         configure,
         getConfig,
-        setCallbacks,
-        // Tokenização e informações
-        createCardToken,
-        getPaymentMethods,
-        getInstallments,
-        getIdentificationTypes,
-        // Métodos de pagamento
-        payWithCard,
-        payWithPix,
-        payWithBoleto
+        createPreference
     };
 
     window.MercadoPagoService = MercadoPagoService;

@@ -822,120 +822,30 @@
                         <!-- Método de Pagamento -->
                         <div class="checkout-card">
                             <h2 class="checkout-card-title">
-                                <i class="fas fa-qrcode" style="margin-right: 10px;"></i>
+                                <i class="fas fa-credit-card" style="margin-right: 10px;"></i>
                                 Pagamento
                             </h2>
                             <div class="payment-methods">
-                                <!-- Seleção de Método de Pagamento -->
-                                <div style="margin-bottom: 25px;">
-                                    <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 12px; font-weight: 600;">Escolha a forma de pagamento *</label>
-                                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                                        <label style="display: flex; align-items: center; padding: 15px; background: #121212; border: 2px solid #2F2F2F; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-                                            <input type="radio" name="paymentMethod" value="credit_card" checked style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
-                                            <div style="flex: 1;">
-                                                <strong style="color: #FFFFFF; font-size: 16px;">Cartão de Crédito ou Débito</strong>
-                                                <p style="color: #7A7A7A; font-size: 12px; margin: 4px 0 0 0;">Visa, Mastercard, Elo, Hipercard</p>
-                                            </div>
-                                            <i class="fas fa-credit-card" style="color: #E24B2F; font-size: 24px; margin-left: 12px;"></i>
-                                        </label>
-                                        <label style="display: flex; align-items: center; padding: 15px; background: #121212; border: 2px solid #2F2F2F; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-                                            <input type="radio" name="paymentMethod" value="pix" style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
-                                            <div style="flex: 1;">
-                                                <strong style="color: #FFFFFF; font-size: 16px;">PIX</strong>
-                                                <p style="color: #7A7A7A; font-size: 12px; margin: 4px 0 0 0;">Aprovação imediata</p>
-                                            </div>
-                                            <i class="fas fa-qrcode" style="color: #E24B2F; font-size: 24px; margin-left: 12px;"></i>
-                                        </label>
-                                        <label style="display: flex; align-items: center; padding: 15px; background: #121212; border: 2px solid #2F2F2F; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-                                            <input type="radio" name="paymentMethod" value="boleto" style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
-                                            <div style="flex: 1;">
-                                                <strong style="color: #FFFFFF; font-size: 16px;">Boleto Bancário</strong>
-                                                <p style="color: #7A7A7A; font-size: 12px; margin: 4px 0 0 0;">Vencimento em 3 dias úteis</p>
-                                            </div>
-                                            <i class="fas fa-barcode" style="color: #E24B2F; font-size: 24px; margin-left: 12px;"></i>
-                                        </label>
+                                <div style="background: rgba(226, 75, 47, 0.1); border: 2px solid #E24B2F; border-radius: 12px; padding: 30px; text-align: center;">
+                                    <div style="margin-bottom: 20px;">
+                                        <i class="fas fa-shield-alt" style="font-size: 64px; color: #E24B2F; margin-bottom: 15px;"></i>
                                     </div>
-                                </div>
-
-                                <!-- Formulário de Cartão -->
-                                <div id="cardPaymentForm" class="payment-form-section">
-                                    <div style="background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; padding: 20px;">
-                                        <p style="color: #BFBFBF; font-size: 13px; margin-bottom: 20px;">
-                                            <i class="fas fa-shield-alt" style="color: #E24B2F; margin-right: 8px;"></i>
-                                            Seus dados são criptografados e processados diretamente pelo Mercado Pago.
+                                    <h3 style="color: #FFFFFF; font-size: 28px; font-weight: 700; margin-bottom: 10px;">Mercado Pago</h3>
+                                    <p style="color: #BFBFBF; font-size: 16px; margin-bottom: 20px;">Pagamento seguro via Mercado Pago</p>
+                                    <div style="background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; padding: 20px; margin-top: 20px; text-align: left;">
+                                        <p style="color: #FFFFFF; font-size: 14px; margin: 0 0 10px 0; font-weight: 600;">
+                                            <i class="fas fa-check-circle" style="color: #22C55E; margin-right: 8px;"></i>
+                                            Aceita múltiplas formas de pagamento:
                                         </p>
-                                        
-                                        <!-- Número do Cartão -->
-                                        <div style="margin-bottom: 15px;">
-                                            <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Número do Cartão *</label>
-                                            <div style="position: relative;">
-                                                <input type="text" id="cardNumber" name="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required style="width: 100%; padding: 12px 50px 12px 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 16px; letter-spacing: 1px;">
-                                                <span id="cardBrandIcon" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);">
-                                                    <i class="fas fa-credit-card" style="color: #7A7A7A;"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Nome do Titular -->
-                                        <div style="margin-bottom: 15px;">
-                                            <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Nome do Titular *</label>
-                                            <input type="text" id="cardholderName" name="cardholderName" placeholder="Como está no cartão" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px; text-transform: uppercase;">
-                                        </div>
-                                        
-                                        <!-- Validade e CVV -->
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                                            <div>
-                                                <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Validade *</label>
-                                                <input type="text" id="cardExpiration" name="cardExpiration" placeholder="MM/AA" maxlength="5" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
-                                            </div>
-                                            <div>
-                                                <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">CVV *</label>
-                                                <input type="text" id="cardCVV" name="cardCVV" placeholder="123" maxlength="4" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- CPF e Parcelas -->
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                            <div>
-                                                <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">CPF do Portador *</label>
-                                                <input type="text" id="cardholderCPF" name="cardholderCPF" placeholder="000.000.000-00" maxlength="14" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
-                                            </div>
-                                            <div>
-                                                <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Parcelas *</label>
-                                                <select id="installments" name="installments" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
-                                                    <option value="1">1x sem juros</option>
-                                                    <option value="2">2x sem juros</option>
-                                                    <option value="3">3x sem juros</option>
-                                                    <option value="4">4x sem juros</option>
-                                                    <option value="5">5x sem juros</option>
-                                                    <option value="6">6x sem juros</option>
-                                                    <option value="7">7x</option>
-                                                    <option value="8">8x</option>
-                                                    <option value="9">9x</option>
-                                                    <option value="10">10x</option>
-                                                    <option value="11">11x</option>
-                                                    <option value="12">12x</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Informações PIX -->
-                                <div id="pixPaymentInfo" class="payment-form-section" style="display: none;">
-                                    <div style="background: rgba(34, 197, 94, 0.1); border: 2px solid #22C55E; border-radius: 8px; padding: 20px; text-align: center;">
-                                        <i class="fas fa-qrcode" style="font-size: 48px; color: #22C55E; margin-bottom: 15px;"></i>
-                                        <p style="color: #FFFFFF; font-size: 16px; font-weight: 600; margin-bottom: 8px;">Pagamento via PIX</p>
-                                        <p style="color: #BFBFBF; font-size: 14px; margin: 0;">O QR Code será gerado após finalizar a compra.</p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações Boleto -->
-                                <div id="boletoPaymentInfo" class="payment-form-section" style="display: none;">
-                                    <div style="background: rgba(226, 75, 47, 0.1); border: 2px solid #E24B2F; border-radius: 8px; padding: 20px; text-align: center;">
-                                        <i class="fas fa-barcode" style="font-size: 48px; color: #E24B2F; margin-bottom: 15px;"></i>
-                                        <p style="color: #FFFFFF; font-size: 16px; font-weight: 600; margin-bottom: 8px;">Pagamento via Boleto</p>
-                                        <p style="color: #BFBFBF; font-size: 14px; margin: 0;">O boleto será gerado após finalizar a compra. Vencimento em 3 dias úteis.</p>
+                                        <ul style="color: #BFBFBF; font-size: 13px; margin: 0; padding-left: 20px;">
+                                            <li>Cartão de Crédito ou Débito</li>
+                                            <li>PIX (aprovação imediata)</li>
+                                            <li>Boleto Bancário</li>
+                                        </ul>
+                                        <p style="color: #7A7A7A; font-size: 12px; margin: 15px 0 0 0;">
+                                            <i class="fas fa-info-circle" style="color: #E24B2F; margin-right: 8px;"></i>
+                                            Você será redirecionado para o site do Mercado Pago para finalizar o pagamento de forma segura.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -1023,20 +933,21 @@
                 n8nWebhookUrl: 'https://n8n-auto.cpmarketingbr.com/webhook/melhorenvio-natucart' // Webhook n8n
             });
         </script>
-        <script src="https://sdk.mercadopago.com/js/v2"></script>
-        <script src="assets/js/payments/mercadopago.js"></script>
+        <script src="assets/js/payments/mercadopago.js?v=2.0"></script>
         <script>
-            // Configurar Checkout Transparente do Mercado Pago (API de Pagamentos)
+            // Configurar Checkout Pro do Mercado Pago
             // IMPORTANTE: Use credenciais de TESTE para desenvolvimento
             // Obtenha em: https://www.mercadopago.com.br/developers/panel/credentials
             // Credenciais de TESTE começam com "TEST-", não "APP_USR-"
             MercadoPagoService.configure({
                 publicKey: 'TEST-c739ae99-2ef7-46bb-ba66-a9cb9572658a',
-                paymentEndpoint: '/inc/mercadopago_checkout.php',
-                notificationUrl: '' // Configure seu webhook aqui se necessário
+                accessToken: 'TEST-174327649585109-112508-b5556707665f235f4eb8c89fe2ac9346-3000462520', // Para fallback quando não houver servidor PHP
+                preferenceEndpoint: '/inc/mercadopago_preference.php', // Endpoint para criar preferência (prioridade)
+                baseUrl: 'https://natucart.vercel.app', // URL base do site para back_urls do Mercado Pago
+                notificationUrl: '' // Configure seu webhook aqui se necessário (opcional)
             });
         </script>
-        <script src="assets/js/checkout.js"></script>
+        <script src="assets/js/checkout.js?v=2.0"></script>
         
         <script>
             // Máscaras para CPF e Telefone
