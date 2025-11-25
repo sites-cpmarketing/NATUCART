@@ -6,11 +6,14 @@ declare(strict_types=1);
  * 
  * Configure o Access Token via variável de ambiente MP_ACCESS_TOKEN
  * ou defina a constante MP_FALLBACK_ACCESS_TOKEN abaixo.
+ * 
+ * ATENÇÃO: Este arquivo está configurado com credenciais de PRODUÇÃO.
+ * Certifique-se de que o servidor está seguro e protegido.
  */
 
 // Access Token do Mercado Pago (NUNCA exponha no frontend)
-// IMPORTANTE: Use credenciais de TESTE para desenvolvimento
-const MP_FALLBACK_ACCESS_TOKEN = 'TEST-174327649585109-112508-b5556707665f235f4eb8c89fe2ac9346-3000462520';
+// CREDENCIAL DE PRODUÇÃO - Use com cuidado!
+const MP_FALLBACK_ACCESS_TOKEN = 'APP_USR-4377085117917669-112408-2af68f55fefdd24495c2288210b3dd37-3000462520';
 
 // Headers CORS e Content-Type
 header('Content-Type: application/json; charset=utf-8');
