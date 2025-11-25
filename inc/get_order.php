@@ -45,19 +45,26 @@ if (!$orderData) {
 $logFile = __DIR__ . '/../logs/mercadopago_notifications.log';
 $timestamp = date('Y-m-d H:i:s');
 @file_put_contents($logFile, "[{$timestamp}] [Get Order] Retornando dados do pedido {$orderId}\n", FILE_APPEND);
-@file_put_contents($logFile, "[{$timestamp}] [Get Order] Estrutura: " . json_encode([
-    'hasCustomer' => !empty($orderData['customer']),
-    'hasAddress' => !empty($orderData['address']),
-    'hasItems' => !empty($orderData['items']),
-    'hasFreight' => !empty($orderData['freight']),
-    'hasTotals' => !empty($orderData['totals']),
-    'keys' => array_keys($orderData)
-], JSON_PRETTY_PRINT) . "\n", FILE_APPEND);
+@file_put_contents($logFile, "[{$timestamp}] [Get Order] Estrutura completa: " . json_encode($orderData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND);
 
-http_response_code(200);
-echo json_encode([
+// Garantir que os dados estão no formato correto
+$response = [
     'status' => 'ok',
     'orderId' => $orderId,
-    'orderData' => $orderData
-], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    'orderData' => [
+        'customer' => $orderData['customer'] ?? [],
+        'address' => $orderData['address'] ?? [],
+        'items' => $orderData['items'] ?? [],
+        'freight' => $orderData['freight'] ?? [],
+        'totals' => $orderData['totals'] ?? [],
+        'orderId' => $orderData['orderId'] ?? $orderId,
+        'externalReference' => $orderData['externalReference'] ?? $orderId
+    ]
+];
+
+// Log da resposta que será enviada
+@file_put_contents($logFile, "[{$timestamp}] [Get Order] Resposta que será enviada: " . json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND);
+
+http_response_code(200);
+echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
