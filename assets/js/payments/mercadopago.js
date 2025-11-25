@@ -23,12 +23,43 @@
 
     const buildPreferencePayload = (order) => {
         const baseUrl = config.baseUrl.replace(/\/$/, '');
-        const items = (order.items || []).map((item) => ({
-            title: item.name,
-            quantity: item.quantity,
-            unit_price: Number(item.price),
-            currency_id: 'BRL'
-        }));
+        const items = (order.items || []).map((item) => {
+            const itemPayload = {
+                title: item.name,
+                quantity: item.quantity,
+                unit_price: Number(item.price),
+                currency_id: 'BRL'
+            };
+            
+            // Campos recomendados pelo Mercado Pago para melhorar aprovação
+            // category_id: Categoria do item (ex: "health" para produtos de saúde)
+            if (item.categoryId) {
+                itemPayload.category_id = item.categoryId;
+            } else {
+                // Categoria padrão para produtos de saúde/suplementos
+                itemPayload.category_id = 'health';
+            }
+            
+            // description: Descrição detalhada do item
+            if (item.description) {
+                itemPayload.description = item.description;
+            } else {
+                // Usar o nome como descrição se não houver descrição específica
+                itemPayload.description = item.name;
+            }
+            
+            // id: Código/SKU do produto (prioridade: sku > id)
+            if (item.sku) {
+                itemPayload.id = String(item.sku);
+            } else if (item.id) {
+                itemPayload.id = String(item.id);
+            } else {
+                // Gerar ID baseado no nome se não houver
+                itemPayload.id = `natucart_${item.name.toLowerCase().replace(/\s+/g, '_')}`;
+            }
+            
+            return itemPayload;
+        });
 
         if (order.freight && order.freight.price) {
             items.push({

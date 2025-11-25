@@ -79,19 +79,33 @@ if ($xSignature && MP_WEBHOOK_SECRET) {
 $paymentId = $queryParams['data.id'] ?? $queryParams['id'] ?? null;
 $topic = $queryParams['type'] ?? $queryParams['topic'] ?? 'payment';
 
+@file_put_contents($logFile, "[{$timestamp}] Payment ID extraído: {$paymentId}, Topic: {$topic}\n", FILE_APPEND);
+
+// Se for merchant_order, não processar (só queremos payment)
+if (strpos($topic, 'merchant_order') !== false || $topic === 'merchant_order') {
+    @file_put_contents($logFile, "[{$timestamp}] ⏭️ Ignorando notificação de merchant_order (só processamos payment)\n", FILE_APPEND);
+    http_response_code(200);
+    echo json_encode(['status' => 'ok', 'message' => 'merchant_order ignorado', 'processed' => false]);
+    exit;
+}
+
 if (!$paymentId) {
     // Tentar extrair do body
     $bodyData = json_decode($rawBody, true);
     if (isset($bodyData['data']['id'])) {
         $paymentId = $bodyData['data']['id'];
+        @file_put_contents($logFile, "[{$timestamp}] Payment ID extraído do body: {$paymentId}\n", FILE_APPEND);
     }
 }
 
 if (!$paymentId) {
+    @file_put_contents($logFile, "[{$timestamp}] ❌ Payment ID não encontrado\n", FILE_APPEND);
     http_response_code(200); // Responder 200 para evitar retries
     echo json_encode(['status' => 'ok', 'message' => 'Payment ID não encontrado']);
     exit;
 }
+
+@file_put_contents($logFile, "[{$timestamp}] ✅ Payment ID válido: {$paymentId}, Topic: {$topic}\n", FILE_APPEND);
 
 // Repassar para o n8n
 $n8nPayload = [
@@ -105,23 +119,43 @@ $n8nPayload = [
     'timestamp' => date('Y-m-d H:i:s')
 ];
 
+@file_put_contents($logFile, "[{$timestamp}] 📤 Enviando para n8n: " . N8N_WEBHOOK_URL . "\n", FILE_APPEND);
+@file_put_contents($logFile, "[{$timestamp}] 📦 Payload: " . json_encode($n8nPayload, JSON_PRETTY_PRINT) . "\n", FILE_APPEND);
+
 $ch = curl_init(N8N_WEBHOOK_URL);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST => true,
     CURLOPT_HTTPHEADER => [
-        'Content-Type: application/json'
+        'Content-Type: application/json',
+        'User-Agent: NATUCART-Webhook/1.0'
     ],
     CURLOPT_POSTFIELDS => json_encode($n8nPayload),
-    CURLOPT_TIMEOUT => 10
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_CONNECTTIMEOUT => 10,
+    CURLOPT_SSL_VERIFYPEER => true,
+    CURLOPT_SSL_VERIFYHOST => 2
 ]);
 
 $response = curl_exec($ch);
 $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
+$curlInfo = curl_getinfo($ch);
 curl_close($ch);
 
-@file_put_contents($logFile, "[{$timestamp}] Enviado para n8n. HTTP: {$httpCode}, Response: {$response}\n", FILE_APPEND);
+@file_put_contents($logFile, "[{$timestamp}] 📥 Resposta do n8n:\n", FILE_APPEND);
+@file_put_contents($logFile, "[{$timestamp}]   HTTP Code: {$httpCode}\n", FILE_APPEND);
+@file_put_contents($logFile, "[{$timestamp}]   Response: {$response}\n", FILE_APPEND);
+@file_put_contents($logFile, "[{$timestamp}]   cURL Error: " . ($curlError ?: 'Nenhum') . "\n", FILE_APPEND);
+@file_put_contents($logFile, "[{$timestamp}]   Total Time: " . ($curlInfo['total_time'] ?? 'N/A') . "s\n", FILE_APPEND);
+
+if ($curlError) {
+    @file_put_contents($logFile, "[{$timestamp}] ❌ ERRO cURL ao enviar para n8n: {$curlError}\n", FILE_APPEND);
+}
+
+if ($httpCode !== 200 && $httpCode !== 201) {
+    @file_put_contents($logFile, "[{$timestamp}] ⚠️ n8n retornou HTTP {$httpCode}\n", FILE_APPEND);
+}
 
 // Sempre responder 200 OK para o Mercado Pago
 http_response_code(200);
