@@ -1027,8 +1027,11 @@
         <script src="assets/js/payments/mercadopago.js"></script>
         <script>
             // Configurar Checkout Transparente do Mercado Pago (API de Pagamentos)
+            // IMPORTANTE: Use credenciais de TESTE para desenvolvimento
+            // Obtenha em: https://www.mercadopago.com.br/developers/panel/credentials
+            // Credenciais de TESTE começam com "TEST-", não "APP_USR-"
             MercadoPagoService.configure({
-                publicKey: 'APP_USR-d498d4ed-3faf-47e4-b5bd-33771ec2e31e',
+                publicKey: 'TEST-c739ae99-2ef7-46bb-ba66-a9cb9572658a',
                 paymentEndpoint: '/inc/mercadopago_checkout.php',
                 notificationUrl: '' // Configure seu webhook aqui se necessário
             });
