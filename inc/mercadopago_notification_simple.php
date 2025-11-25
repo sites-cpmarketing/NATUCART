@@ -107,6 +107,35 @@ if (!$paymentId) {
 
 @file_put_contents($logFile, "[{$timestamp}] ✅ Payment ID válido: {$paymentId}, Topic: {$topic}\n", FILE_APPEND);
 
+// Buscar dados básicos do pagamento para extrair external_reference
+// Isso ajuda o n8n a buscar os dados completos do pedido
+$paymentData = null;
+if ($paymentId) {
+    // Fazer uma chamada rápida à API do Mercado Pago para obter external_reference
+    $accessToken = getenv('MP_ACCESS_TOKEN') ?: 'APP_USR-4377085117917669-112408-2af68f55fefdd24495c2288210b3dd37-3000462520';
+    $paymentEndpoint = "https://api.mercadopago.com/v1/payments/{$paymentId}";
+    
+    $chPayment = curl_init($paymentEndpoint);
+    curl_setopt_array($chPayment, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            'Authorization: Bearer ' . $accessToken
+        ],
+        CURLOPT_TIMEOUT => 5
+    ]);
+    
+    $paymentResponse = curl_exec($chPayment);
+    $paymentHttpCode = (int) curl_getinfo($chPayment, CURLINFO_HTTP_CODE);
+    curl_close($chPayment);
+    
+    if ($paymentHttpCode === 200) {
+        $paymentData = json_decode($paymentResponse, true);
+        @file_put_contents($logFile, "[{$timestamp}] ✅ Dados do pagamento obtidos. Status: " . ($paymentData['status'] ?? 'N/A') . ", External Reference: " . ($paymentData['external_reference'] ?? 'N/A') . "\n", FILE_APPEND);
+    } else {
+        @file_put_contents($logFile, "[{$timestamp}] ⚠️ Não foi possível obter dados do pagamento (HTTP {$paymentHttpCode})\n", FILE_APPEND);
+    }
+}
+
 // Repassar para o n8n
 $n8nPayload = [
     'paymentId' => $paymentId,
@@ -116,7 +145,19 @@ $n8nPayload = [
     'headers' => $headers,
     'xSignature' => $xSignature,
     'signatureValid' => $isValidSignature,
-    'timestamp' => date('Y-m-d H:i:s')
+    'timestamp' => date('Y-m-d H:i:s'),
+    // Dados do pagamento (se obtidos)
+    'payment' => $paymentData ? [
+        'id' => $paymentData['id'] ?? null,
+        'status' => $paymentData['status'] ?? null,
+        'external_reference' => $paymentData['external_reference'] ?? null,
+        'transaction_amount' => $paymentData['transaction_amount'] ?? null,
+        'payment_method_id' => $paymentData['payment_method_id'] ?? null
+    ] : null,
+    // URL para buscar dados completos do pedido
+    'orderApiUrl' => $paymentData && isset($paymentData['external_reference']) 
+        ? "https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/get_order.php?orderId=" . urlencode($paymentData['external_reference'])
+        : null
 ];
 
 @file_put_contents($logFile, "[{$timestamp}] 📤 Enviando para n8n: " . N8N_WEBHOOK_URL . "\n", FILE_APPEND);
