@@ -43,7 +43,7 @@ $headers = getallheaders();
 logNotification("Headers: " . json_encode($headers) . "\nBody: " . $rawBody);
 
 // Verificar se é uma notificação do Mercado Pago
-if (!isset($_GET['topic']) && !isset($_GET['id'])) {
+if (!isset($_GET['topic']) && !isset($_GET['id']) && !isset($_GET['type']) && !isset($_GET['data.id'])) {
     // Pode ser uma notificação via POST (webhook)
     $payload = json_decode($rawBody, true);
     
@@ -57,8 +57,8 @@ if (!isset($_GET['topic']) && !isset($_GET['id'])) {
     }
 } else {
     // Notificação via GET (IPN - Instant Payment Notification)
-    $topic = $_GET['topic'] ?? '';
-    $paymentId = $_GET['id'] ?? '';
+    $topic = $_GET['topic'] ?? ($_GET['type'] ?? '');
+    $paymentId = $_GET['id'] ?? ($_GET['data.id'] ?? '');
 }
 
 if (empty($paymentId)) {
@@ -80,8 +80,9 @@ if (!$accessToken) {
 $paymentInfo = getPaymentInfo($paymentId, $accessToken);
 
 if (!$paymentInfo) {
-    http_response_code(404);
-    echo json_encode(['error' => 'Pagamento não encontrado']);
+    logNotification("Pagamento {$paymentId} não encontrado. Respondendo 200 para evitar retries.");
+    http_response_code(200);
+    echo json_encode(['status' => 'ok', 'processed' => false, 'reason' => 'payment_not_found']);
     exit;
 }
 
