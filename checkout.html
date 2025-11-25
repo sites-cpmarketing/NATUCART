@@ -938,13 +938,23 @@
             // Configurar Checkout Pro do Mercado Pago
             // IMPORTANTE: Use credenciais de TESTE para desenvolvimento
             // Obtenha em: https://www.mercadopago.com.br/developers/panel/credentials
-            // CREDENCIAIS DE PRODUÇÃO - Use com cuidado!
+            // CREDENCIAIS DE TESTE - Use em ambiente de desenvolvimento
             MercadoPagoService.configure({
-                publicKey: 'APP_USR-a8ed77de-0f1b-4f5a-8f2b-b5ecf62893bd', // Public Key de PRODUÇÃO
-                accessToken: 'APP_USR-4377085117917669-112408-2af68f55fefdd24495c2288210b3dd37-3000462520', // Access Token de PRODUÇÃO (para fallback quando não houver servidor PHP)
-                preferenceEndpoint: '/inc/mercadopago_preference.php', // Endpoint para criar preferência (prioridade)
-                baseUrl: 'https://natucart.vercel.app', // URL base do site para back_urls do Mercado Pago
-                notificationUrl: '' // Configure seu webhook aqui se necessário (opcional)
+                publicKey: 'TEST-c739ae99-2ef7-46bb-ba66-a9cb9572658a', // Public Key de TESTE
+                accessToken: 'TEST-174327649585109-112508-b5556707665f235f4eb8c89fe2ac9346-3000462520', // Access Token de TESTE (fallback)
+                preferenceEndpoint: '/inc/mercadopago_preference.php',
+                baseUrl: 'https://natucart.vercel.app',
+                notificationUrl: 'https://natucart.vercel.app/inc/mercadopago_notification.php',
+                // Configurações de métodos de pagamento
+                paymentMethods: {
+                    // Excluir métodos específicos (opcional)
+                    // excludedPaymentMethods: [{id: 'master'}], // Exemplo: excluir Mastercard
+                    // Excluir tipos de pagamento (opcional)
+                    // excludedPaymentTypes: [{id: 'ticket'}], // Exemplo: excluir boleto
+                    installments: 12 // Número máximo de parcelas
+                },
+                binaryMode: false, // false = permite pagamentos pendentes (boleto/PIX), true = apenas aprovado/recusado
+                expires: false // true para expirar preferência após X dias
             });
         </script>
         <script src="assets/js/checkout.js?v=2.0"></script>

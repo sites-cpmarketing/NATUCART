@@ -53,6 +53,8 @@
     };
 
     if (cart) {
+        // Garantir que o frete só aparece depois de um novo cálculo
+        cart.setFreight(null);
         cart.subscribe(updateSummary);
     } else {
         document.addEventListener('natucart:cart:update', (event) => {

@@ -12,8 +12,8 @@ declare(strict_types=1);
  */
 
 // Access Token do Mercado Pago (NUNCA exponha no frontend)
-// CREDENCIAL DE PRODUÇÃO - Use com cuidado!
-const MP_FALLBACK_ACCESS_TOKEN = 'APP_USR-4377085117917669-112408-2af68f55fefdd24495c2288210b3dd37-3000462520';
+// CREDENCIAL DE TESTE - Use apenas em desenvolvimento
+const MP_FALLBACK_ACCESS_TOKEN = 'TEST-174327649585109-112508-b5556707665f235f4eb8c89fe2ac9346-3000462520';
 
 // Headers CORS e Content-Type
 header('Content-Type: application/json; charset=utf-8');
@@ -45,6 +45,13 @@ if (!is_array($payload) || !isset($payload['preference'])) {
 }
 
 $preferenceData = $payload['preference'];
+
+// Valores mínimos obrigatórios
+if (empty($preferenceData['items']) || empty($preferenceData['payer']['email'])) {
+    http_response_code(422);
+    echo json_encode(['error' => 'Dados obrigatórios ausentes (items ou payer).']);
+    exit;
+}
 
 // Obter Access Token
 $accessToken = getenv('MP_ACCESS_TOKEN') ?: MP_FALLBACK_ACCESS_TOKEN;
