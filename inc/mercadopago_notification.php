@@ -201,12 +201,29 @@ function handleApprovedPayment(array $paymentInfo): void
     require_once __DIR__ . '/melhorenvio_shipment.php';
     
     // 1. Recuperar dados do pedido
+    logNotification("Buscando pedido com external_reference: {$externalReference}");
     $orderData = getOrder($externalReference);
     
     if (!$orderData) {
-        logNotification("Pedido {$externalReference} não encontrado. Não é possível criar envio.");
+        logNotification("ERRO: Pedido {$externalReference} não encontrado no storage. Verificando estrutura de arquivos...");
+        
+        // Tentar listar arquivos para debug
+        $ordersDir = __DIR__ . '/../data/orders';
+        if (is_dir($ordersDir)) {
+            $files = glob($ordersDir . '/*.json');
+            logNotification("Arquivos encontrados no diretório de pedidos: " . count($files));
+            foreach ($files as $file) {
+                $filename = basename($file);
+                logNotification("  - Arquivo: {$filename}");
+            }
+        } else {
+            logNotification("Diretório de pedidos não existe: {$ordersDir}");
+        }
+        
         return;
     }
+    
+    logNotification("Pedido encontrado! Dados: " . json_encode($orderData, JSON_PRETTY_PRINT));
     
     // 2. Atualizar status do pedido
     updateOrderStatus($externalReference, 'approved', [
@@ -217,9 +234,17 @@ function handleApprovedPayment(array $paymentInfo): void
     
     // 3. Criar envio no Melhor Envio
     try {
-        logNotification("Criando envio no Melhor Envio para pedido {$externalReference}...");
+        logNotification("Iniciando criação de envio no Melhor Envio para pedido {$externalReference}...");
+        logNotification("Dados do pedido que serão enviados: " . json_encode([
+            'customer' => $orderData['customer'] ?? 'N/A',
+            'address' => $orderData['address'] ?? 'N/A',
+            'items' => $orderData['items'] ?? 'N/A',
+            'freight' => $orderData['freight'] ?? 'N/A'
+        ], JSON_PRETTY_PRINT));
         
         $shipmentResult = processMelhorEnvioShipment($orderData);
+        
+        logNotification("Resultado do processMelhorEnvioShipment: " . json_encode($shipmentResult, JSON_PRETTY_PRINT));
         
         if ($shipmentResult && isset($shipmentResult['shipmentId'])) {
             // Salvar informações do envio
@@ -229,12 +254,12 @@ function handleApprovedPayment(array $paymentInfo): void
                 'shipmentCreatedAt' => date('Y-m-d H:i:s')
             ]);
             
-            logNotification("Envio criado com sucesso! ID: {$shipmentResult['shipmentId']}, URL Etiqueta: " . ($shipmentResult['labelUrl'] ?? 'N/A'));
+            logNotification("SUCESSO: Envio criado! ID: {$shipmentResult['shipmentId']}, URL Etiqueta: " . ($shipmentResult['labelUrl'] ?? 'N/A'));
         } else {
-            logNotification("Erro ao criar envio no Melhor Envio para pedido {$externalReference}");
+            logNotification("ERRO: processMelhorEnvioShipment retornou null ou sem shipmentId. Resultado: " . json_encode($shipmentResult));
         }
     } catch (Exception $e) {
-        logNotification("Exceção ao criar envio: " . $e->getMessage());
+        logNotification("EXCEÇÃO ao criar envio: " . $e->getMessage() . "\nStack trace: " . $e->getTraceAsString());
     }
     
     // 4. Aqui você pode também:

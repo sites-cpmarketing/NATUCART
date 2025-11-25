@@ -28,9 +28,20 @@ const ME_N8N_WEBHOOK = 'https://n8n-auto.cpmarketingbr.com/webhook/melhorenvio-s
  */
 function createMelhorEnvioShipment(array $orderData): ?array
 {
+    // Log para debug
+    $logFile = __DIR__ . '/../logs/mercadopago_notifications.log';
+    $logDir = dirname($logFile);
+    if (!is_dir($logDir)) {
+        @mkdir($logDir, 0755, true);
+    }
+    $timestamp = date('Y-m-d H:i:s');
+    @file_put_contents($logFile, "[{$timestamp}] [Melhor Envio] createMelhorEnvioShipment chamado. Dados recebidos: " . json_encode($orderData, JSON_PRETTY_PRINT) . "\n", FILE_APPEND);
+    
     // Validar dados obrigatórios
     if (empty($orderData['customer']) || empty($orderData['address']) || empty($orderData['items'])) {
-        error_log('[Melhor Envio] Dados incompletos para criar envio');
+        $errorMsg = '[Melhor Envio] Dados incompletos para criar envio. customer: ' . (empty($orderData['customer']) ? 'VAZIO' : 'OK') . ', address: ' . (empty($orderData['address']) ? 'VAZIO' : 'OK') . ', items: ' . (empty($orderData['items']) ? 'VAZIO' : 'OK');
+        error_log($errorMsg);
+        @file_put_contents($logFile, "[{$timestamp}] {$errorMsg}\n", FILE_APPEND);
         return null;
     }
 
@@ -98,6 +109,20 @@ function createMelhorEnvioShipment(array $orderData): ?array
         ]
     ];
 
+    // Preparar payload para n8n
+    $n8nPayload = [
+        'action' => 'create_shipment',
+        'melhorEnvioUrl' => ME_API_BASE . '/shipment',
+        'payload' => $payload,
+        'clientId' => ME_CLIENT_ID,
+        'clientSecret' => ME_CLIENT_SECRET
+    ];
+    
+    $timestamp = date('Y-m-d H:i:s');
+    $logFile = __DIR__ . '/../logs/mercadopago_notifications.log';
+    @file_put_contents($logFile, "[{$timestamp}] [Melhor Envio] Enviando requisição para n8n: " . ME_N8N_WEBHOOK . "\n", FILE_APPEND);
+    @file_put_contents($logFile, "[{$timestamp}] [Melhor Envio] Payload completo: " . json_encode($n8nPayload, JSON_PRETTY_PRINT) . "\n", FILE_APPEND);
+    
     // Enviar requisição via n8n (já configurado para gerenciar OAuth)
     $ch = curl_init(ME_N8N_WEBHOOK);
     curl_setopt_array($ch, [
@@ -106,13 +131,7 @@ function createMelhorEnvioShipment(array $orderData): ?array
         CURLOPT_HTTPHEADER => [
             'Content-Type: application/json'
         ],
-        CURLOPT_POSTFIELDS => json_encode([
-            'action' => 'create_shipment',
-            'melhorEnvioUrl' => ME_API_BASE . '/shipment',
-            'payload' => $payload,
-            'clientId' => ME_CLIENT_ID,
-            'clientSecret' => ME_CLIENT_SECRET
-        ]),
+        CURLOPT_POSTFIELDS => json_encode($n8nPayload),
         CURLOPT_TIMEOUT => 30
     ]);
 
@@ -121,13 +140,19 @@ function createMelhorEnvioShipment(array $orderData): ?array
     $curlError = curl_error($ch);
     curl_close($ch);
 
+    @file_put_contents($logFile, "[{$timestamp}] [Melhor Envio] Resposta do n8n - HTTP {$httpCode}: {$response}\n", FILE_APPEND);
+
     if ($curlError) {
-        error_log("[Melhor Envio] Erro cURL: {$curlError}");
+        $errorMsg = "[Melhor Envio] Erro cURL: {$curlError}";
+        error_log($errorMsg);
+        @file_put_contents($logFile, "[{$timestamp}] {$errorMsg}\n", FILE_APPEND);
         return null;
     }
 
     if ($httpCode !== 200 && $httpCode !== 201) {
-        error_log("[Melhor Envio] Erro HTTP {$httpCode}: {$response}");
+        $errorMsg = "[Melhor Envio] Erro HTTP {$httpCode}: {$response}";
+        error_log($errorMsg);
+        @file_put_contents($logFile, "[{$timestamp}] {$errorMsg}\n", FILE_APPEND);
         return null;
     }
 

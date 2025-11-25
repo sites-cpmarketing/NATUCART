@@ -50,17 +50,37 @@ function getOrder(string $orderId): ?array
 {
     $filePath = ORDERS_DIR . '/' . $orderId . '.json';
     
+    // Log para debug
+    $logFile = __DIR__ . '/../logs/mercadopago_notifications.log';
+    $timestamp = date('Y-m-d H:i:s');
+    @file_put_contents($logFile, "[{$timestamp}] [Order Storage] Buscando pedido: {$orderId}\n", FILE_APPEND);
+    @file_put_contents($logFile, "[{$timestamp}] [Order Storage] Caminho do arquivo: {$filePath}\n", FILE_APPEND);
+    
     if (!file_exists($filePath)) {
+        @file_put_contents($logFile, "[{$timestamp}] [Order Storage] Arquivo não encontrado: {$filePath}\n", FILE_APPEND);
         return null;
     }
     
     $content = @file_get_contents($filePath);
     if ($content === false) {
+        @file_put_contents($logFile, "[{$timestamp}] [Order Storage] Erro ao ler arquivo: {$filePath}\n", FILE_APPEND);
         return null;
     }
     
     $data = json_decode($content, true);
-    return $data['data'] ?? null;
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        @file_put_contents($logFile, "[{$timestamp}] [Order Storage] Erro ao decodificar JSON: " . json_last_error_msg() . "\n", FILE_APPEND);
+        return null;
+    }
+    
+    @file_put_contents($logFile, "[{$timestamp}] [Order Storage] Dados decodificados: " . json_encode($data, JSON_PRETTY_PRINT) . "\n", FILE_APPEND);
+    
+    $orderData = $data['data'] ?? null;
+    if (!$orderData) {
+        @file_put_contents($logFile, "[{$timestamp}] [Order Storage] Chave 'data' não encontrada no JSON. Chaves disponíveis: " . implode(', ', array_keys($data)) . "\n", FILE_APPEND);
+    }
+    
+    return $orderData;
 }
 
 /**
