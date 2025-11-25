@@ -1,14 +1,9 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "a84ddc287f3adf1fbb681cff8dda0e46",
     "packages": [
         {
             "name": "mercadopago/dx-php",
             "version": "3.7.1",
+            "version_normalized": "3.7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mercadopago/sdk-php.git",
@@ -28,7 +23,9 @@
                 "phpunit/phpunit": "^10.2",
                 "squizlabs/php_codesniffer": "3.*"
             },
+            "time": "2025-10-31T12:40:56+00:00",
             "type": "library",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "MercadoPago\\": "src/MercadoPago"
@@ -43,18 +40,9 @@
             "support": {
                 "source": "https://github.com/mercadopago/sdk-php/tree/3.7.1"
             },
-            "time": "2025-10-31T12:40:56+00:00"
+            "install-path": "../mercadopago/dx-php"
         }
     ],
-    "packages-dev": [],
-    "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": {},
-    "prefer-stable": false,
-    "prefer-lowest": false,
-    "platform": {
-        "php": ">=8.1"
-    },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "dev": true,
+    "dev-package-names": []
 }
