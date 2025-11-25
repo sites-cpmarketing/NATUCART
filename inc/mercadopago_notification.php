@@ -43,6 +43,10 @@ $headers = getallheaders();
 logNotification("Headers: " . json_encode($headers) . "\nBody: " . $rawBody);
 
 // Verificar se é uma notificação do Mercado Pago
+$topic = '';
+$paymentId = '';
+$merchantOrderId = '';
+
 if (!isset($_GET['topic']) && !isset($_GET['id']) && !isset($_GET['type']) && !isset($_GET['data.id'])) {
     // Pode ser uma notificação via POST (webhook)
     $payload = json_decode($rawBody, true);
@@ -58,12 +62,25 @@ if (!isset($_GET['topic']) && !isset($_GET['id']) && !isset($_GET['type']) && !i
 } else {
     // Notificação via GET (IPN - Instant Payment Notification)
     $topic = $_GET['topic'] ?? ($_GET['type'] ?? '');
-    $paymentId = $_GET['id'] ?? ($_GET['data.id'] ?? ($_GET['data_id'] ?? ''));
+    $id = $_GET['id'] ?? ($_GET['data.id'] ?? ($_GET['data_id'] ?? ''));
+    
+    // Se for merchant_order, buscar os pagamentos dentro da ordem
+    if ($topic === 'merchant_order' || strpos($topic, 'merchant_order') !== false) {
+        $merchantOrderId = $id;
+        logNotification("Notificação de merchant_order recebida: {$merchantOrderId}");
+        // Vamos buscar a ordem e processar os pagamentos dentro dela
+        // Por enquanto, vamos apenas logar e retornar OK
+        http_response_code(200);
+        echo json_encode(['status' => 'ok', 'processed' => true, 'type' => 'merchant_order']);
+        exit;
+    } else {
+        $paymentId = $id;
+    }
 }
 
-if (empty($paymentId)) {
+if (empty($paymentId) && empty($merchantOrderId)) {
     http_response_code(400);
-    echo json_encode(['error' => 'ID do pagamento não encontrado']);
+    echo json_encode(['error' => 'ID do pagamento ou ordem não encontrado']);
     exit;
 }
 
@@ -76,7 +93,13 @@ if (!$accessToken) {
     exit;
 }
 
+// Se for merchant_order, já respondemos acima
+if (!empty($merchantOrderId)) {
+    exit;
+}
+
 // Buscar informações do pagamento no Mercado Pago
+logNotification("Buscando informações do pagamento {$paymentId}...");
 $paymentInfo = getPaymentInfo($paymentId, $accessToken);
 
 if (!$paymentInfo) {
@@ -85,6 +108,8 @@ if (!$paymentInfo) {
     echo json_encode(['status' => 'ok', 'processed' => false, 'reason' => 'payment_not_found']);
     exit;
 }
+
+logNotification("Pagamento encontrado. Status: " . ($paymentInfo['status'] ?? 'N/A') . ", External Reference: " . ($paymentInfo['external_reference'] ?? 'N/A'));
 
 // Processar notificação
 processNotification($paymentInfo, $topic);

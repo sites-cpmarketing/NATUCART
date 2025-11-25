@@ -42,14 +42,28 @@ if (!$payload || empty($payload['orderId']) || empty($payload['orderData'])) {
 $orderId = $payload['orderId'];
 $orderData = $payload['orderData'];
 
+// Log para debug
+$logFile = __DIR__ . '/../logs/mercadopago_notifications.log';
+$logDir = dirname($logFile);
+if (!is_dir($logDir)) {
+    @mkdir($logDir, 0755, true);
+}
+$timestamp = date('Y-m-d H:i:s');
+@file_put_contents($logFile, "[{$timestamp}] [Save Order] Recebendo pedido para salvar\n", FILE_APPEND);
+@file_put_contents($logFile, "[{$timestamp}] [Save Order] OrderId: {$orderId}\n", FILE_APPEND);
+@file_put_contents($logFile, "[{$timestamp}] [Save Order] OrderData keys: " . implode(', ', array_keys($orderData)) . "\n", FILE_APPEND);
+
 // Adicionar timestamp
 $orderData['createdAt'] = date('Y-m-d H:i:s');
 $orderData['status'] = 'pending_payment';
+$orderData['orderId'] = $orderId; // Garantir que orderId está nos dados
+$orderData['externalReference'] = $orderId; // Garantir que externalReference está nos dados
 
 // Salvar pedido
 $success = saveOrder($orderId, $orderData);
 
 if ($success) {
+    @file_put_contents($logFile, "[{$timestamp}] [Save Order] Pedido salvo com sucesso: {$orderId}\n", FILE_APPEND);
     http_response_code(201);
     echo json_encode([
         'status' => 'ok',
@@ -57,6 +71,7 @@ if ($success) {
         'message' => 'Pedido salvo com sucesso'
     ]);
 } else {
+    @file_put_contents($logFile, "[{$timestamp}] [Save Order] ERRO ao salvar pedido: {$orderId}\n", FILE_APPEND);
     http_response_code(500);
     echo json_encode(['error' => 'Erro ao salvar pedido']);
 }
