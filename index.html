@@ -105,8 +105,8 @@
                                                         <span class="woocommerce-Price-amount" data-cart-total>R$ 0</span>
                                                     </p>
                                                     <p class="checkout-link">
-                                                        <a href="#freight" class="button wc-forward cart-view-link" data-close-mini-cart>Ver Carrinho</a>
-                                                        <a href="#freight" class="button checkout wc-forward cart-checkout-link" data-close-mini-cart>Finalizar Compra</a>
+                                                        <a href="checkout.html" class="button wc-forward cart-view-link" data-close-mini-cart>Ver Carrinho</a>
+                                                        <a href="checkout.html" class="button checkout wc-forward cart-checkout-link" data-close-mini-cart data-finalize-checkout>Finalizar Compra</a>
                                                     </p>
                                                 </div>
                                             </li>
@@ -678,38 +678,6 @@
             </section>
             <!-- pricing-area-end -->
 
-            <!-- freight-area -->
-            <section id="freight" class="freight-area">
-                <div class="container">
-                    <div class="freight-card">
-                        <div class="freight-card__content">
-                            <h3 class="freight-title">Calcule o Frete</h3>
-                            <p class="freight-description">Informe seu CEP para estimar o prazo e o custo de entrega via Frenet.</p>
-                            <form data-freight-form class="freight-form">
-                                <div class="freight-form-group">
-                                    <input type="text" name="postalCode" inputmode="numeric" placeholder="00000-000" maxlength="9" required>
-                                    <button type="submit">Calcular Frete</button>
-                                </div>
-                                <small class="freight-hint">Utilizaremos os dados configurados no painel Frenet.</small>
-                            </form>
-                            <div class="freight-result" data-freight-result>Frete ainda não calculado.</div>
-                            <div class="checkout-summary">
-                                <div class="checkout-summary__row">
-                                    <span>Itens no carrinho</span>
-                                    <strong data-checkout-items>0</strong>
-                                </div>
-                                <div class="checkout-summary__row">
-                                    <span>Total estimado</span>
-                                    <strong data-checkout-total>R$ 0</strong>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-two checkout-submit" data-checkout-submit>Finalizar com AbacatePay</button>
-                            <small class="checkout-status" data-checkout-status>Aguardando itens para finalizar.</small>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!-- freight-area-end -->
 
             <!-- testimonial-area -->
             <section id="testimonials" class="testimonial-area testimonial-bg" data-background="assets/img/bg/testimonial_bg.jpg">
@@ -1009,6 +977,14 @@
         <script src="assets/js/cart.js"></script>
         <script src="assets/js/payments/abacatepay.js"></script>
         <script src="assets/js/shipping/frenet.js"></script>
+        <script>
+            AbacatePayService.configure({
+                baseUrl: 'https://api.abacatepay.com/v1',
+                apiKey: 'abc_dev_dkkJpqAd5ZFquyFX6ymkKtXL',
+                environment: 'sandbox',
+                methods: ['PIX']
+            });
+        </script>
         <script src="assets/js/checkout.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js" referrerpolicy="no-referrer"></script>

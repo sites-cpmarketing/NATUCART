@@ -2,12 +2,12 @@
     'use strict';
 
     const DEFAULT_CONFIG = {
-        baseUrl: 'http://api.frenet.com.br/shipping/quote', // Endpoint para cotação de frete (HTTP, não HTTPS)
-        token: '',
-        password: '',
-        key: '',
+        baseUrl: 'https://melhorenvio.com.br/api/v2/me/shipment/calculate',
+        token: '', // Token de acesso OAuth do Melhor Envio (gerenciado pelo n8n)
+        clientId: '', // Client ID do aplicativo Melhor Envio
+        clientSecret: '', // Client Secret do aplicativo Melhor Envio
         sellerPostalCode: '01001000',
-        n8nWebhookUrl: 'https://n8n-auto.cpmarketingbr.com/webhook/frete-natucart' // Webhook n8n para proxy
+        n8nWebhookUrl: 'https://n8n-auto.cpmarketingbr.com/webhook/melhorenvio-natucart' // Webhook n8n para proxy
     };
 
     const config = { ...DEFAULT_CONFIG };
@@ -17,7 +17,14 @@
         currency: 'BRL'
     }).format(value);
 
-    const shouldMock = () => !config.token || !config.password;
+    const shouldMock = () => {
+        // Se houver n8nWebhookUrl configurado, não usar mock (o n8n gerencia a autenticação)
+        if (config.n8nWebhookUrl && config.n8nWebhookUrl.length > 0) {
+            return false;
+        }
+        // Se não houver token E não houver n8nWebhookUrl, usar mock
+        return !config.token;
+    };
 
     const sanitizePostalCode = (value = '') => value.replace(/\D/g, '').slice(0, 8);
     const formatPostalCode = (value = '') => {
@@ -27,91 +34,117 @@
     };
 
     const mockResponse = (postalCode) => ({
-        service: 'Frenet Expresso',
-        price: 29.9,
-        deliveryTime: 5,
+        options: [
+            {
+                service: 'PAC',
+                carrier: 'Correios',
+                price: 15.50,
+                deliveryTime: 7,
+                serviceCode: 'PAC',
+                postalCode
+            },
+            {
+                service: 'SEDEX',
+                carrier: 'Correios',
+                price: 25.90,
+                deliveryTime: 3,
+                serviceCode: 'SEDEX',
+                postalCode
+            }
+        ],
         postalCode
     });
 
     const request = async (addressData, cartSnapshot) => {
         if (shouldMock()) {
-            console.info('[Frenet] Executando em modo mock');
+            console.info('[Melhor Envio] Executando em modo mock');
             return mockResponse(addressData.postalCode);
         }
 
-        // Construir body conforme documentação oficial do Frenet
-        // Documentação: https://docs.frenet.com.br/reference/calculateshippingquote
+        // Construir body conforme documentação do Melhor Envio
+        // Documentação: https://melhorenvio.com.br/api/v2/me/shipment/calculate
         const body = {
-            SellerCEP: config.sellerPostalCode,
-            RecipientCEP: addressData.postalCode,
-            ShipmentInvoiceValue: cartSnapshot.total || cartSnapshot.subtotal || 0,
-            ShippingItemArray: cartSnapshot.items.map((item) => ({
-                Height: 2,      // Altura em cm
-                Length: 33,     // Comprimento em cm
-                Width: 47,      // Largura em cm
-                Weight: 1.18,   // Peso em kg
-                Quantity: item.quantity,
-                SKU: item.sku || item.id,
-                Category: 'General' // Categoria do produto (opcional)
-            })),
-            RecipientCountry: addressData.country || 'BR'
+            from: {
+                postal_code: config.sellerPostalCode
+            },
+            to: {
+                postal_code: addressData.postalCode
+            },
+            // Enviar cada unidade como um produto separado
+            // Exemplo: se quantity = 3, criar 3 produtos separados
+            products: cartSnapshot.items.flatMap((item) => {
+                const products = [];
+                for (let i = 0; i < item.quantity; i++) {
+                    products.push({
+                        id: item.sku || item.id,
+                        width: 33,      // Largura em cm
+                        height: 2,      // Altura em cm
+                        length: 47,    // Comprimento em cm
+                        weight: 1.18,  // Peso em kg
+                        insurance_value: item.price,
+                        quantity: 1
+                    });
+                }
+                return products;
+            }),
+            services: '1,2,3,4,17' // IDs dos serviços (PAC, SEDEX, etc.)
         };
 
-        // Adicionar dados de endereço completo se disponíveis (opcionais, melhoram a precisão)
+        // Adicionar dados de endereço completo se disponíveis
         if (addressData.street) {
-            body.RecipientStreet = addressData.street;
+            body.to.address = addressData.street;
         }
         if (addressData.number) {
-            body.RecipientNumber = addressData.number;
+            body.to.number = addressData.number;
         }
         if (addressData.complement) {
-            body.RecipientComplement = addressData.complement;
+            body.to.complement = addressData.complement;
         }
         if (addressData.district) {
-            body.RecipientDistrict = addressData.district;
+            body.to.district = addressData.district;
         }
         if (addressData.city) {
-            body.RecipientCity = addressData.city;
+            body.to.city = addressData.city;
         }
         if (addressData.state) {
-            body.RecipientState = addressData.state;
+            body.to.state = addressData.state;
         }
 
-        // Headers conforme documentação oficial do Frenet
-        // Documentação: https://docs.frenet.com.br/reference/calculateshippingquote
+        // Verificar se deve usar n8n como proxy
+        const useN8N = config.n8nWebhookUrl && config.n8nWebhookUrl.length > 0;
+
+        // Headers conforme documentação do Melhor Envio
+        // Nota: Quando usando n8n como proxy, o token será gerenciado pelo n8n
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'token': config.token
+            'User-Agent': 'Natucart/1.0'
         };
-
-        // Senha e chave são opcionais, dependendo do tipo de autenticação
-        if (config.password) {
-            headers['senha'] = config.password;
-        }
-        if (config.key) {
-            headers['chave'] = config.key;
+        
+        // Adicionar Authorization apenas se houver token E não estiver usando n8n (requisição direta)
+        if (config.token && !useN8N) {
+            headers['Authorization'] = `Bearer ${config.token}`;
         }
 
         let response;
         
-        // Sempre usar n8n webhook como proxy para evitar CORS
-        const useN8N = config.n8nWebhookUrl && config.n8nWebhookUrl.length > 0;
-        
         if (useN8N) {
             // Enviar requisição via n8n webhook
             try {
-                console.info('[Frenet] Enviando requisição via n8n webhook...');
+                console.info('[Melhor Envio] Enviando requisição via n8n webhook...');
                 response = await fetch(config.n8nWebhookUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        // Dados para o n8n fazer a requisição ao Frenet
-                        frenetUrl: config.baseUrl,
-                        frenetHeaders: headers,
-                        frenetBody: body,
+                        // Dados para o n8n fazer a requisição ao Melhor Envio
+                        melhorEnvioUrl: config.baseUrl,
+                        melhorEnvioHeaders: headers,
+                        melhorEnvioBody: body,
+                        // Credenciais OAuth (o n8n usará para obter/renovar token)
+                        clientId: config.clientId,
+                        clientSecret: config.clientSecret,
                         // Informações adicionais úteis
                         address: addressData,
                         cartSnapshot: {
@@ -123,7 +156,7 @@
                     mode: 'cors'
                 });
             } catch (n8nError) {
-                console.error('[Frenet] Erro ao chamar webhook n8n:', n8nError);
+                console.error('[Melhor Envio] Erro ao chamar webhook n8n:', n8nError);
                 throw new Error(`Não foi possível conectar ao webhook n8n. Verifique se o webhook está configurado corretamente. Erro: ${n8nError.message}`);
             }
         } else {
@@ -136,25 +169,26 @@
                     mode: 'cors'
                 });
             } catch (fetchError) {
-                // Erro de rede ou CORS
-                console.error('[Frenet] Erro na requisição direta:', fetchError);
+                console.error('[Melhor Envio] Erro na requisição direta:', fetchError);
                 
                 // Se for erro de CORS, informar que precisa configurar n8n
                 if (fetchError.message.includes('Failed to fetch') || fetchError.message.includes('CORS')) {
-                    throw new Error('Erro de CORS: A API do Frenet não permite requisições diretas do navegador. Configure o n8nWebhookUrl na configuração do FrenetService para usar o webhook n8n como proxy.');
+                    throw new Error('Erro de CORS: A API do Melhor Envio não permite requisições diretas do navegador. Configure o n8nWebhookUrl na configuração do MelhorEnvioService para usar o webhook n8n como proxy.');
                 }
                 
-                throw new Error(`Não foi possível conectar à API do Frenet. Erro: ${fetchError.message}`);
+                throw new Error(`Não foi possível conectar à API do Melhor Envio. Erro: ${fetchError.message}`);
             }
         }
 
         if (!response.ok) {
             const errorText = await response.text();
-            let errorMessage = `Frenet error ${response.status}: ${errorText}`;
+            let errorMessage = `Melhor Envio error ${response.status}: ${errorText}`;
             try {
                 const errorJson = JSON.parse(errorText);
                 if (errorJson.message) {
                     errorMessage = errorJson.message;
+                } else if (errorJson.error) {
+                    errorMessage = errorJson.error;
                 }
             } catch (e) {
                 // Manter mensagem original se não for JSON
@@ -163,77 +197,111 @@
         }
 
         let responseData = await response.json();
+        console.log('[Melhor Envio] Resposta bruta do n8n:', responseData);
+        console.log('[Melhor Envio] Tipo da resposta:', typeof responseData, Array.isArray(responseData));
         
-        // Se o n8n retornar a resposta do Frenet dentro de um campo (ex: data, body, result)
+        // Se o n8n retornar a resposta do Melhor Envio dentro de um campo (ex: data, body, result)
         // extrair o conteúdo real
         let data = responseData;
         if (useN8N) {
             // O n8n pode retornar a resposta em diferentes formatos
-            if (responseData.data) {
+            // Verificar múltiplos níveis de aninhamento
+            if (Array.isArray(responseData)) {
+                // Se já estiver no formato correto (array direto), usar diretamente
+                data = responseData;
+                console.log('[Melhor Envio] Dados são um array direto:', data.length, 'itens');
+            } else if (responseData.data) {
                 data = responseData.data;
+                console.log('[Melhor Envio] Dados extraídos de responseData.data:', Array.isArray(data) ? `${data.length} itens` : 'objeto único');
             } else if (responseData.body) {
                 data = responseData.body;
+                console.log('[Melhor Envio] Dados extraídos de responseData.body:', Array.isArray(data) ? `${data.length} itens` : 'objeto único');
             } else if (responseData.result) {
                 data = responseData.result;
-            } else if (Array.isArray(responseData) || responseData.ShippingSevicesArray) {
-                // Se já estiver no formato correto, usar diretamente
-                data = responseData;
+                console.log('[Melhor Envio] Dados extraídos de responseData.result:', Array.isArray(data) ? `${data.length} itens` : 'objeto único');
+            } else if (responseData.json) {
+                // n8n pode retornar em responseData.json
+                data = responseData.json;
+                console.log('[Melhor Envio] Dados extraídos de responseData.json:', Array.isArray(data) ? `${data.length} itens` : 'objeto único');
+            } else if (responseData && typeof responseData === 'object') {
+                // Verificar se é um objeto com propriedades que podem ser arrays
+                if (Array.isArray(responseData.items)) {
+                    data = responseData.items;
+                    console.log('[Melhor Envio] Dados extraídos de responseData.items:', data.length, 'itens');
+                } else if (Array.isArray(responseData.services)) {
+                    data = responseData.services;
+                    console.log('[Melhor Envio] Dados extraídos de responseData.services:', data.length, 'itens');
+                } else {
+                    data = responseData;
+                    console.log('[Melhor Envio] Dados são um objeto único:', data);
+                }
             }
         }
         
-        // Processar resposta conforme documentação oficial
-        // A API retorna ShippingSevicesArray (note o typo "Sevices" na API oficial)
-        // Documentação: https://docs.frenet.com.br/reference/calculateshippingquote
+        console.log('[Melhor Envio] Dados finais para processamento:', data);
+        
+        // Processar resposta conforme documentação do Melhor Envio
+        // A API pode retornar um array de opções de frete ou um objeto único
         let availableServices = [];
         
-        // Formato oficial: ShippingSevicesArray
-        if (Array.isArray(data?.ShippingSevicesArray)) {
-            availableServices = data.ShippingSevicesArray
-                .filter(srv => srv.Error === false && srv.ShippingPrice && parseFloat(srv.ShippingPrice) > 0)
-                .map(srv => ({
-                    serviceCode: srv.ServiceCode || '',
-                    service: srv.ServiceDescription || 'Serviço de Entrega',
-                    carrier: srv.Carrier || '',
-                    carrierCode: srv.CarrierCode || '',
-                    price: parseFloat(srv.ShippingPrice) || 0, // Converter string para número
-                    deliveryTime: parseInt(srv.DeliveryTime) || 0,
-                    originalPrice: parseFloat(srv.OriginalShippingPrice) || 0,
-                    originalDeliveryTime: parseInt(srv.OriginalDeliveryTime) || 0,
-                    allowBuyLabel: srv.AllowBuyLabel || false,
-                    postalCode: addressData.postalCode
-                }));
-        }
+        // Função auxiliar para processar um serviço individual
+        const processService = (srv) => ({
+            serviceCode: srv.id?.toString() || srv.name?.toUpperCase() || '',
+            service: srv.name || srv.service_name || 'Serviço de Entrega',
+            carrier: srv.company?.name || srv.carrier || 'Transportadora',
+            carrierCode: srv.company?.id?.toString() || '',
+            price: parseFloat(srv.price) || parseFloat(srv.custom_price) || 0,
+            deliveryTime: parseInt(srv.delivery_time) || parseInt(srv.delivery_range?.min) || parseInt(srv.delivery_range?.max) || 0,
+            originalPrice: parseFloat(srv.custom_price) || parseFloat(srv.price) || 0,
+            postalCode: addressData.postalCode,
+            // Dados adicionais do Melhor Envio
+            serviceId: srv.id,
+            companyId: srv.company?.id,
+            error: srv.error || null
+        });
         
-        // Fallback para outros formatos possíveis
-        if (availableServices.length === 0 && Array.isArray(data?.ShippingServicesArray)) {
-            availableServices = data.ShippingServicesArray
-                .filter(srv => srv.Error === false && srv.ShippingPrice && parseFloat(srv.ShippingPrice) > 0)
-                .map(srv => ({
-                    serviceCode: srv.ServiceCode || '',
-                    service: srv.ServiceDescription || 'Serviço de Entrega',
-                    carrier: srv.Carrier || '',
-                    carrierCode: srv.CarrierCode || '',
-                    price: parseFloat(srv.ShippingPrice) || 0,
-                    deliveryTime: parseInt(srv.DeliveryTime) || 0,
-                    postalCode: addressData.postalCode
-                }));
+        if (Array.isArray(data)) {
+            // Resposta é um array de serviços
+            availableServices = data
+                .filter(srv => {
+                    const price = parseFloat(srv.price) || parseFloat(srv.custom_price) || 0;
+                    return price > 0 && !srv.error;
+                })
+                .map(processService);
+        } else if (data && Array.isArray(data.services)) {
+            // Formato alternativo com propriedade services
+            availableServices = data.services
+                .filter(srv => {
+                    const price = parseFloat(srv.price) || parseFloat(srv.custom_price) || 0;
+                    return price > 0 && !srv.error;
+                })
+                .map(processService);
+        } else if (data && typeof data === 'object' && data.id) {
+            // Resposta é um objeto único (caso do n8n retornar apenas um serviço)
+            const price = parseFloat(data.price) || parseFloat(data.custom_price) || 0;
+            if (price > 0 && !data.error) {
+                availableServices = [processService(data)];
+            }
         }
 
+        console.log('[Melhor Envio] Serviços processados:', availableServices.length, 'opções');
         if (availableServices.length > 0) {
+            console.log('[Melhor Envio] Detalhes dos serviços:', availableServices);
             // Retornar todas as opções disponíveis
+            console.log('[Melhor Envio] Retornando', availableServices.length, 'opções de frete');
             return {
                 options: availableServices,
-                postalCode: addressData.postalCode,
-                timeout: data.Timeout || 0
+                postalCode: addressData.postalCode
             };
         }
 
         // Se nenhum serviço disponível, lançar erro
-        console.warn('[Frenet] Nenhum serviço disponível. Resposta:', data);
+        console.warn('[Melhor Envio] Nenhum serviço disponível. Resposta original:', responseData);
+        console.warn('[Melhor Envio] Dados processados:', data);
         throw new Error('Nenhum serviço de frete disponível para este endereço.');
     };
 
-    const FrenetService = {
+    const MelhorEnvioService = {
         configure(options = {}) {
             Object.assign(config, options);
         },
@@ -264,6 +332,7 @@
         }
     };
 
+    // Integração com formulário (se existir)
     const resultBox = document.querySelector('[data-freight-result]');
     const form = document.querySelector('[data-freight-form]');
 
@@ -336,7 +405,7 @@
                     complement: formData.get('complement') || ''
                 };
 
-                const quote = await FrenetService.getFreightRates({
+                const quote = await MelhorEnvioService.getFreightRates({
                     postalCode: sanitizedPostal,
                     cartSnapshot,
                     address: addressData
@@ -377,7 +446,7 @@
                     }
                 }
             } catch (error) {
-                console.error('[Frenet] Falha ao calcular frete', error);
+                console.error('[Melhor Envio] Falha ao calcular frete', error);
                 if (resultBox) {
                     resultBox.textContent = error.message || 'Não foi possível calcular o frete no momento.';
                     resultBox.classList.remove('has-result');
@@ -388,6 +457,6 @@
         });
     }
 
-    window.FrenetService = FrenetService;
+    window.MelhorEnvioService = MelhorEnvioService;
 })(window, document);
 

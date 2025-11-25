@@ -3,74 +3,59 @@
 
     const DEFAULT_CONFIG = {
         baseUrl: 'https://api.abacatepay.com/v1',
-        publicKey: '',
-        secretKey: '',
-        environment: 'sandbox'
+        apiKey: '',
+        frequency: 'ONE_TIME',
+        methods: ['PIX'],
+        returnUrl: window.location.origin,
+        completionUrl: `${window.location.origin}?payment=completed`,
+        customerDefaults: null
     };
 
     const config = { ...DEFAULT_CONFIG };
 
-    const shouldMock = () => !config.publicKey || !config.secretKey;
-
-    const randomId = () => `abp_${Math.random().toString(36).slice(2, 10)}`;
-
-    const mockDelay = (result) => new Promise((resolve) => {
-        setTimeout(() => resolve(result), 300);
-    });
-
-    const mockResponse = (type, payload = {}) => {
-        switch (type) {
-            case 'session':
-                return mockDelay({
-                    sessionId: randomId(),
-                    checkoutUrl: 'https://sandbox.abacatepay.com/checkout/mock',
-                    expiresAt: new Date(Date.now() + 3600000).toISOString(),
-                    payload
-                });
-            case 'payment':
-                return mockDelay({
-                    paymentId: randomId(),
-                    status: 'authorized',
-                    receivedAt: new Date().toISOString()
-                });
-            default:
-                return mockDelay({ ok: true });
+    const ensureApiKey = () => {
+        if (!config.apiKey) {
+            throw new Error('AbacatePay API key is not configured.');
         }
     };
 
     const buildHeaders = () => ({
         'Content-Type': 'application/json',
-        'x-api-key': config.publicKey,
-        Authorization: `Bearer ${config.secretKey}`
+        Authorization: `Bearer ${config.apiKey}`
     });
 
-    const request = async (path, options = {}) => {
-        if (shouldMock()) {
-            console.info('[AbacatePay] Executando em modo mock', path);
-            return mockResponse(options.mockType || 'default', options.mockPayload);
-        }
+    const request = async (path, body = {}) => {
+        ensureApiKey();
 
         const response = await fetch(`${config.baseUrl}${path}`, {
             method: 'POST',
             headers: buildHeaders(),
-            body: JSON.stringify(options.body || {})
+            body: JSON.stringify(body)
         });
 
+        const payload = await response.json().catch(() => ({}));
+
         if (!response.ok) {
-            const errorBody = await response.text();
-            throw new Error(`AbacatePay error ${response.status}: ${errorBody}`);
+            const errorMessage = payload?.error || payload?.message || response.statusText;
+            throw new Error(`AbacatePay error ${response.status}: ${errorMessage}`);
         }
 
-        return response.json();
+        return payload;
     };
 
-    const sanitizeCartItems = (items = []) => items.map((item) => ({
-        sku: item.sku || item.id,
-        name: item.name,
-        quantity: item.quantity,
-        unitAmount: item.price,
-        totalAmount: item.price * item.quantity
-    }));
+    const buildProducts = (items = []) => {
+        if (!items.length) {
+            throw new Error('Carrinho vazio. Adicione itens antes de criar a cobrança.');
+        }
+
+        return items.map((item) => ({
+            externalId: item.sku || item.id,
+            name: item.name,
+            description: '',
+            quantity: item.quantity,
+            price: Math.round(item.price * 100) // API utiliza centavos
+        }));
+    };
 
     const AbacatePayService = {
         configure(options = {}) {
@@ -82,36 +67,22 @@
         getConfig() {
             return { ...config };
         },
-        async createCheckoutSession(cartSnapshot) {
+        async createBilling(cartSnapshot, customer = {}) {
+            const products = buildProducts(cartSnapshot.items);
+
             const body = {
-                currency: 'BRL',
-                items: sanitizeCartItems(cartSnapshot.items),
-                subtotal: cartSnapshot.subtotal,
-                freight: cartSnapshot.freight?.price || 0,
-                total: cartSnapshot.total,
-                metadata: {
-                    generatedAt: new Date().toISOString()
+                frequency: config.frequency,
+                methods: config.methods,
+                products,
+                returnUrl: config.returnUrl,
+                completionUrl: config.completionUrl,
+                customer: {
+                    ...(config.customerDefaults || {}),
+                    ...customer
                 }
             };
 
-            return request('/checkout/sessions', {
-                body,
-                mockType: 'session',
-                mockPayload: body
-            });
-        },
-        async submitPayment(paymentData) {
-            return request('/payments', {
-                body: paymentData,
-                mockType: 'payment'
-            });
-        },
-        async tokenizeCard(cardData) {
-            return request('/tokens/card', {
-                body: cardData,
-                mockType: 'token',
-                mockPayload: { tokenId: randomId(), last4: cardData.number?.slice(-4) }
-            });
+            return request('/billing/create', body);
         }
     };
 

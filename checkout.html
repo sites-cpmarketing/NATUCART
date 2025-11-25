@@ -1,0 +1,1543 @@
+<!doctype html>
+<html class="no-js" lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Checkout - NATUCART</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Favicon NATUCART -->
+		<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+		<link rel="shortcut icon" type="image/svg+xml" href="assets/img/favicon.svg">
+		<link rel="apple-touch-icon" href="assets/img/favicon.svg">
+
+		<!-- CSS here -->
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="assets/css/flaticon.css">
+        <link rel="stylesheet" href="assets/css/default.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="assets/css/responsive.css">
+        <link rel="stylesheet" href="assets/css/natucart-custom.css">
+        <link rel="stylesheet" href="assets/css/natucart-dark.css">
+        
+        <style>
+            .checkout-page {
+                background: #000000;
+                min-height: 100vh;
+                padding: 40px 0 100px;
+            }
+            .checkout-container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            .checkout-header {
+                text-align: center;
+                margin-bottom: 50px;
+            }
+            .checkout-header h1 {
+                color: #FFFFFF;
+                font-size: 42px;
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
+            .checkout-header p {
+                color: #7A7A7A;
+                font-size: 18px;
+            }
+            .checkout-grid {
+                display: grid;
+                grid-template-columns: 1fr 400px;
+                gap: 30px;
+                margin-top: 40px;
+            }
+            @media (max-width: 991px) {
+                .checkout-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .checkout-main {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
+            .checkout-card {
+                background: #161616;
+                border: 1px solid #2F2F2F;
+                border-radius: 12px;
+                padding: 35px;
+            }
+            .checkout-card-title {
+                color: #FFFFFF;
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 25px;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #2F2F2F;
+            }
+            .checkout-items {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            .checkout-item {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                padding: 20px;
+                background: #121212;
+                border-radius: 8px;
+                border: 1px solid #2F2F2F;
+            }
+            .checkout-item-info {
+                flex: 1;
+            }
+            .checkout-item-name {
+                color: #FFFFFF;
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+            .checkout-item-details {
+                color: #7A7A7A;
+                font-size: 14px;
+            }
+            .checkout-item-price {
+                color: #E24B2F;
+                font-size: 20px;
+                font-weight: 700;
+                text-align: right;
+                min-width: 120px;
+            }
+            .checkout-sidebar {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            .checkout-summary-card {
+                background: #161616;
+                border: 1px solid #2F2F2F;
+                border-radius: 12px;
+                padding: 30px;
+                position: sticky;
+                top: 20px;
+            }
+            .checkout-summary-title {
+                color: #FFFFFF;
+                font-size: 22px;
+                font-weight: 700;
+                margin-bottom: 25px;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #2F2F2F;
+            }
+            .checkout-summary-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 0;
+                border-bottom: 1px solid #2F2F2F;
+            }
+            .checkout-summary-row:last-child {
+                border-bottom: none;
+            }
+            .checkout-summary-label {
+                color: #BFBFBF;
+                font-size: 16px;
+            }
+            .checkout-summary-value {
+                color: #FFFFFF;
+                font-size: 16px;
+                font-weight: 600;
+            }
+            .checkout-summary-total {
+                margin-top: 20px;
+                padding-top: 20px;
+                border-top: 2px solid #E24B2F;
+            }
+            .checkout-summary-total .checkout-summary-label {
+                color: #FFFFFF;
+                font-size: 20px;
+                font-weight: 700;
+            }
+            .checkout-summary-total .checkout-summary-value {
+                color: #E24B2F;
+                font-size: 28px;
+                font-weight: 700;
+            }
+            .freight-section {
+                margin-top: 20px;
+            }
+            .freight-form-group {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            .freight-form-group input {
+                flex: 1;
+                background: #121212;
+                border: 1px solid #2F2F2F;
+                color: #FFFFFF;
+                padding: 14px 18px;
+                border-radius: 8px;
+                font-size: 16px;
+            }
+            .freight-form-group input:focus {
+                outline: none;
+                border-color: #E24B2F;
+                box-shadow: 0 0 0 3px rgba(226, 75, 47, 0.1);
+            }
+            .freight-result {
+                background: #121212;
+                border: 1px solid #2F2F2F;
+                border-radius: 8px;
+                padding: 15px;
+                color: #BFBFBF;
+                font-size: 14px;
+                margin-top: 15px;
+            }
+            .freight-result.has-result {
+                border-color: #22C55E;
+                color: #22C55E;
+            }
+            .freight-section select {
+                width: 100%;
+                padding: 12px;
+                background: #121212;
+                border: 1px solid #2F2F2F;
+                border-radius: 8px;
+                color: #FFFFFF;
+                font-size: 14px;
+            }
+            .checkout-success {
+                max-width: 800px;
+                margin: 40px auto;
+                padding: 40px;
+            }
+            .checkout-success-content {
+                background: #121212;
+                border: 1px solid #2F2F2F;
+                border-radius: 16px;
+                padding: 50px 40px;
+                text-align: center;
+            }
+            .checkout-success-icon {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto 30px;
+                background: rgba(34, 197, 94, 0.1);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .checkout-success-icon i {
+                font-size: 60px;
+                color: #22C55E;
+            }
+            .checkout-success-content h2 {
+                color: #FFFFFF;
+                font-size: 32px;
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
+            .success-message {
+                color: #BFBFBF;
+                font-size: 16px;
+                margin-bottom: 40px;
+                line-height: 1.6;
+            }
+            .success-order-info {
+                background: #0A0A0A;
+                border: 1px solid #2F2F2F;
+                border-radius: 12px;
+                padding: 30px;
+                margin-bottom: 30px;
+                text-align: left;
+            }
+            .success-info-item {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 15px 0;
+                border-bottom: 1px solid #2F2F2F;
+            }
+            .success-info-item:last-child {
+                border-bottom: none;
+            }
+            .success-info-item i {
+                font-size: 24px;
+                color: #E24B2F;
+                width: 40px;
+                text-align: center;
+            }
+            .success-info-item div {
+                flex: 1;
+            }
+            .success-info-item strong {
+                display: block;
+                color: #BFBFBF;
+                font-size: 13px;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+            .success-info-item span {
+                display: block;
+                color: #FFFFFF;
+                font-size: 16px;
+                font-weight: 600;
+            }
+            .success-actions {
+                margin-top: 30px;
+            }
+            .success-actions .btn {
+                min-width: 250px;
+            }
+            .freight-section select option {
+                background: #121212;
+                color: #FFFFFF;
+            }
+            @media (max-width: 768px) {
+                .freight-section > div[style*="grid-template-columns"] {
+                    grid-template-columns: 1fr !important;
+                }
+            }
+            .btn-checkout-finalize {
+                width: 100%;
+                padding: 18px;
+                font-size: 18px;
+                font-weight: 700;
+                background: #E24B2F;
+                color: #FFFFFF;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: none;
+                margin-top: 25px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+            }
+            .btn-checkout-finalize i {
+                font-size: 20px;
+            }
+            .btn-checkout-finalize:disabled {
+                background: #7A7A7A;
+                cursor: not-allowed;
+            }
+            /* Garantir que todos os botões sempre mostrem conteúdo */
+            .checkout-page .btn,
+            .checkout-page .btn-two,
+            .checkout-page button,
+            .checkout-page .btn-header-action,
+            .checkout-page .cart-toggle,
+            .checkout-page .btn-checkout-finalize {
+                opacity: 1 !important;
+                visibility: visible !important;
+                color: #FFFFFF !important;
+                transition: none !important;
+            }
+            
+            /* Garantir que texto e ícones dos botões sejam sempre visíveis */
+            .checkout-page .btn *,
+            .checkout-page .btn-two *,
+            .checkout-page button *,
+            .checkout-page .btn-header-action *,
+            .checkout-page .cart-toggle *,
+            .checkout-page .btn-checkout-finalize * {
+                opacity: 1 !important;
+                visibility: visible !important;
+                color: inherit !important;
+            }
+            
+            /* Remover hovers problemáticos */
+            .checkout-page .btn:hover,
+            .checkout-page .btn-two:hover,
+            .checkout-page button:hover,
+            .checkout-page .btn-header-action:hover,
+            .checkout-page .cart-toggle:hover {
+                transform: none !important;
+                box-shadow: none !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            
+            /* Desabilitar ::before e ::after que podem esconder conteúdo */
+            .checkout-page .btn::before,
+            .checkout-page .btn::after,
+            .checkout-page .btn-two::before,
+            .checkout-page .btn-two::after,
+            .checkout-page button::before,
+            .checkout-page button::after {
+                display: none !important;
+                content: none !important;
+                opacity: 0 !important;
+                visibility: hidden !important;
+            }
+            
+            /* Garantir que conteúdo do botão fique acima */
+            .checkout-page .btn *,
+            .checkout-page .btn-two *,
+            .checkout-page button * {
+                position: relative !important;
+                z-index: 10 !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            
+            /* Estilos específicos para botão btn-two */
+            .checkout-page .btn-two {
+                background: #E24B2F !important;
+                color: #FFFFFF !important;
+                border: none !important;
+                padding: 12px 28px !important;
+                font-weight: 700 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 1px !important;
+                border-radius: 8px !important;
+                position: relative !important;
+                z-index: 1 !important;
+            }
+            
+            .checkout-page .btn-two * {
+                color: #FFFFFF !important;
+                opacity: 1 !important;
+                position: relative !important;
+                z-index: 10 !important;
+            }
+            
+            /* Garantir que botões tenham conteúdo visível */
+            .checkout-page .btn,
+            .checkout-page .btn-two {
+                overflow: visible !important;
+            }
+            
+            /* Estilos específicos para botões do header */
+            .checkout-page .btn-header-action,
+            .checkout-page .cart-toggle {
+                position: relative !important;
+                z-index: 1 !important;
+            }
+            
+            .checkout-page .btn-header-action *,
+            .checkout-page .cart-toggle * {
+                position: relative !important;
+                z-index: 10 !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            
+            .checkout-page .btn-header-action::before,
+            .checkout-page .btn-header-action::after,
+            .checkout-page .cart-toggle::before,
+            .checkout-page .cart-toggle::after {
+                display: none !important;
+                content: none !important;
+            }
+            
+            /* Forçar visibilidade de todo conteúdo de botão */
+            .checkout-page .btn span,
+            .checkout-page .btn-two span,
+            .checkout-page .btn i,
+            .checkout-page .btn-two i,
+            .checkout-page button span,
+            .checkout-page button i {
+                opacity: 1 !important;
+                visibility: visible !important;
+                color: inherit !important;
+                position: relative !important;
+                z-index: 999 !important;
+                display: inline-block !important;
+            }
+            
+            /* Garantir que botões sempre mostrem texto */
+            .checkout-page .btn,
+            .checkout-page .btn-two,
+            .checkout-page button {
+                color: #FFFFFF !important;
+            }
+            
+            .checkout-page .btn:not(:hover),
+            .checkout-page .btn-two:not(:hover),
+            .checkout-page button:not(:hover) {
+                color: #FFFFFF !important;
+            }
+            .checkout-status {
+                display: block;
+                text-align: center;
+                margin-top: 15px;
+                color: #7A7A7A;
+                font-size: 14px;
+            }
+            .checkout-empty {
+                text-align: center;
+                padding: 60px 20px;
+                color: #7A7A7A;
+            }
+            .checkout-empty-icon {
+                font-size: 64px;
+                margin-bottom: 20px;
+                color: #2F2F2F;
+            }
+            .checkout-empty h3 {
+                color: #FFFFFF;
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+            .checkout-empty p {
+                color: #7A7A7A;
+                font-size: 16px;
+                margin-bottom: 30px;
+            }
+            .shipping-options {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .shipping-option {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 20px;
+                background: #121212;
+                border: 2px solid #2F2F2F;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: none;
+            }
+            .shipping-option.selected {
+                border-color: #E24B2F;
+                background: rgba(226, 75, 47, 0.1);
+            }
+            .shipping-option input[type="radio"] {
+                margin-right: 15px;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+            .shipping-option-info {
+                flex: 1;
+            }
+            .shipping-option-name {
+                color: #FFFFFF;
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+            .shipping-option-details {
+                color: #7A7A7A;
+                font-size: 14px;
+            }
+            .shipping-option-price {
+                color: #E24B2F;
+                font-size: 20px;
+                font-weight: 700;
+                text-align: right;
+                min-width: 120px;
+            }
+            .payment-methods {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .mercadopago-payment-brick {
+                margin-top: 25px;
+                background: #0f0f0f;
+                border: 1px solid #2F2F2F;
+                border-radius: 10px;
+                padding: 20px;
+            }
+            #mercadopago-payment-brick .mercadopago-button,
+            #mercadopago-payment-brick button[type="submit"] {
+                display: none !important;
+            }
+            .payment-brick-helper {
+                margin-top: 10px;
+                color: #7A7A7A;
+                font-size: 13px;
+            }
+            .payment-method-option {
+                position: relative;
+            }
+            .payment-method-option input[type="radio"] {
+                position: absolute;
+                opacity: 0;
+                pointer-events: none;
+            }
+            .payment-method-option label {
+                display: flex;
+                align-items: center;
+                padding: 20px;
+                background: #121212;
+                border: 2px solid #2F2F2F;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: none;
+            }
+            .payment-method-option input[type="radio"]:checked + label {
+                border-color: #E24B2F;
+                background: rgba(226, 75, 47, 0.1);
+            }
+            .payment-method-option label div {
+                flex: 1;
+            }
+            .payment-method-option label strong {
+                display: block;
+                color: #FFFFFF;
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+            .payment-method-option label small {
+                display: block;
+                color: #7A7A7A;
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <!-- header-area -->
+        <header class="header-area header-style-two" style="background: #000000; border-bottom: 1px solid #2F2F2F;">
+            <div class="header-main" style="padding: 20px 0;">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-12">
+                            <div class="header-main-content" style="display: flex; align-items: center; justify-content: space-between; gap: 30px;">
+                                <div class="logo">
+                                    <a href="index.html" style="display: block;">
+                                        <img src="assets/img/logo/logo.svg" alt="NATUCART" style="height: 50px;">
+                                    </a>
+                                </div>
+                                
+                                <div style="flex: 1;"></div>
+                                
+                                <div class="header-actions" style="display: flex; align-items: center; gap: 15px;">
+                                    <a href="index.html" class="btn-header-action" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: #161616; border: 1px solid #2F2F2F; border-radius: 8px; color: #BFBFBF; text-decoration: none; font-size: 14px; font-weight: 500; transition: none;">
+                                        <i class="fas fa-arrow-left" style="font-size: 14px;"></i>
+                                        <span>Voltar</span>
+                                    </a>
+                                    
+                                    <div class="header-cart-badge" style="position: relative;">
+                                        <a href="checkout.html" class="cart-toggle" style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; background: rgba(226, 75, 47, 0.1); border: 1px solid rgba(226, 75, 47, 0.3); border-radius: 8px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 500; transition: none;">
+                                            <i class="flaticon-shopping-cart" style="font-size: 18px;"></i>
+                                            <span>Carrinho</span>
+                                            <span class="cart-count" data-cart-count style="background: #E24B2F; color: #FFFFFF; border-radius: 12px; min-width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; padding: 0 6px;">0</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- header-area-end -->
+
+        <!-- main-area -->
+        <main class="checkout-page">
+            <div class="container checkout-container">
+                <div class="checkout-header">
+                    <h1>Finalizar Compra</h1>
+                    <p>Revise seu pedido e finalize o pagamento de forma segura</p>
+                </div>
+
+                <!-- Tela de Sucesso -->
+                <div id="checkoutSuccess" class="checkout-success" style="display: none;">
+                    <div class="checkout-success-content">
+                        <div class="checkout-success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2>Pedido Confirmado!</h2>
+                        <p class="success-message">Seu pagamento foi processado com sucesso. Em breve você receberá um e-mail com os detalhes do seu pedido.</p>
+                        
+                        <div class="success-order-info">
+                            <div class="success-info-item">
+                                <i class="fas fa-box"></i>
+                                <div>
+                                    <strong>Número do Pedido</strong>
+                                    <span id="successOrderId">-</span>
+                                </div>
+                            </div>
+                            <div class="success-info-item">
+                                <i class="fas fa-truck"></i>
+                                <div>
+                                    <strong>Previsão de Entrega</strong>
+                                    <span id="successDeliveryTime">-</span>
+                                </div>
+                            </div>
+                            <div class="success-info-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <strong>E-mail de Confirmação</strong>
+                                    <span id="successEmail">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="success-actions">
+                            <a href="index.html" class="btn btn-two">Continuar Comprando</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="checkoutEmpty" class="checkout-empty" style="display: none;">
+                    <div class="checkout-empty-icon">
+                        <i class="flaticon-shopping-cart"></i>
+                    </div>
+                    <h3>Seu carrinho está vazio</h3>
+                    <p>Adicione produtos ao carrinho para continuar com a compra</p>
+                    <a href="index.html" class="btn btn-two">Ver Produtos</a>
+                </div>
+
+                <div id="checkoutContent" class="checkout-grid">
+                    <div class="checkout-main">
+                        <!-- Itens do Carrinho -->
+                        <div class="checkout-card">
+                            <h2 class="checkout-card-title">
+                                <i class="fas fa-shopping-bag" style="margin-right: 10px;"></i>
+                                Itens do Pedido
+                            </h2>
+                            <div id="checkoutItems" class="checkout-items">
+                                <!-- Preenchido via JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Dados do Cliente -->
+                        <div class="checkout-card">
+                            <h2 class="checkout-card-title">
+                                <i class="fas fa-user" style="margin-right: 10px;"></i>
+                                Dados do Cliente
+                            </h2>
+                            <form id="customerDataForm" class="freight-section">
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Nome Completo *</label>
+                                    <input type="text" name="customerName" placeholder="Seu nome completo" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                    <div>
+                                        <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">E-mail *</label>
+                                        <input type="email" name="customerEmail" placeholder="seu@email.com" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Telefone *</label>
+                                        <input type="tel" name="customerPhone" placeholder="(00) 00000-0000" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">CPF *</label>
+                                    <input type="text" name="customerCPF" placeholder="000.000.000-00" maxlength="14" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Endereço de Entrega -->
+                        <div class="checkout-card">
+                            <h2 class="checkout-card-title">
+                                <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i>
+                                Endereço de Entrega
+                            </h2>
+                            <form data-freight-form class="freight-section">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                    <div>
+                                        <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">CEP *</label>
+                                        <input type="text" name="postalCode" inputmode="numeric" placeholder="00000-000" maxlength="9" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Estado *</label>
+                                        <select name="state" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                            <option value="">Selecione</option>
+                                            <option value="AC">Acre</option>
+                                            <option value="AL">Alagoas</option>
+                                            <option value="AP">Amapá</option>
+                                            <option value="AM">Amazonas</option>
+                                            <option value="BA">Bahia</option>
+                                            <option value="CE">Ceará</option>
+                                            <option value="DF">Distrito Federal</option>
+                                            <option value="ES">Espírito Santo</option>
+                                            <option value="GO">Goiás</option>
+                                            <option value="MA">Maranhão</option>
+                                            <option value="MT">Mato Grosso</option>
+                                            <option value="MS">Mato Grosso do Sul</option>
+                                            <option value="MG">Minas Gerais</option>
+                                            <option value="PA">Pará</option>
+                                            <option value="PB">Paraíba</option>
+                                            <option value="PR">Paraná</option>
+                                            <option value="PE">Pernambuco</option>
+                                            <option value="PI">Piauí</option>
+                                            <option value="RJ">Rio de Janeiro</option>
+                                            <option value="RN">Rio Grande do Norte</option>
+                                            <option value="RS">Rio Grande do Sul</option>
+                                            <option value="RO">Rondônia</option>
+                                            <option value="RR">Roraima</option>
+                                            <option value="SC">Santa Catarina</option>
+                                            <option value="SP">São Paulo</option>
+                                            <option value="SE">Sergipe</option>
+                                            <option value="TO">Tocantins</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Cidade *</label>
+                                    <input type="text" name="city" placeholder="Nome da cidade" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                </div>
+                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                    <div>
+                                        <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Rua *</label>
+                                        <input type="text" name="street" placeholder="Nome da rua" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Número *</label>
+                                        <input type="text" name="number" placeholder="123" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Bairro *</label>
+                                    <input type="text" name="district" placeholder="Nome do bairro" required style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Complemento</label>
+                                    <input type="text" name="complement" placeholder="Apto, bloco, etc. (opcional)" style="width: 100%; padding: 12px; background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                </div>
+                                <div style="margin-top: 20px;">
+                                    <button type="submit" class="btn btn-two" style="width: 100%; padding: 15px; font-size: 16px; font-weight: 700;">Calcular Frete</button>
+                                </div>
+                                <div class="freight-result" data-freight-result style="margin-top: 15px;">Preencha o endereço completo para calcular o frete.</div>
+                            </form>
+                        </div>
+
+                        <!-- Opções de Envio -->
+                        <div class="checkout-card" id="shippingOptionsCard" style="display: none;">
+                            <h2 class="checkout-card-title">
+                                <i class="fas fa-truck" style="margin-right: 10px;"></i>
+                                Opções de Envio
+                            </h2>
+                            <div id="shippingOptions" class="shipping-options">
+                                <!-- Preenchido via JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Método de Pagamento -->
+                        <div class="checkout-card">
+                            <h2 class="checkout-card-title">
+                                <i class="fas fa-qrcode" style="margin-right: 10px;"></i>
+                                Pagamento
+                            </h2>
+                            <div class="payment-methods">
+                                <!-- Seleção de Método de Pagamento -->
+                                <div style="margin-bottom: 25px;">
+                                    <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 12px; font-weight: 600;">Escolha a forma de pagamento *</label>
+                                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                                        <label style="display: flex; align-items: center; padding: 15px; background: #121212; border: 2px solid #2F2F2F; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                                            <input type="radio" name="paymentMethod" value="credit_card" checked style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
+                                            <div style="flex: 1;">
+                                                <strong style="color: #FFFFFF; font-size: 16px;">Cartão de Crédito ou Débito</strong>
+                                                <p style="color: #7A7A7A; font-size: 12px; margin: 4px 0 0 0;">Visa, Mastercard, Elo, Hipercard</p>
+                                            </div>
+                                            <i class="fas fa-credit-card" style="color: #E24B2F; font-size: 24px; margin-left: 12px;"></i>
+                                        </label>
+                                        <label style="display: flex; align-items: center; padding: 15px; background: #121212; border: 2px solid #2F2F2F; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                                            <input type="radio" name="paymentMethod" value="pix" style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
+                                            <div style="flex: 1;">
+                                                <strong style="color: #FFFFFF; font-size: 16px;">PIX</strong>
+                                                <p style="color: #7A7A7A; font-size: 12px; margin: 4px 0 0 0;">Aprovação imediata</p>
+                                            </div>
+                                            <i class="fas fa-qrcode" style="color: #E24B2F; font-size: 24px; margin-left: 12px;"></i>
+                                        </label>
+                                        <label style="display: flex; align-items: center; padding: 15px; background: #121212; border: 2px solid #2F2F2F; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                                            <input type="radio" name="paymentMethod" value="boleto" style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
+                                            <div style="flex: 1;">
+                                                <strong style="color: #FFFFFF; font-size: 16px;">Boleto Bancário</strong>
+                                                <p style="color: #7A7A7A; font-size: 12px; margin: 4px 0 0 0;">Vencimento em 3 dias úteis</p>
+                                            </div>
+                                            <i class="fas fa-barcode" style="color: #E24B2F; font-size: 24px; margin-left: 12px;"></i>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Formulário de Cartão -->
+                                <div id="cardPaymentForm" class="payment-form-section">
+                                    <div style="background: #121212; border: 1px solid #2F2F2F; border-radius: 8px; padding: 20px;">
+                                        <p style="color: #BFBFBF; font-size: 13px; margin-bottom: 20px;">
+                                            <i class="fas fa-shield-alt" style="color: #E24B2F; margin-right: 8px;"></i>
+                                            Seus dados são criptografados e processados diretamente pelo Mercado Pago.
+                                        </p>
+                                        
+                                        <!-- Número do Cartão -->
+                                        <div style="margin-bottom: 15px;">
+                                            <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Número do Cartão *</label>
+                                            <div style="position: relative;">
+                                                <input type="text" id="cardNumber" name="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required style="width: 100%; padding: 12px 50px 12px 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 16px; letter-spacing: 1px;">
+                                                <span id="cardBrandIcon" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);">
+                                                    <i class="fas fa-credit-card" style="color: #7A7A7A;"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Nome do Titular -->
+                                        <div style="margin-bottom: 15px;">
+                                            <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Nome do Titular *</label>
+                                            <input type="text" id="cardholderName" name="cardholderName" placeholder="Como está no cartão" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px; text-transform: uppercase;">
+                                        </div>
+                                        
+                                        <!-- Validade e CVV -->
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                            <div>
+                                                <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Validade *</label>
+                                                <input type="text" id="cardExpiration" name="cardExpiration" placeholder="MM/AA" maxlength="5" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                            </div>
+                                            <div>
+                                                <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">CVV *</label>
+                                                <input type="text" id="cardCVV" name="cardCVV" placeholder="123" maxlength="4" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- CPF e Parcelas -->
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                            <div>
+                                                <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">CPF do Portador *</label>
+                                                <input type="text" id="cardholderCPF" name="cardholderCPF" placeholder="000.000.000-00" maxlength="14" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                            </div>
+                                            <div>
+                                                <label style="display: block; color: #BFBFBF; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Parcelas *</label>
+                                                <select id="installments" name="installments" required style="width: 100%; padding: 12px; background: #0A0A0A; border: 1px solid #2F2F2F; border-radius: 8px; color: #FFFFFF; font-size: 14px;">
+                                                    <option value="1">1x sem juros</option>
+                                                    <option value="2">2x sem juros</option>
+                                                    <option value="3">3x sem juros</option>
+                                                    <option value="4">4x sem juros</option>
+                                                    <option value="5">5x sem juros</option>
+                                                    <option value="6">6x sem juros</option>
+                                                    <option value="7">7x</option>
+                                                    <option value="8">8x</option>
+                                                    <option value="9">9x</option>
+                                                    <option value="10">10x</option>
+                                                    <option value="11">11x</option>
+                                                    <option value="12">12x</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Informações PIX -->
+                                <div id="pixPaymentInfo" class="payment-form-section" style="display: none;">
+                                    <div style="background: rgba(34, 197, 94, 0.1); border: 2px solid #22C55E; border-radius: 8px; padding: 20px; text-align: center;">
+                                        <i class="fas fa-qrcode" style="font-size: 48px; color: #22C55E; margin-bottom: 15px;"></i>
+                                        <p style="color: #FFFFFF; font-size: 16px; font-weight: 600; margin-bottom: 8px;">Pagamento via PIX</p>
+                                        <p style="color: #BFBFBF; font-size: 14px; margin: 0;">O QR Code será gerado após finalizar a compra.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Informações Boleto -->
+                                <div id="boletoPaymentInfo" class="payment-form-section" style="display: none;">
+                                    <div style="background: rgba(226, 75, 47, 0.1); border: 2px solid #E24B2F; border-radius: 8px; padding: 20px; text-align: center;">
+                                        <i class="fas fa-barcode" style="font-size: 48px; color: #E24B2F; margin-bottom: 15px;"></i>
+                                        <p style="color: #FFFFFF; font-size: 16px; font-weight: 600; margin-bottom: 8px;">Pagamento via Boleto</p>
+                                        <p style="color: #BFBFBF; font-size: 14px; margin: 0;">O boleto será gerado após finalizar a compra. Vencimento em 3 dias úteis.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumo do Pedido -->
+                    <div class="checkout-sidebar">
+                        <div class="checkout-summary-card">
+                            <h3 class="checkout-summary-title">Resumo do Pedido</h3>
+                            
+                            <div class="checkout-summary-row">
+                                <span class="checkout-summary-label">Itens</span>
+                                <span class="checkout-summary-value" data-checkout-items>0</span>
+                            </div>
+                            
+                            <div class="checkout-summary-row">
+                                <span class="checkout-summary-label">Subtotal</span>
+                                <span class="checkout-summary-value" data-cart-subtotal>R$ 0,00</span>
+                            </div>
+                            
+                            <div class="checkout-summary-row">
+                                <span class="checkout-summary-label">Frete</span>
+                                <span class="checkout-summary-value" id="freightSummary">Não calculado</span>
+                            </div>
+                            
+                            <div class="checkout-summary-row checkout-summary-total">
+                                <span class="checkout-summary-label">Total</span>
+                                <span class="checkout-summary-value" data-checkout-total>R$ 0,00</span>
+                            </div>
+
+                            <div style="background: rgba(226, 75, 47, 0.1); border: 1px solid #E24B2F; border-radius: 8px; padding: 15px; margin: 20px 0; text-align: center;">
+                                <p style="color: #FFFFFF; font-size: 14px; font-weight: 600; margin: 0;">
+                                    <i class="fas fa-credit-card" style="color: #E24B2F; margin-right: 8px;"></i>
+                                    Pagamento via Mercado Pago
+                                </p>
+                                <p style="color: #BFBFBF; font-size: 12px; margin: 5px 0 0 0;">
+                                    PIX, Cartão ou Boleto
+                                </p>
+                            </div>
+
+                            <button type="button" class="btn-checkout-finalize" data-checkout-submit>
+                                <i class="fas fa-credit-card"></i>
+                                Finalizar Compra
+                            </button>
+                            
+                            <small class="checkout-status" data-checkout-status>Aguardando itens para finalizar.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- main-area-end -->
+
+        <!-- footer-area -->
+        <footer class="footer-area footer-bg" data-background="assets/img/bg/footer_bg.jpg">
+            <div class="footer-overlay"></div>
+            <div class="container">
+                <div class="footer-bottom">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="copyright-text text-center">
+                                <p>© 2024 NATUCART. Todos os direitos reservados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer-area-end -->
+
+        <!-- JS here -->
+        <script src="assets/js/cart.js"></script>
+        <script src="assets/js/shipping/melhorenvio.js"></script>
+        <script>
+            // Configurar credenciais do Melhor Envio
+            // Documentação oficial: https://melhorenvio.com.br/api/v2/me/shipment/calculate
+            // Usando webhook n8n como proxy para evitar problemas de CORS
+            // O n8n gerencia a autenticação OAuth usando Client ID e Secret
+            MelhorEnvioService.configure({
+                baseUrl: 'https://melhorenvio.com.br/api/v2/me/shipment/calculate',
+                clientId: '7496', // Client ID do aplicativo Natucart
+                clientSecret: 'An6nMKUyzuHyA1TWHWWYZklA8jryl5v0YMCgqYLL', // Client Secret
+                sellerPostalCode: '01001000', // CEP do remetente - ajuste conforme necessário
+                n8nWebhookUrl: 'https://n8n-auto.cpmarketingbr.com/webhook/melhorenvio-natucart' // Webhook n8n
+            });
+        </script>
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
+        <script src="assets/js/payments/mercadopago.js"></script>
+        <script>
+            // Configurar Checkout Transparente do Mercado Pago (API de Pagamentos)
+            MercadoPagoService.configure({
+                publicKey: 'APP_USR-d498d4ed-3faf-47e4-b5bd-33771ec2e31e',
+                paymentEndpoint: '/inc/mercadopago_checkout.php',
+                notificationUrl: '' // Configure seu webhook aqui se necessário
+            });
+        </script>
+        <script src="assets/js/checkout.js"></script>
+        
+        <script>
+            // Máscaras para CPF e Telefone
+            (function() {
+                const cpfInput = document.querySelector('input[name="customerCPF"]');
+                const phoneInput = document.querySelector('input[name="customerPhone"]');
+
+                // Máscara CPF
+                if (cpfInput) {
+                    cpfInput.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length <= 11) {
+                            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                            e.target.value = value;
+                        }
+                    });
+                }
+
+                // Máscara Telefone
+                if (phoneInput) {
+                    phoneInput.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length <= 11) {
+                            if (value.length <= 10) {
+                                value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                                value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                            } else {
+                                value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                                value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                            }
+                            e.target.value = value;
+                        }
+                    });
+                }
+            })();
+        </script>
+        
+        <script>
+            // Aguardar DOM e scripts estarem prontos
+            document.addEventListener('DOMContentLoaded', function() {
+            
+            const formatCurrency = (value) => new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value || 0);
+
+
+            // Atualizar itens do carrinho
+            function updateCheckoutItems() {
+                const cart = window.NatucartCart;
+                if (!cart) return;
+
+                const snapshot = cart.getSnapshot();
+                const itemsEl = document.getElementById('checkoutItems');
+                const emptyEl = document.getElementById('checkoutEmpty');
+                const contentEl = document.getElementById('checkoutContent');
+
+                if (!snapshot.items.length) {
+                    if (emptyEl) emptyEl.style.display = 'block';
+                    if (contentEl) contentEl.style.display = 'none';
+                    return;
+                }
+
+                if (emptyEl) emptyEl.style.display = 'none';
+                if (contentEl) contentEl.style.display = 'grid';
+
+                if (itemsEl) {
+                    itemsEl.innerHTML = snapshot.items.map(item => `
+                        <div class="checkout-item">
+                            <div class="checkout-item-info">
+                                <div class="checkout-item-name">${item.name}</div>
+                                <div class="checkout-item-details">Quantidade: ${item.quantity}x</div>
+                            </div>
+                            <div class="checkout-item-price">${formatCurrency(item.price * item.quantity)}</div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // Atualizar resumo
+            function updateCheckoutSummary() {
+                const cart = window.NatucartCart;
+                if (!cart) return;
+
+                const snapshot = cart.getSnapshot();
+                
+                // Atualizar contadores
+                const itemsCount = snapshot.items.reduce((sum, item) => sum + item.quantity, 0);
+                document.querySelector('[data-checkout-items]').textContent = itemsCount;
+                document.querySelector('[data-cart-subtotal]').textContent = formatCurrency(snapshot.subtotal);
+                document.querySelector('[data-checkout-total]').textContent = formatCurrency(snapshot.total);
+
+                // Atualizar frete
+                const freightEl = document.getElementById('freightSummary');
+                if (freightEl) {
+                    if (snapshot.freight) {
+                        freightEl.textContent = formatCurrency(snapshot.freight.price);
+                    } else {
+                        freightEl.textContent = 'Não calculado';
+                    }
+                }
+
+                // Atualizar status
+                const statusEl = document.querySelector('[data-checkout-status]');
+                if (statusEl) {
+                    if (!snapshot.items.length) {
+                        statusEl.textContent = 'Adicione itens ao carrinho para continuar.';
+                    } else if (!snapshot.freight) {
+                        statusEl.textContent = 'Calcule o frete para finalizar a compra.';
+                    } else {
+                        statusEl.textContent = 'Pronto para finalizar o pagamento.';
+                    }
+                }
+            }
+
+            // Atualizar contador do carrinho
+            function updateCartCount() {
+                const cart = window.NatucartCart;
+                if (!cart) return;
+                
+                const snapshot = cart.getSnapshot();
+                const count = snapshot.items.reduce((sum, item) => sum + item.quantity, 0);
+                const countEl = document.querySelector('[data-cart-count]');
+                if (countEl) countEl.textContent = count;
+            }
+
+            // Verificar se o pagamento foi completado
+            function checkPaymentCompletion() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const paymentStatus = urlParams.get('payment');
+                
+                if (paymentStatus === 'completed' || paymentStatus === 'pending') {
+                    // Ocultar conteúdo normal e mostrar tela de sucesso
+                    const successEl = document.getElementById('checkoutSuccess');
+                    const contentEl = document.getElementById('checkoutContent');
+                    const emptyEl = document.getElementById('checkoutEmpty');
+                    const headerEl = document.querySelector('.checkout-header');
+                    
+                    if (successEl) successEl.style.display = 'block';
+                    if (contentEl) contentEl.style.display = 'none';
+                    if (emptyEl) emptyEl.style.display = 'none';
+                    if (headerEl) {
+                        if (paymentStatus === 'pending') {
+                            headerEl.querySelector('h1').textContent = 'Pagamento em análise';
+                            headerEl.querySelector('p').textContent = 'Recebemos seu pedido e aguardamos a confirmação do Mercado Pago.';
+                        } else {
+                            headerEl.querySelector('h1').textContent = 'Pedido Confirmado!';
+                            headerEl.querySelector('p').textContent = 'Seu pagamento foi processado com sucesso';
+                        }
+                    }
+                    
+                    if (paymentStatus === 'completed') {
+                        // Coletar dados e enviar para o webhook do Melhor Envio
+                        sendOrderToMelhorEnvio();
+                    } else {
+                        let savedOrderData = null;
+                        try {
+                            const savedRaw = localStorage.getItem('natucart_pending_order');
+                            if (savedRaw) {
+                                savedOrderData = JSON.parse(savedRaw);
+                            }
+                        } catch (storageError) {
+                            console.warn('[Checkout] Não foi possível carregar dados pendentes:', storageError);
+                        }
+                        updateSuccessScreen(savedOrderData, null, true);
+                    }
+                }
+            }
+
+            // Enviar dados do pedido para o webhook do Melhor Envio
+            async function sendOrderToMelhorEnvio() {
+                try {
+                    console.log('[Melhor Envio Order] Iniciando envio de dados...');
+                    
+                    // Tentar recuperar dados do localStorage primeiro
+                    let savedOrderData = null;
+                    try {
+                        const savedData = localStorage.getItem('natucart_pending_order');
+                        if (savedData) {
+                            savedOrderData = JSON.parse(savedData);
+                            console.log('[Melhor Envio Order] Dados recuperados do localStorage:', savedOrderData);
+                        }
+                    } catch (e) {
+                        console.warn('[Melhor Envio Order] Erro ao recuperar dados do localStorage:', e);
+                    }
+
+                    // Tentar coletar dados do carrinho
+                    const cart = window.NatucartCart;
+                    let snapshot = null;
+                    if (cart) {
+                        snapshot = cart.getSnapshot();
+                        console.log('[Melhor Envio Order] Snapshot do carrinho:', snapshot);
+                    }
+
+                    // Tentar coletar dados dos formulários (fallback)
+                    let customerDataFromForm = null;
+                    let addressDataFromForm = null;
+                    const customerForm = document.getElementById('customerDataForm');
+                    const freightForm = document.querySelector('[data-freight-form]');
+                    
+                    if (customerForm && freightForm) {
+                        const customerData = new FormData(customerForm);
+                        const addressData = new FormData(freightForm);
+                        customerDataFromForm = {
+                            name: customerData.get('customerName') || '',
+                            email: customerData.get('customerEmail') || '',
+                            cellphone: (customerData.get('customerPhone') || '').replace(/\D/g, ''),
+                            taxId: (customerData.get('customerCPF') || '').replace(/\D/g, '')
+                        };
+                        addressDataFromForm = {
+                            postalCode: (addressData.get('postalCode') || '').replace(/\D/g, ''),
+                            state: addressData.get('state') || '',
+                            city: addressData.get('city') || '',
+                            street: addressData.get('street') || '',
+                            number: addressData.get('number') || '',
+                            district: addressData.get('district') || '',
+                            complement: addressData.get('complement') || ''
+                        };
+                        console.log('[Melhor Envio Order] Dados coletados dos formulários:', { customerDataFromForm, addressDataFromForm });
+                    }
+
+                    // Usar dados salvos como prioridade, depois formulários, depois snapshot
+                    const customer = savedOrderData?.customer || customerDataFromForm || {};
+                    const shippingAddress = savedOrderData?.address || addressDataFromForm || {};
+                    const freight = savedOrderData?.freight || snapshot?.freight || {};
+                    const items = savedOrderData?.items || snapshot?.items || [];
+                    const totals = savedOrderData?.totals || {
+                        subtotal: snapshot?.subtotal || 0,
+                        freight: freight?.price || 0,
+                        total: snapshot?.total || 0
+                    };
+
+                    // Validar se temos dados mínimos necessários
+                    if (!customer.name || !customer.email || !shippingAddress.postalCode) {
+                        console.error('[Melhor Envio Order] Dados insuficientes:', {
+                            customer: !!customer.name,
+                            email: !!customer.email,
+                            postalCode: !!shippingAddress.postalCode
+                        });
+                        // Mesmo assim, tentar enviar com os dados disponíveis
+                    }
+
+                    // Preparar dados completos do pedido
+                    const orderData = {
+                        // Dados do cliente
+                        customer: {
+                            name: customer.name || '',
+                            email: customer.email || '',
+                            cellphone: customer.cellphone || '',
+                            taxId: customer.taxId || ''
+                        },
+                        // Endereço de entrega
+                        shippingAddress: {
+                            postalCode: shippingAddress.postalCode || '',
+                            state: shippingAddress.state || '',
+                            city: shippingAddress.city || '',
+                            street: shippingAddress.street || '',
+                            number: shippingAddress.number || '',
+                            district: shippingAddress.district || '',
+                            complement: shippingAddress.complement || ''
+                        },
+                        // Dados do frete selecionado
+                        shipping: {
+                            service: freight.service || '',
+                            serviceCode: freight.serviceCode || '',
+                            carrier: freight.carrier || '',
+                            price: freight.price || 0,
+                            deliveryTime: freight.deliveryTime || 0
+                        },
+                        // Itens do pedido
+                        items: items.map(item => ({
+                            id: item.id || '',
+                            sku: item.sku || item.id || '',
+                            name: item.name || '',
+                            quantity: item.quantity || 1,
+                            price: item.price || 0
+                        })),
+                        // Totais
+                        totals: totals,
+                        // Informações adicionais
+                        orderId: savedOrderData?.orderId || `natucart_${Date.now()}`,
+                        timestamp: savedOrderData?.timestamp || new Date().toISOString()
+                    };
+
+                    console.log('[Melhor Envio Order] Dados finais preparados para envio:', orderData);
+
+                    // Enviar para webhook do Melhor Envio
+                    const webhookUrl = 'https://n8n-auto.cpmarketingbr.com/webhook/melhorenvio-final-natucart';
+                    console.log('[Melhor Envio Order] Enviando para:', webhookUrl);
+                    
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderData),
+                        mode: 'cors'
+                    });
+
+                    console.log('[Melhor Envio Order] Status da resposta:', response.status, response.statusText);
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('[Melhor Envio Order] Erro na resposta:', errorText);
+                        throw new Error(`Erro ao criar pedido de frete: ${response.status} - ${errorText}`);
+                    }
+
+                    const result = await response.json().catch((e) => {
+                        console.warn('[Melhor Envio Order] Erro ao parsear JSON da resposta:', e);
+                        return { success: true, status: response.status };
+                    });
+                    console.log('[Melhor Envio Order] Resposta do webhook:', result);
+
+                    // Limpar dados do localStorage após envio bem-sucedido
+                    try {
+                        localStorage.removeItem('natucart_pending_order');
+                        console.log('[Melhor Envio Order] Dados removidos do localStorage');
+                    } catch (e) {
+                        console.warn('[Melhor Envio Order] Erro ao limpar localStorage:', e);
+                    }
+
+                    // Atualizar informações na tela de sucesso
+                    updateSuccessScreen(orderData, result);
+
+                } catch (error) {
+                    console.error('[Melhor Envio Order] Erro ao enviar pedido:', error);
+                    console.error('[Melhor Envio Order] Stack trace:', error.stack);
+                    // Mesmo com erro, mostrar tela de sucesso
+                    updateSuccessScreen(null, null);
+                }
+            }
+
+            // Atualizar informações na tela de sucesso
+            function updateSuccessScreen(orderData, melhorEnvioResult, isPending = false) {
+                const orderIdEl = document.getElementById('successOrderId');
+                const deliveryTimeEl = document.getElementById('successDeliveryTime');
+                const emailEl = document.getElementById('successEmail');
+
+                if (isPending && !orderData) {
+                    if (orderIdEl) {
+                        orderIdEl.textContent = 'Pagamento em análise';
+                    }
+                    if (deliveryTimeEl) {
+                        deliveryTimeEl.textContent = 'Aguardando confirmação';
+                    }
+                    return;
+                }
+
+                if (orderData) {
+                    if (orderIdEl) {
+                        orderIdEl.textContent = orderData.orderId || '-';
+                    }
+                    if (deliveryTimeEl && orderData.shipping.deliveryTime) {
+                        const days = orderData.shipping.deliveryTime;
+                        deliveryTimeEl.textContent = `${days} dia${days > 1 ? 's' : ''} útil${days > 1 ? 'eis' : ''}`;
+                    }
+                    if (emailEl) {
+                        emailEl.textContent = orderData.customer.email || '-';
+                    }
+                }
+            }
+
+            // Inicializar - aguardar um pouco para garantir que o cart.js foi carregado
+            function initializeCheckout() {
+                // Verificar primeiro se o pagamento foi completado
+                checkPaymentCompletion();
+                
+                if (window.NatucartCart) {
+                    // Forçar recálculo ao carregar para garantir que os dados estão sincronizados
+                    const snapshot = window.NatucartCart.getSnapshot();
+                    console.log('[Checkout] Estado do carrinho ao carregar:', snapshot);
+                    
+                    window.NatucartCart.subscribe(() => {
+                        updateCheckoutItems();
+                        updateCheckoutSummary();
+                        updateCartCount();
+                    });
+                    
+                // Atualizar imediatamente
+                updateCheckoutItems();
+                updateCheckoutSummary();
+                updateCartCount();
+                } else {
+                    // Tentar novamente após um pequeno delay se não estiver disponível
+                    setTimeout(initializeCheckout, 100);
+                }
+            }
+            
+            // Tentar inicializar imediatamente
+            initializeCheckout();
+
+
+            // Atualizar opções de envio quando frete for calculado
+            function updateShippingOptions() {
+                const cart = window.NatucartCart;
+                if (!cart) return;
+                
+                const snapshot = cart.getSnapshot();
+                const shippingOptionsCard = document.getElementById('shippingOptionsCard');
+                const shippingOptionsEl = document.getElementById('shippingOptions');
+                const freightResultEl = document.querySelector('[data-freight-result]');
+                
+                if (snapshot.freight && snapshot.freight.options && snapshot.freight.options.length > 0) {
+                    // Mostrar card de opções
+                    if (shippingOptionsCard) shippingOptionsCard.style.display = 'block';
+                    
+                    // Renderizar opções com informações completas da API do Melhor Envio
+                    if (shippingOptionsEl) {
+                        // Determinar qual opção está selecionada (comparar com o frete atual)
+                        const currentFreight = snapshot.freight;
+                        const selectedIndex = currentFreight.options.findIndex(opt => 
+                            opt.service === currentFreight.service && 
+                            opt.price === currentFreight.price
+                        );
+                        const defaultSelectedIndex = selectedIndex >= 0 ? selectedIndex : 0;
+                        
+                        shippingOptionsEl.innerHTML = snapshot.freight.options.map((option, index) => {
+                            const serviceName = option.service || option.name || 'Frete';
+                            const carrier = option.carrier || '';
+                            const deliveryTime = option.deliveryTime || option.deadline || 0;
+                            const price = option.price || option.cost || 0;
+                            const displayName = carrier ? `${serviceName} - ${carrier}` : serviceName;
+                            const isSelected = index === defaultSelectedIndex;
+                            
+                            return `
+                            <div class="shipping-option ${isSelected ? 'selected' : ''}" data-shipping-index="${index}">
+                                <input type="radio" name="shippingOption" id="shipping${index}" value="${index}" ${isSelected ? 'checked' : ''}>
+                                <label for="shipping${index}" style="flex: 1; display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: 15px;">
+                                    <div class="shipping-option-info" style="flex: 1;">
+                                        <div class="shipping-option-name" style="font-weight: 600; color: #FFFFFF; margin-bottom: 5px;">${displayName}</div>
+                                        <div class="shipping-option-details" style="color: #BFBFBF; font-size: 13px;">
+                                            ${deliveryTime > 0 ? `Entrega em ${deliveryTime} dia${deliveryTime > 1 ? 's' : ''} útil${deliveryTime > 1 ? 'eis' : ''}` : 'Prazo a consultar'}
+                                            ${option.serviceCode ? ` • Código: ${option.serviceCode}` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="shipping-option-price" style="font-size: 18px; font-weight: 700; color: #E24B2F; margin-left: 20px;">
+                                        ${formatCurrency(price)}
+                                    </div>
+                                </label>
+                            </div>
+                            `;
+                        }).join('');
+                        
+                        // Adicionar listeners para seleção
+                        shippingOptionsEl.querySelectorAll('.shipping-option').forEach(option => {
+                            option.addEventListener('click', function() {
+                                shippingOptionsEl.querySelectorAll('.shipping-option').forEach(opt => opt.classList.remove('selected'));
+                                this.classList.add('selected');
+                                const radio = this.querySelector('input[type="radio"]');
+                                if (radio) radio.checked = true;
+                                
+                                // Atualizar frete no carrinho, preservando todas as opções
+                                const index = parseInt(this.dataset.shippingIndex);
+                                const selectedOption = snapshot.freight.options[index];
+                                if (selectedOption && window.NatucartCart) {
+                                    // Preservar todas as opções ao atualizar o frete
+                                    window.NatucartCart.setFreight({
+                                        service: selectedOption.service || selectedOption.name,
+                                        price: selectedOption.price || selectedOption.cost,
+                                        deliveryTime: selectedOption.deliveryTime || selectedOption.deadline,
+                                        postalCode: snapshot.freight.postalCode,
+                                        options: snapshot.freight.options // Preservar todas as opções
+                                    });
+                                }
+                            });
+                        });
+                    }
+                    
+                    if (freightResultEl) {
+                        freightResultEl.textContent = 'Selecione uma opção de envio abaixo.';
+                        freightResultEl.classList.add('has-result');
+                    }
+                } else if (snapshot.freight) {
+                    // Se houver apenas uma opção de frete (formato antigo)
+                    if (shippingOptionsCard) shippingOptionsCard.style.display = 'none';
+                    if (freightResultEl) {
+                        freightResultEl.textContent = `Frete ${snapshot.freight.service}: ${formatCurrency(snapshot.freight.price)} - Prazo: ${snapshot.freight.deliveryTime || 'N/A'} dias úteis`;
+                        freightResultEl.classList.add('has-result');
+                    }
+                } else {
+                    if (shippingOptionsCard) shippingOptionsCard.style.display = 'none';
+                    if (freightResultEl) {
+                        freightResultEl.textContent = 'Informe seu CEP para calcular o frete.';
+                        freightResultEl.classList.remove('has-result');
+                    }
+                }
+            }
+            
+            // Atualizar resultado do frete
+            if (window.NatucartCart) {
+                window.NatucartCart.subscribe(() => {
+                    updateShippingOptions();
+                });
+                updateShippingOptions();
+            }
+            
+            // Método de pagamento fixo: PIX
+            function getSelectedPaymentMethod() {
+                return 'PIX';
+            }
+            
+            }); // Fim do DOMContentLoaded
+        </script>
+    </body>
+</html>

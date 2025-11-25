@@ -22,10 +22,45 @@
         }
     };
 
+    const STORAGE_KEY = 'natucart_cart_state';
+
+    const loadState = () => {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                return {
+                    items: parsed.items || {},
+                    freight: parsed.freight || null
+                };
+            }
+        } catch (error) {
+            console.warn('[Cart] Erro ao carregar estado do localStorage:', error);
+        }
+        return {
+            items: {},
+            freight: null
+        };
+    };
+
+    const saveState = () => {
+        try {
+            const stateToSave = {
+                items: state.items,
+                freight: state.freight,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+        } catch (error) {
+            console.warn('[Cart] Erro ao salvar estado no localStorage:', error);
+        }
+    };
+
+    const savedState = loadState();
     const state = {
-        items: {},
+        items: savedState.items,
         subtotal: 0,
-        freight: null,
+        freight: savedState.freight,
         total: 0
     };
 
@@ -66,6 +101,7 @@
         const freightValue = state.freight?.price || 0;
         state.total = state.subtotal + freightValue;
 
+        saveState(); // Salvar no localStorage após recalcular
         notify();
     };
 
@@ -247,6 +283,9 @@
             el.addEventListener('click', closeMiniCart);
         });
     }
+
+    // Inicializar recalc ao carregar para garantir que os valores estão corretos
+    recalc();
 
     window.NatucartProducts = PRODUCTS;
     window.NatucartCart = cart;

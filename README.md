@@ -85,9 +85,9 @@ NATUCART/
 - Botões com `data-add-to-cart` já acionam o carrinho e atualizam o mini-cart.
 
 ### AbacatePay (pagamentos)
-- Serviço mockável em `assets/js/payments/abacatepay.js`.
-- Configure credenciais reais chamando `AbacatePayService.configure({ publicKey, secretKey, baseUrl })`.
-- Sem credenciais, o módulo gera respostas mock para testes de fluxo.
+- Serviço em `assets/js/payments/abacatepay.js` chamando `POST /billing/create`.
+- Configure credenciais reais com `AbacatePayService.configure({ apiKey, baseUrl, methods })`.
+- A resposta retorna a URL do checkout seguro; o `checkout.js` redireciona o usuário automaticamente.
 
 ### Frenet (frete)
 - Serviço em `assets/js/shipping/frenet.js` ligado ao formulário `data-freight-form`.
