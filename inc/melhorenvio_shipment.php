@@ -14,7 +14,7 @@ declare(strict_types=1);
 const ME_CLIENT_ID = '7496';
 const ME_CLIENT_SECRET = 'An6nMKUyzuHyA1TWHWWYZklA8jryl5v0YMCgqYLL';
 const ME_API_BASE = 'https://melhorenvio.com.br/api/v2/me';
-const ME_SELLER_POSTAL_CODE = '01001000'; // CEP do remetente
+const ME_SELLER_POSTAL_CODE = '74805100'; // CEP do remetente (Goiânia, GO)
 
 // Token OAuth (deve ser obtido via OAuth flow ou armazenado após autenticação)
 // Por enquanto, vamos usar o n8n como proxy (já configurado)
@@ -56,17 +56,17 @@ function createMelhorEnvioShipment(array $orderData): ?array
         'service' => $freight['serviceCode'] ?? '1', // ID do serviço (1 = PAC, 2 = SEDEX, etc.)
         'from' => [
             'name' => 'NATUCART',
-            'phone' => '', // Adicionar telefone do remetente se disponível
-            'email' => 'alladistribuidora@gmail.com',
-            'document' => '', // CNPJ do remetente se disponível
+            'phone' => '62985803598',
+            'email' => 'Natucart1@gmail.com',
+            'document' => '04509188153', // CNPJ do remetente
             'company_document' => '',
             'state_register' => '',
-            'address' => '',
-            'complement' => '',
-            'number' => '',
-            'district' => '',
-            'city' => '',
-            'state_abbr' => '',
+            'address' => 'Rua Rio Branco',
+            'complement' => 'Q 3 L 6',
+            'number' => '316',
+            'district' => 'Panorama Parque',
+            'city' => 'Goiânia',
+            'state_abbr' => 'GO',
             'country_id' => 'BR',
             'postal_code' => ME_SELLER_POSTAL_CODE
         ],

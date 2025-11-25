@@ -101,5 +101,5 @@ NATUCART/
 
 ## Contato
 
-Para dúvidas ou suporte, entre em contato através do email: contato@natucart.com.br
+Para dúvidas ou suporte, entre em contato através do email: Natucart1@gmail.com
 

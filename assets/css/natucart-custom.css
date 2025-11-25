@@ -1150,6 +1150,9 @@ a:hover {
 
 .banner-content .title {
     color: #2F2F2F;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    hyphens: none;
 }
 
 .banner-caption {
@@ -1209,6 +1212,10 @@ a:hover {
         padding: 0 10px !important;
         color: #FFFFFF !important;
         font-weight: 700 !important;
+        word-break: keep-all !important;
+        overflow-wrap: break-word !important;
+        hyphens: none !important;
+        word-spacing: normal !important;
     }
     
     /* Caption - ajustar tamanho */
@@ -1327,6 +1334,14 @@ a:hover {
         overflow-wrap: break-word !important;
         hyphens: auto !important;
     }
+    
+    /* Título específico - evitar quebras inadequadas */
+    .banner-area .banner-content h2.title,
+    section.banner-area .banner-content h2.title {
+        word-break: keep-all !important;
+        overflow-wrap: break-word !important;
+        hyphens: none !important;
+    }
 }
 
 /* Mobile pequeno - telas muito pequenas */
@@ -1337,9 +1352,14 @@ a:hover {
     }
     
     .banner-area .banner-content .title,
-    section.banner-area .banner-content .title {
+    .banner-area .banner-content h2.title,
+    section.banner-area .banner-content .title,
+    section.banner-area .banner-content h2.title {
         font-size: 24px !important;
         line-height: 1.15 !important;
+        word-break: keep-all !important;
+        overflow-wrap: break-word !important;
+        hyphens: none !important;
         margin: 0 0 15px !important;
         padding: 0 5px !important;
     }
