@@ -18,7 +18,7 @@ const ME_SELLER_POSTAL_CODE = '01001000'; // CEP do remetente
 
 // Token OAuth (deve ser obtido via OAuth flow ou armazenado após autenticação)
 // Por enquanto, vamos usar o n8n como proxy (já configurado)
-const ME_N8N_WEBHOOK = 'https://n8n-auto.cpmarketingbr.com/webhook/';
+const ME_N8N_WEBHOOK = 'https://n8n-auto.cpmarketingbr.com/webhook/melhorenvio-shipment';
 
 /**
  * Cria um envio no Melhor Envio
