@@ -301,7 +301,7 @@
                                     <p><strong>Fórmula avançada para saúde articular e óssea.</strong> O NATUCART combina ingredientes cientificamente comprovados para proteção articular e fortalecimento ósseo em uma única fórmula sinérgica.</p>
                                     <p>Por que tratar só a dor se você pode proteger a articulação? NATUCART é a fórmula completa: anti-inflamatória, protetora e fortalecedora. Ideal para atletas, idosos, adultos com dores articulares e mulheres na pós-menopausa.</p>
                                     <div class="features-product-bottom">
-                                        <a href="#pricing" class="btn" role="button">Comprar Agora</a>
+                                        <a href="javascript:void(0)" class="btn" role="button" data-add-to-cart="natucart-single">Comprar Agora</a>
                                         <span class="price">A partir de R$ 99,90</span>
                                     </div>
                                 </div>
@@ -516,7 +516,7 @@
                                             <span>&nbsp;</span>
                                         </div>
                                         <div class="pricing-btn mb-15">
-                                            <a href="#pricing" role="button">Comprar Agora <span>Garantia de 365 Dias ou seu Dinheiro de Volta</span></a>
+                                            <a href="javascript:void(0)" role="button" data-add-to-cart="natucart-single">Comprar Agora <span>Garantia de 365 Dias ou seu Dinheiro de Volta</span></a>
                                         </div>
                                         <div class="bottom-img">
                                             <img src="assets/img/others/pricing_bottom_img.png" alt="card">
@@ -548,7 +548,7 @@
                                             <span>+ Frete Grátis</span>
                                         </div>
                                         <div class="pricing-btn mb-15">
-                                            <a href="#pricing" role="button">Comprar Agora <span>Garantia de 365 Dias ou seu Dinheiro de Volta</span></a>
+                                            <a href="javascript:void(0)" role="button" data-add-to-cart="natucart-trio">Comprar Agora <span>Garantia de 365 Dias ou seu Dinheiro de Volta</span></a>
                                         </div>
                                         <div class="bottom-img">
                                             <img src="assets/img/others/pricing_bottom_img.png" alt="card">
@@ -580,7 +580,7 @@
                                             <span>+ Frete Grátis</span>
                                         </div>
                                         <div class="pricing-btn mb-15">
-                                            <a href="#pricing" role="button">Comprar Agora <span>Garantia de 365 Dias ou seu Dinheiro de Volta</span></a>
+                                            <a href="javascript:void(0)" role="button" data-add-to-cart="natucart-six">Comprar Agora <span>Garantia de 365 Dias ou seu Dinheiro de Volta</span></a>
                                         </div>
                                         <div class="bottom-img">
                                             <img src="assets/img/others/pricing_bottom_img.png" alt="img">
@@ -958,6 +958,10 @@
 
                 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                     anchor.addEventListener('click', function (event) {
+                        // Ignorar links com data-add-to-cart (botões de adicionar ao carrinho)
+                        if (this.hasAttribute('data-add-to-cart') || this.getAttribute('href') === 'javascript:void(0)') {
+                            return;
+                        }
                         const hash = this.getAttribute('href');
                         if (hash && hash.length > 1) {
                             const target = document.querySelector(hash);

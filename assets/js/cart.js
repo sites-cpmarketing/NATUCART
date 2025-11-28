@@ -241,10 +241,13 @@
     document.querySelectorAll('[data-add-to-cart]').forEach((trigger) => {
         trigger.addEventListener('click', (event) => {
             event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
             const productId = trigger.getAttribute('data-add-to-cart');
             cart.addItem(productId);
             runAddToCartFeedback(trigger);
-        });
+            return false;
+        }, true); // Usar capture phase para executar antes de outros handlers
     });
 
     const headerShopCart = document.querySelector('.header-shop-cart');
