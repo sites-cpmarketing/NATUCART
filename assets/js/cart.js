@@ -6,7 +6,7 @@
             id: 'natucart-single',
             name: 'Natucart - 1 Frasco',
             sku: 'NATUCART-1',
-            price: 100
+            price: 99.90
         },
         'natucart-trio': {
             id: 'natucart-trio',

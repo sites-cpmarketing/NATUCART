@@ -1762,7 +1762,7 @@ html body .pricing__box .pricing-btn a:hover {
     display: block !important;
     font-size: 11px !important;
     font-weight: 400 !important;
-    color: #7A7A7A !important;
+    color: #FFFFFF !important;
     margin-top: 8px !important;
     text-transform: none !important;
     line-height: 1.4 !important;
@@ -1774,9 +1774,24 @@ html body .pricing__box .pricing-btn a:hover {
 
 /* Garantir que o texto de garantia seja visível no hover */
 .pricing-item .pricing-btn a:hover > span {
-    color: #7A7A7A !important;
+    color: #FFFFFF !important;
     opacity: 1 !important;
     visibility: visible !important;
+}
+
+/* Sobrescrever regras de outros arquivos CSS para garantir texto branco */
+.pricing-btn a > span,
+.pricing__box .pricing-btn a > span,
+.pricing-item .pricing-btn a > span,
+.pricing-item .pricing__box .pricing-btn a > span {
+    color: #FFFFFF !important;
+}
+
+.pricing-btn a:hover > span,
+.pricing__box .pricing-btn a:hover > span,
+.pricing-item .pricing-btn a:hover > span,
+.pricing-item .pricing__box .pricing-btn a:hover > span {
+    color: #FFFFFF !important;
 }
 
 /* Imagens dos produtos */
