@@ -10,9 +10,12 @@ declare(strict_types=1);
  * 3. Imprimir etiqueta (retornar URL do PDF)
  */
 
+// Incluir configurações de produto (peso e dimensões)
+require_once __DIR__ . '/product_config.php';
+
 // Configurações do Melhor Envio
-const ME_CLIENT_ID = '7496';
-const ME_CLIENT_SECRET = 'An6nMKUyzuHyA1TWHWWYZklA8jryl5v0YMCgqYLL';
+const ME_CLIENT_ID = '21160';
+const ME_CLIENT_SECRET = '466oHb5sHMqmvhc8Etbc70gTWGD75IVeQy3jiF1i';
 const ME_API_BASE = 'https://melhorenvio.com.br/api/v2/me';
 const ME_SELLER_POSTAL_CODE = '74805100'; // CEP do remetente (Goiânia, GO)
 
@@ -85,14 +88,19 @@ function createMelhorEnvioShipment(array $orderData): ?array
             'postal_code' => preg_replace('/\D/', '', $address['postalCode'] ?? '')
         ],
         'products' => array_map(function($item) {
+            $quantity = intval($item['quantity'] ?? 1);
+            
+            // Obter configuração baseada na quantidade
+            $productConfig = getProductConfigByQuantity($quantity);
+            
             return [
                 'name' => $item['name'] ?? 'Produto',
-                'quantity' => intval($item['quantity'] ?? 1),
+                'quantity' => $quantity,
                 'unitary_value' => floatval($item['price'] ?? 0),
-                'weight' => 1.18, // Peso em kg (ajustar conforme produto)
-                'width' => 33,   // Largura em cm
-                'height' => 2,    // Altura em cm
-                'length' => 47    // Comprimento em cm
+                'weight' => $productConfig['weight'],
+                'width' => $productConfig['width'],
+                'height' => $productConfig['height'],
+                'length' => $productConfig['length']
             ];
         }, $items),
         'volumes' => count($items), // Número de volumes

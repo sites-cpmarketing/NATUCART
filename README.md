@@ -89,15 +89,16 @@ NATUCART/
 - Configure credenciais reais com `AbacatePayService.configure({ apiKey, baseUrl, methods })`.
 - A resposta retorna a URL do checkout seguro; o `checkout.js` redireciona o usuário automaticamente.
 
-### Frenet (frete)
-- Serviço em `assets/js/shipping/frenet.js` ligado ao formulário `data-freight-form`.
-- Configure com `FrenetService.configure({ token, password, sellerPostalCode })`.
-- Enquanto estiver em modo mock, retornos simulados permitem validar o checkout.
+### Melhor Envio (frete)
+- Serviço em `assets/js/shipping/melhorenvio.js` ligado ao formulário `data-freight-form`.
+- Configure com `MelhorEnvioService.configure({ clientId, clientSecret, sellerPostalCode, n8nWebhookUrl })`.
+- Usa webhook n8n como proxy para evitar problemas de CORS.
+- Configurações de produto (peso e dimensões) centralizadas em `assets/js/config/product-config.js`.
 
 ### Orquestração do checkout
-- `assets/js/checkout.js` conecta carrinho, Frenet e AbacatePay.
-- Resumo e botão `data-checkout-submit` ficam na seção “Calcule o Frete”.
-- O fluxo atual: itens no carrinho → CEP (Frenet) → sessão AbacatePay → simulação de pagamento.
+- `assets/js/checkout.js` conecta carrinho, Melhor Envio e AbacatePay.
+- Resumo e botão `data-checkout-submit` ficam na seção "Calcule o Frete".
+- O fluxo atual: itens no carrinho → CEP (Melhor Envio) → sessão AbacatePay → simulação de pagamento.
 
 ## Contato
 

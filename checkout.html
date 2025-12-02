@@ -918,6 +918,7 @@
         <!-- footer-area-end -->
 
         <!-- JS here -->
+        <script src="assets/js/config/product-config.js"></script>
         <script src="assets/js/cart.js"></script>
         <script src="assets/js/shipping/melhorenvio.js"></script>
         <script>
@@ -927,8 +928,8 @@
             // O n8n gerencia a autenticação OAuth usando Client ID e Secret
             MelhorEnvioService.configure({
                 baseUrl: 'https://melhorenvio.com.br/api/v2/me/shipment/calculate',
-                clientId: '7496', // Client ID do aplicativo Natucart
-                clientSecret: 'An6nMKUyzuHyA1TWHWWYZklA8jryl5v0YMCgqYLL', // Client Secret
+                clientId: '21160', // Client ID do aplicativo Natucart (Produção)
+                clientSecret: '466oHb5sHMqmvhc8Etbc70gTWGD75IVeQy3jiF1i', // Client Secret (Produção)
                 sellerPostalCode: '01001000', // CEP do remetente - ajuste conforme necessário
                 n8nWebhookUrl: 'https://n8n-auto.cpmarketingbr.com/webhook/melhorenvio-natucart' // Webhook n8n
             });

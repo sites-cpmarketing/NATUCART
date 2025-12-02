@@ -73,19 +73,32 @@
             // Enviar cada unidade como um produto separado
             // Exemplo: se quantity = 3, criar 3 produtos separados
             products: cartSnapshot.items.flatMap((item) => {
-                const products = [];
-                for (let i = 0; i < item.quantity; i++) {
-                    products.push({
-                        id: item.sku || item.id,
-                        width: 33,      // Largura em cm
-                        height: 2,      // Altura em cm
-                        length: 47,    // Comprimento em cm
-                        weight: 1.18,  // Peso em kg
-                        insurance_value: item.price,
-                        quantity: 1
-                    });
-                }
-                return products;
+                // Usar configurações baseadas na quantidade do produto
+                const ProductConfig = window.ProductConfig || {
+                    getConfigByQuantity: function(qty) {
+                        // Fallback se ProductConfig não estiver disponível
+                        if (qty === 1) return { weight: 0.05, width: 16.5, height: 1, length: 18 };
+                        if (qty >= 2 && qty <= 3) return { weight: 0.16, width: 20.5, height: 7.5, length: 12 };
+                        if (qty >= 4 && qty <= 6) return { weight: 0.28, width: 19, height: 10, length: 14.5 };
+                        const base = { weight: 0.28, width: 19, height: 10, length: 14.5 };
+                        return { ...base, weight: (base.weight / 6) * qty };
+                    }
+                };
+                
+                // Obter configuração baseada na quantidade deste item
+                const productConfig = ProductConfig.getConfigByQuantity(item.quantity);
+                
+                // Enviar como 1 produto com as dimensões do pacote completo
+                // O Melhor Envio calcula o frete baseado nas dimensões e peso totais
+                return [{
+                    id: item.sku || item.id,
+                    width: productConfig.width,
+                    height: productConfig.height,
+                    length: productConfig.length,
+                    weight: productConfig.weight, // Peso total do pacote
+                    insurance_value: item.price * item.quantity, // Valor total do item
+                    quantity: item.quantity
+                }];
             }),
             services: '1,2,3,4,17' // IDs dos serviços (PAC, SEDEX, etc.)
         };
