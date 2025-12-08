@@ -1,0 +1,19 @@
+# Dados de pedidos (contém informações sensíveis)
+data/orders/
+
+# Logs
+logs/
+
+# Arquivos de ambiente
+.env
+.env.local
+
+# Dependências
+vendor/
+node_modules/
+
+# Arquivos temporários
+*.log
+*.tmp
+.DS_Store
+
