@@ -156,7 +156,7 @@ $n8nPayload = [
     ] : null,
     // URL para buscar dados completos do pedido
     'orderApiUrl' => $paymentData && isset($paymentData['external_reference']) 
-        ? "https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/get_order.php?orderId=" . urlencode($paymentData['external_reference'])
+        ? "https://clientes-natucart-back.8szsdx.easypanel.host/inc/get_order.php?orderId=" . urlencode($paymentData['external_reference'])
         : null
 ];
 

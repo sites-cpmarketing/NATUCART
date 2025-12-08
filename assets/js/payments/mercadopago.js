@@ -3,7 +3,7 @@
 
     const DEFAULT_CONFIG = {
         preferenceEndpoint: '/inc/mercadopago_preference.php',
-        baseUrl: 'https://natucart.vercel.app',
+        baseUrl: 'https://natucart.com.br',
         notificationUrl: '',
         paymentMethods: {
             excludedPaymentMethods: [],

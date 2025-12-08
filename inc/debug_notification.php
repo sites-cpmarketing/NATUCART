@@ -2,7 +2,7 @@
 /**
  * Endpoint de debug para verificar notificações e pedidos
  * 
- * Acesse: https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/debug_notification.php?orderId=SEU_ORDER_ID
+ * Acesse: https://clientes-natucart-back.8szsdx.easypanel.host/inc/debug_notification.php?orderId=SEU_ORDER_ID
  */
 
 require_once __DIR__ . '/order_storage.php';

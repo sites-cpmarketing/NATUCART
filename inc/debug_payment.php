@@ -2,7 +2,7 @@
 /**
  * Endpoint de debug para verificar último pagamento processado
  * 
- * Acesse: https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/debug_payment.php?paymentId=SEU_PAYMENT_ID
+ * Acesse: https://clientes-natucart-back.8szsdx.easypanel.host/inc/debug_payment.php?paymentId=SEU_PAYMENT_ID
  */
 
 // Access Token do Mercado Pago

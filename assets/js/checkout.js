@@ -218,7 +218,7 @@
 
             // Salvar dados do pedido no backend (para o webhook recuperar)
             try {
-                const saveResponse = await fetch('https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/save_order.php', {
+                const saveResponse = await fetch('https://clientes-natucart-back.8szsdx.easypanel.host/inc/save_order.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

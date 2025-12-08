@@ -68,28 +68,28 @@ Este documento lista todas as variáveis de ambiente necessárias para o funcion
 ### MP_PREFERENCE_ENDPOINT
 - **Descrição**: Endpoint para criar preferência de pagamento
 - **Onde usar**: `checkout.html` (JavaScript)
-- **Valor**: `https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/mercadopago_preference.php`
+- **Valor**: `https://clientes-natucart-back.8szsdx.easypanel.host/inc/mercadopago_preference.php`
 - **Como configurar no Easypanel**:
   ```
-  MP_PREFERENCE_ENDPOINT=https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/mercadopago_preference.php
+  MP_PREFERENCE_ENDPOINT=https://clientes-natucart-back.8szsdx.easypanel.host/inc/mercadopago_preference.php
   ```
 
 ### MP_NOTIFICATION_ENDPOINT
 - **Descrição**: Endpoint para receber notificações do Mercado Pago
 - **Onde usar**: `checkout.html` (JavaScript)
-- **Valor**: `https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/mercadopago_notification_simple.php`
+- **Valor**: `https://clientes-natucart-back.8szsdx.easypanel.host/inc/mercadopago_notification_simple.php`
 - **Como configurar no Easypanel**:
   ```
-  MP_NOTIFICATION_ENDPOINT=https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/mercadopago_notification_simple.php
+  MP_NOTIFICATION_ENDPOINT=https://clientes-natucart-back.8szsdx.easypanel.host/inc/mercadopago_notification_simple.php
   ```
 
 ### BASE_URL
 - **Descrição**: URL base do site
 - **Onde usar**: `checkout.html` (JavaScript)
-- **Valor**: `https://natucart.vercel.app`
+- **Valor**: `https://natucart.com.br`
 - **Como configurar no Easypanel**:
   ```
-  BASE_URL=https://natucart.vercel.app
+  BASE_URL=https://natucart.com.br
   ```
 
 ## Como Configurar no Easypanel
@@ -119,9 +119,9 @@ N8N_MELHORENVIO_WEBHOOK_URL=https://n8n-auto.cpmarketingbr.com/webhook/melhorenv
 N8N_MELHORENVIO_FINAL_WEBHOOK_URL=https://n8n-auto.cpmarketingbr.com/webhook/melhorenvio-final-natucart
 
 # URLs do Backend
-MP_PREFERENCE_ENDPOINT=https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/mercadopago_preference.php
-MP_NOTIFICATION_ENDPOINT=https://sites-wordpress-natucart-back.8szsdx.easypanel.host/inc/mercadopago_notification_simple.php
-BASE_URL=https://natucart.vercel.app
+MP_PREFERENCE_ENDPOINT=https://clientes-natucart-back.8szsdx.easypanel.host/inc/mercadopago_preference.php
+MP_NOTIFICATION_ENDPOINT=https://clientes-natucart-back.8szsdx.easypanel.host/inc/mercadopago_notification_simple.php
+BASE_URL=https://natucart.com.br
 ```
 
 ## Notas Importantes
