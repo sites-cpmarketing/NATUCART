@@ -296,13 +296,26 @@
                     console.warn('[Obrigado] Erro ao recuperar dados do pedido:', error);
                 }
 
-                // Ocultar preloader
-                window.addEventListener('load', function() {
+                // Ocultar preloader com fallback
+                function hidePreloader() {
                     const preloader = document.getElementById('preloader');
                     if (preloader) {
                         preloader.style.display = 'none';
+                        preloader.style.opacity = '0';
+                        preloader.style.visibility = 'hidden';
+                        preloader.style.transition = 'opacity 0.5s ease, visibility 0.5s ease';
                     }
-                });
+                }
+                
+                if (document.readyState === 'complete') {
+                    setTimeout(hidePreloader, 100);
+                } else {
+                    window.addEventListener('load', function() {
+                        setTimeout(hidePreloader, 100);
+                    });
+                    // Fallback: esconder após 3 segundos mesmo se load não disparar
+                    setTimeout(hidePreloader, 3000);
+                }
             })();
         </script>
         

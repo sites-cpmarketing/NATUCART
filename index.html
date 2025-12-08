@@ -888,6 +888,33 @@
         <script src="assets/js/main.js"></script>
         <script src="assets/js/config/product-config.js"></script>
         <script src="assets/js/cart.js"></script>
+        
+        <!-- Fallback para esconder preloader caso jQuery ou outros scripts falhem -->
+        <script>
+            // Garantir que o preloader seja escondido mesmo se houver erros
+            (function() {
+                function hidePreloader() {
+                    const preloader = document.getElementById('preloader');
+                    if (preloader) {
+                        preloader.style.display = 'none';
+                        preloader.style.opacity = '0';
+                        preloader.style.visibility = 'hidden';
+                        preloader.style.transition = 'opacity 0.5s ease, visibility 0.5s ease';
+                    }
+                }
+                
+                // Tentar esconder quando a página carregar
+                if (document.readyState === 'complete') {
+                    setTimeout(hidePreloader, 100);
+                } else {
+                    window.addEventListener('load', function() {
+                        setTimeout(hidePreloader, 100);
+                    });
+                    // Fallback: esconder após 3 segundos mesmo se load não disparar
+                    setTimeout(hidePreloader, 3000);
+                }
+            })();
+        </script>
         <script src="assets/js/payments/abacatepay.js"></script>
         <script>
             AbacatePayService.configure({
