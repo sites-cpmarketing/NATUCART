@@ -1038,6 +1038,7 @@
                                 <div class="checkout-item-details">Quantidade: ${item.quantity}x</div>
                             </div>
                             <div class="checkout-item-price">${formatCurrency(item.price * item.quantity)}</div>
+                            <button class="checkout-item-remove" data-remove-checkout="${item.id}" aria-label="Remover ${item.name}">Remover</button>
                         </div>
                     `).join('');
                 }
@@ -1338,6 +1339,21 @@
             function initializeCheckout() {
                 // Verificar primeiro se o pagamento foi completado
                 checkPaymentCompletion();
+                
+                // Remover item diretamente no checkout
+                const itemsEl = document.getElementById('checkoutItems');
+                if (itemsEl) {
+                    itemsEl.addEventListener('click', (event) => {
+                        const button = event.target.closest('[data-remove-checkout]');
+                        if (button && window.NatucartCart) {
+                            event.preventDefault();
+                            window.NatucartCart.removeItem(button.dataset.removeCheckout);
+                            updateCheckoutItems();
+                            updateCheckoutSummary();
+                            updateCartCount();
+                        }
+                    });
+                }
                 
                 if (window.NatucartCart) {
                     // Forçar recálculo ao carregar para garantir que os dados estão sincronizados
