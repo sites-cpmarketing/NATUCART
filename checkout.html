@@ -1405,11 +1405,17 @@
                 const timer = setInterval(async () => {
                     attempts += 1;
                     try {
-                        const resp = await fetch(`/inc/mp_payment_status.php?orderId=${encodeURIComponent(pendingOrderId)}`);
+                        // Usar endpoint absoluto no backend para evitar falha de path quando fora do domínio
+                        const statusUrl = `https://clientes-natucart-back.8szsdx.easypanel.host/inc/mp_payment_status.php?orderId=${encodeURIComponent(pendingOrderId)}`;
+                        const resp = await fetch(statusUrl);
                         if (!resp.ok) {
                             throw new Error(`HTTP ${resp.status}`);
                         }
-                        const data = await resp.json();
+                        const data = await resp.json().catch(async () => {
+                            // Caso o backend retorne HTML/erro, logar preview para debugar
+                            const text = await resp.text().catch(() => '');
+                            throw new Error(`Resposta não é JSON. Preview: ${text.slice(0, 120)}`);
+                        });
                         const status = data.status;
                         if (statusEl) {
                             statusEl.textContent = `Aguardando confirmação do pagamento... (${status || 'desconhecido'})`;
