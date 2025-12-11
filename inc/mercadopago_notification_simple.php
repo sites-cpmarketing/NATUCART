@@ -105,38 +105,6 @@ if (!$paymentId) {
     exit;
 }
 
-// Prevenir notificações duplicadas (idempotência simples em arquivo)
-$processedFile = __DIR__ . '/../logs/processed_payments.json';
-$processed = [];
-if (file_exists($processedFile)) {
-    $json = file_get_contents($processedFile);
-    $processed = json_decode($json, true) ?: [];
-}
-
-$nowTs = time();
-$dedupWindowSeconds = 600; // 10 minutos
-
-// Limpar registros antigos para manter arquivo pequeno
-$processed = array_filter($processed, function ($entry) use ($nowTs, $dedupWindowSeconds) {
-    return isset($entry['ts']) && ($nowTs - (int)$entry['ts']) <= $dedupWindowSeconds;
-});
-
-// Verificar se já processamos este paymentId recentemente
-$alreadyProcessed = array_filter($processed, function ($entry) use ($paymentId) {
-    return isset($entry['paymentId']) && $entry['paymentId'] === $paymentId;
-});
-
-if (!empty($alreadyProcessed)) {
-    @file_put_contents($logFile, "[{$timestamp}] ⏭️ Notificação duplicada para {$paymentId} ignorada (janela 10min)\n", FILE_APPEND);
-    http_response_code(200);
-    echo json_encode(['status' => 'ok', 'processed' => false, 'duplicate' => true]);
-    exit;
-}
-
-// Registrar processamento atual
-$processed[] = ['paymentId' => $paymentId, 'ts' => $nowTs];
-@file_put_contents($processedFile, json_encode($processed));
-
 @file_put_contents($logFile, "[{$timestamp}] ✅ Payment ID válido: {$paymentId}, Topic: {$topic}\n", FILE_APPEND);
 
 // Buscar dados básicos do pagamento para extrair external_reference

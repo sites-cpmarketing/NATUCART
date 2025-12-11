@@ -2959,6 +2959,40 @@ a.whatsapp-btn:hover,
     color: #FFFFFF !important;
 }
 
+/* ===================================================================
+   Checkout - botão remover item
+   =================================================================== */
+.checkout-item {
+    position: relative;
+    gap: 8px;
+}
+
+.checkout-item-remove {
+    background: #2b2b2b;
+    color: #ff6b6b;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checkout-item-remove:hover {
+    background: #ff6b6b;
+    color: #0f0f0f;
+    border-color: #ff6b6b;
+}
+
+.checkout-item-remove:active {
+    transform: scale(0.98);
+}
+
+.checkout-item-remove:focus {
+    outline: 2px solid #ff6b6b;
+    outline-offset: 2px;
+}
+
 a.whatsapp-float:hover i,
 a.whatsapp-float:hover .fab,
 a.whatsapp-float:hover .fa-whatsapp,
