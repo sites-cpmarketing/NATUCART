@@ -1207,7 +1207,7 @@
                     }
 
                     // Preparar dados completos do pedido
-                    const orderData = {
+                    let orderData = {
                         // Dados do cliente
                         customer: {
                             name: customer.name || '',
@@ -1291,8 +1291,8 @@
                 } catch (error) {
                     console.error('[Melhor Envio Order] Erro ao enviar pedido:', error);
                     console.error('[Melhor Envio Order] Stack trace:', error.stack);
-                    // Mesmo com erro, mostrar tela de sucesso
-                    updateSuccessScreen(null, null);
+                    // Mesmo com erro, mostrar tela de sucesso usando os dados disponíveis
+                    updateSuccessScreen(orderData || null, null);
                 }
             }
 
@@ -1316,12 +1316,20 @@
                     if (orderIdEl) {
                         orderIdEl.textContent = orderData.orderId || '-';
                     }
-                    if (deliveryTimeEl && orderData.shipping.deliveryTime) {
-                        const days = orderData.shipping.deliveryTime;
-                        deliveryTimeEl.textContent = `${days} dia${days > 1 ? 's' : ''} útil${days > 1 ? 'eis' : ''}`;
+                    // deliveryTime pode vir de shipping ou freight salvo no localStorage
+                    const deliveryTime =
+                        (orderData.shipping && orderData.shipping.deliveryTime) ||
+                        (orderData.freight && orderData.freight.deliveryTime);
+                    if (deliveryTimeEl && deliveryTime) {
+                        deliveryTimeEl.textContent = `${deliveryTime} dia${deliveryTime > 1 ? 's' : ''} útil${deliveryTime > 1 ? 'eis' : ''}`;
                     }
                     if (emailEl) {
-                        emailEl.textContent = orderData.customer.email || '-';
+                        const email =
+                            (orderData.customer && orderData.customer.email) ||
+                            orderData.customerEmail ||
+                            (orderData.metadata && orderData.metadata.customerEmail) ||
+                            '-';
+                        emailEl.textContent = email;
                     }
                 }
             }

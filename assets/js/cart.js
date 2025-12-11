@@ -19,6 +19,13 @@
             name: 'Natucart - 6 Frascos',
             sku: 'NATUCART-6',
             price: 450
+        },
+        // Produto de teste (R$ 0,05) para fluxos de validação
+        'natucart-test': {
+            id: 'natucart-test',
+            name: 'Natucart - Teste (R$ 0,05)',
+            sku: 'TEST-005',
+            price: 0.05
         }
     };
 
@@ -337,6 +344,19 @@
 
     // Inicializar recalc ao carregar para garantir que os valores estão corretos
     recalc();
+
+    // Função global para adicionar produto de teste (para uso via console)
+    window.addTestProduct = function() {
+        if (cart) {
+            cart.addItem('natucart-test', 1);
+            console.log('✅ Produto de teste (R$ 0,05) adicionado ao carrinho!');
+            console.log('💡 Este produto não requer cálculo de frete.');
+            return true;
+        } else {
+            console.error('❌ Carrinho não está disponível.');
+            return false;
+        }
+    };
 
     window.NatucartProducts = PRODUCTS;
     window.NatucartCart = cart;

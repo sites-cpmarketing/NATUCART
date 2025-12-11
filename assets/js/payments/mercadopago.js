@@ -83,6 +83,7 @@
             back_urls: {
                 success: `${baseUrl}/obrigado.html?payment=completed`,
                 failure: `${baseUrl}/checkout.html?payment=failed`,
+                // Pagamentos pendentes (ex: PIX aguardando) permanecem no checkout
                 pending: `${baseUrl}/checkout.html?payment=pending`
             },
             auto_return: 'approved',

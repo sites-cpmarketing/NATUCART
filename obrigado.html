@@ -243,14 +243,16 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const paymentStatus = urlParams.get('payment');
                 
-                // Se não houver payment=completed, redirecionar para a página inicial
-                if (paymentStatus !== 'completed') {
+                // Somente completed pode ver a página de obrigado
+                const isCompleted = paymentStatus === 'completed';
+                
+                if (!isCompleted) {
                     console.warn('[Obrigado] Acesso não autorizado. Redirecionando...');
                     window.location.href = 'index.html';
                     return;
                 }
 
-                // Rastrear evento de compra no Meta Pixel
+                // Rastrear evento de compra no Meta Pixel (apenas aprovado)
                 if (typeof fbq !== 'undefined') {
                     fbq('track', 'Purchase', {
                         value: 0.00, // Valor será atualizado se disponível
@@ -274,13 +276,19 @@
                             orderIdEl.textContent = orderData.orderId;
                         }
                         
-                        if (deliveryTimeEl && orderData.shipping && orderData.shipping.deliveryTime) {
-                            const days = orderData.shipping.deliveryTime;
-                            deliveryTimeEl.textContent = `${days} dia${days > 1 ? 's' : ''} útil${days > 1 ? 'eis' : ''}`;
+                        const deliveryTime =
+                            (orderData.shipping && orderData.shipping.deliveryTime) ||
+                            (orderData.freight && orderData.freight.deliveryTime);
+                        if (deliveryTimeEl && deliveryTime) {
+                            deliveryTimeEl.textContent = `${deliveryTime} dia${deliveryTime > 1 ? 's' : ''} útil${deliveryTime > 1 ? 'eis' : ''}`;
                         }
                         
-                        if (emailEl && orderData.customer && orderData.customer.email) {
-                            emailEl.textContent = orderData.customer.email;
+                        const email =
+                            (orderData.customer && orderData.customer.email) ||
+                            orderData.customerEmail ||
+                            (orderData.metadata && orderData.metadata.customerEmail);
+                        if (emailEl && email) {
+                            emailEl.textContent = email;
                         }
 
                         // Atualizar valor no Meta Pixel se disponível

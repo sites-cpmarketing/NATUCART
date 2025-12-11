@@ -136,6 +136,9 @@
             return;
         }
 
+        // Verificar se é produto de teste (não precisa de frete)
+        const isTestProduct = snapshot.items.some(item => item.id === 'natucart-test');
+
         // Validar dados do cliente
         const customerValidation = validateCustomerData();
         if (!customerValidation.valid) {
@@ -147,8 +150,8 @@
             return;
         }
 
-        // Validar frete
-        if (!snapshot.freight) {
+        // Validar frete (apenas se não for produto de teste)
+        if (!isTestProduct && !snapshot.freight) {
             setStatus('Calcule o frete antes de finalizar a compra.');
             const freightCard = document.querySelector('[data-freight-form]')?.closest('.checkout-card');
             if (freightCard) {
@@ -157,9 +160,9 @@
             return;
         }
 
-        // Coletar dados do endereço
+        // Coletar dados do endereço (opcional para produto de teste)
         const addressData = getAddressData();
-        if (!addressData || !addressData.postalCode) {
+        if (!isTestProduct && (!addressData || !addressData.postalCode)) {
             setStatus('Preencha o endereço completo antes de finalizar.');
             const freightCard = document.querySelector('[data-freight-form]')?.closest('.checkout-card');
             if (freightCard) {
@@ -181,24 +184,25 @@
                 transactionAmount: snapshot.total,
                 description: `Pedido ${orderId} - Natucart`,
                 customer: customerValidation.data,
-                address: addressData,
-                freight: snapshot.freight,
+                address: isTestProduct ? null : addressData,
+                freight: isTestProduct ? null : snapshot.freight,
                 items: snapshot.items,
                 totals: {
                     subtotal: snapshot.subtotal,
-                    freight: snapshot.freight?.price || 0,
+                    freight: isTestProduct ? 0 : (snapshot.freight?.price || 0),
                     total: snapshot.total
                 },
                 metadata: {
                     orderId,
-                    freight: {
-                        service: snapshot.freight.service,
-                        serviceCode: snapshot.freight.serviceCode,
-                        carrier: snapshot.freight.carrier,
-                        price: snapshot.freight.price,
-                        deliveryTime: snapshot.freight.deliveryTime
+                    isTestProduct: isTestProduct,
+                    freight: isTestProduct ? null : {
+                        service: snapshot.freight?.service,
+                        serviceCode: snapshot.freight?.serviceCode,
+                        carrier: snapshot.freight?.carrier,
+                        price: snapshot.freight?.price,
+                        deliveryTime: snapshot.freight?.deliveryTime
                     },
-                    address: addressData
+                    address: isTestProduct ? null : addressData
                 }
             };
 
