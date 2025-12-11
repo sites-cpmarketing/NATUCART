@@ -1378,7 +1378,61 @@
             
             // Tentar inicializar imediatamente
             initializeCheckout();
+            
+            // =============================
+            // Polling de status de pagamento (PIX) usando orderId salvo
+            // =============================
+            function startPaymentWatcher() {
+                let pendingOrderId = null;
+                try {
+                    const saved = localStorage.getItem('natucart_pending_order');
+                    if (saved) {
+                        const obj = JSON.parse(saved);
+                        pendingOrderId = obj?.orderId || obj?.externalReference || null;
+                    }
+                } catch (err) {
+                    console.warn('[Checkout] Não foi possível ler natucart_pending_order:', err);
+                }
 
+                if (!pendingOrderId) {
+                    return;
+                }
+
+                const statusEl = document.querySelector('[data-checkout-status]');
+                let attempts = 0;
+                const maxAttempts = 30; // ~3min se 6s cada
+
+                const timer = setInterval(async () => {
+                    attempts += 1;
+                    try {
+                        const resp = await fetch(`/inc/mp_payment_status.php?orderId=${encodeURIComponent(pendingOrderId)}`);
+                        if (!resp.ok) {
+                            throw new Error(`HTTP ${resp.status}`);
+                        }
+                        const data = await resp.json();
+                        const status = data.status;
+                        if (statusEl) {
+                            statusEl.textContent = `Aguardando confirmação do pagamento... (${status || 'desconhecido'})`;
+                        }
+                        if (status === 'approved') {
+                            clearInterval(timer);
+                            window.location.href = '/obrigado.html?payment=completed';
+                        } else if (status === 'rejected' || status === 'cancelled') {
+                            clearInterval(timer);
+                            if (statusEl) statusEl.textContent = 'Pagamento rejeitado ou cancelado. Tente novamente.';
+                        }
+                    } catch (err) {
+                        console.warn('[Checkout] Erro ao consultar status do pagamento:', err);
+                    }
+
+                    if (attempts >= maxAttempts) {
+                        clearInterval(timer);
+                    }
+                }, 6000);
+            }
+
+            // Iniciar watcher ao carregar
+            startPaymentWatcher();
 
             // Atualizar opções de envio quando frete for calculado
             function updateShippingOptions() {

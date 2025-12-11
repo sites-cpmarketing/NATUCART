@@ -110,6 +110,7 @@ if (!$paymentId) {
 // Buscar dados básicos do pagamento para extrair external_reference
 // Isso ajuda o n8n a buscar os dados completos do pedido
 $paymentData = null;
+$paymentStatus = 'unknown';
 if ($paymentId) {
     // Fazer uma chamada rápida à API do Mercado Pago para obter external_reference
     $accessToken = getenv('MP_ACCESS_TOKEN') ?: 'APP_USR-4377085117917669-112408-2af68f55fefdd24495c2288210b3dd37-3000462520';
@@ -130,11 +131,35 @@ if ($paymentId) {
     
     if ($paymentHttpCode === 200) {
         $paymentData = json_decode($paymentResponse, true);
+        $paymentStatus = $paymentData['status'] ?? 'unknown';
         @file_put_contents($logFile, "[{$timestamp}] ✅ Dados do pagamento obtidos. Status: " . ($paymentData['status'] ?? 'N/A') . ", External Reference: " . ($paymentData['external_reference'] ?? 'N/A') . "\n", FILE_APPEND);
     } else {
         @file_put_contents($logFile, "[{$timestamp}] ⚠️ Não foi possível obter dados do pagamento (HTTP {$paymentHttpCode})\n", FILE_APPEND);
     }
 }
+
+// Idempotência por paymentId + status (permite transições de status)
+$dedupeFile = __DIR__ . '/../logs/processed_payments_status.json';
+$processedStatus = [];
+if (file_exists($dedupeFile)) {
+    $json = file_get_contents($dedupeFile);
+    $processedStatus = json_decode($json, true) ?: [];
+}
+
+$lastStatus = $processedStatus[$paymentId]['status'] ?? null;
+if ($lastStatus !== null && $paymentStatus !== 'unknown' && $lastStatus === $paymentStatus) {
+    @file_put_contents($logFile, "[{$timestamp}] ⏭️ Notificação ignorada (mesmo status já processado): {$paymentId} status={$paymentStatus}\n", FILE_APPEND);
+    http_response_code(200);
+    echo json_encode(['status' => 'ok', 'processed' => false, 'duplicate' => true, 'status_seen' => $paymentStatus]);
+    exit;
+}
+
+// Atualizar status visto
+$processedStatus[$paymentId] = [
+    'status' => $paymentStatus,
+    'ts' => time()
+];
+@file_put_contents($dedupeFile, json_encode($processedStatus));
 
 // Repassar para o n8n
 $n8nPayload = [
