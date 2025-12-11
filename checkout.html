@@ -1421,6 +1421,12 @@
                             statusEl.textContent = `Aguardando confirmação do pagamento... (${status || 'desconhecido'})`;
                         }
                         if (status === 'approved') {
+                            // Limpar pedido pendente para evitar redirecionamentos futuros
+                            try {
+                                localStorage.removeItem('natucart_pending_order');
+                            } catch (e) {
+                                console.warn('[Checkout] Não foi possível limpar natucart_pending_order:', e);
+                            }
                             clearInterval(timer);
                             window.location.href = '/obrigado.html?payment=completed';
                         } else if (status === 'rejected' || status === 'cancelled') {
