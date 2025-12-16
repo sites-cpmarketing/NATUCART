@@ -131,6 +131,18 @@
             existing.quantity += quantity;
             state.items[productId] = existing;
             recalc();
+
+            // Rastrear AddToCart no Meta Pixel
+            if (window.MetaPixel) {
+                window.MetaPixel.trackAddToCart({
+                    content_name: product.name,
+                    content_ids: [product.sku || product.id],
+                    content_type: 'product',
+                    value: product.price * quantity,
+                    currency: 'BRL',
+                    num_items: quantity
+                });
+            }
         },
         removeItem(productId) {
             if (state.items[productId]) {

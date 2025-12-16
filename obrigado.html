@@ -237,6 +237,7 @@
 
         <!-- JS here -->
         <script src="assets/js/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/meta-pixel.js"></script>
         <script>
             // Verificar se o pagamento foi aprovado
             (function() {
@@ -253,12 +254,12 @@
                 }
 
                 // Rastrear evento de compra no Meta Pixel (apenas aprovado)
-                if (typeof fbq !== 'undefined') {
-                    fbq('track', 'Purchase', {
+                if (window.MetaPixel) {
+                    window.MetaPixel.trackPurchase({
+                        content_name: 'Compra Natucart',
                         value: 0.00, // Valor será atualizado se disponível
                         currency: 'BRL'
                     });
-                    console.log('[Meta Pixel] Evento Purchase rastreado');
                 }
 
                 // Tentar recuperar dados do pedido do localStorage
@@ -292,12 +293,17 @@
                         }
 
                         // Atualizar valor no Meta Pixel se disponível
-                        if (typeof fbq !== 'undefined' && orderData.totals && orderData.totals.total) {
-                            fbq('track', 'Purchase', {
+                        if (window.MetaPixel && orderData.totals && orderData.totals.total) {
+                            const contentIds = orderData.items ? orderData.items.map(item => item.sku || item.id) : [];
+                            window.MetaPixel.trackPurchase({
+                                content_name: 'Compra Natucart',
+                                content_ids: contentIds,
+                                content_type: 'product',
                                 value: parseFloat(orderData.totals.total),
-                                currency: 'BRL'
+                                currency: 'BRL',
+                                num_items: orderData.items ? orderData.items.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0,
+                                order_id: orderData.orderId || null
                             });
-                            console.log('[Meta Pixel] Evento Purchase atualizado com valor:', orderData.totals.total);
                         }
                     }
                 } catch (error) {

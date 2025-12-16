@@ -174,6 +174,32 @@
         toggleButton(true);
         setStatus('Criando link de pagamento...');
 
+        // Rastrear InitiateCheckout no Meta Pixel
+        if (window.MetaPixel) {
+            const contentIds = snapshot.items.map(item => item.sku || item.id);
+            window.MetaPixel.trackInitiateCheckout({
+                content_name: 'Checkout Natucart',
+                content_ids: contentIds,
+                content_type: 'product',
+                value: snapshot.total,
+                currency: 'BRL',
+                num_items: snapshot.items.reduce((sum, item) => sum + item.quantity, 0)
+            });
+        }
+
+        // Rastrear AddPaymentInfo no Meta Pixel (dados do cliente preenchidos)
+        if (window.MetaPixel) {
+            const contentIds = snapshot.items.map(item => item.sku || item.id);
+            window.MetaPixel.trackAddPaymentInfo({
+                content_name: 'Informações de Pagamento',
+                content_ids: contentIds,
+                content_type: 'product',
+                value: snapshot.total,
+                currency: 'BRL',
+                num_items: snapshot.items.reduce((sum, item) => sum + item.quantity, 0)
+            });
+        }
+
         try {
             // Preparar contexto do pedido
             const orderId = `natucart_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
