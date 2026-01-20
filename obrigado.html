@@ -12,45 +12,151 @@
 		<link rel="shortcut icon" type="image/svg+xml" href="assets/img/favicon.svg">
 		<link rel="apple-touch-icon" href="assets/img/favicon.svg">
 
-		<!-- CSS here -->
-        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="assets/css/flaticon.css">
-        <link rel="stylesheet" href="assets/css/default.css">
-        <link rel="stylesheet" href="assets/css/style.css">
-        <link rel="stylesheet" href="assets/css/responsive.css">
-        <link rel="stylesheet" href="assets/css/natucart-custom.css">
-        <link rel="stylesheet" href="assets/css/natucart-dark.css">
+		<!-- Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+		
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
         
         <style>
+            :root {
+                --primary-red: #E31B23;
+                --hover-red: #B3151A;
+                --black: #000000;
+                --surface-black: #121212;
+                --white: #FFFFFF;
+                --gray-light: #F8F9FA;
+                --text-dark: #1A1A1A;
+                --text-muted: #4A4A4A;
+                --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Inter', sans-serif;
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                background-color: var(--white);
+                color: var(--text-dark);
+                line-height: 1.6;
+                font-size: 18px;
+            }
+
+            h1, h2, h3 {
+                text-transform: uppercase;
+                letter-spacing: -0.02em;
+                font-weight: 800;
+            }
+
+            /* --- Preloader --- */
+            #preloader {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: var(--black);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                transition: opacity 0.5s ease, visibility 0.5s ease;
+            }
+
+            #preloader.hidden {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            .tg-cube-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                width: 60px;
+                height: 60px;
+            }
+
+            .tg-cube {
+                background: var(--primary-red);
+                animation: cube-pulse 1.4s infinite ease-in-out;
+            }
+
+            .tg-cube1 { animation-delay: 0s; }
+            .tg-cube2 { animation-delay: 0.1s; }
+            .tg-cube3 { animation-delay: 0.2s; }
+            .tg-cube4 { animation-delay: 0.1s; }
+            .tg-cube5 { animation-delay: 0.2s; }
+            .tg-cube6 { animation-delay: 0.3s; }
+            .tg-cube7 { animation-delay: 0.2s; }
+            .tg-cube8 { animation-delay: 0.3s; }
+            .tg-cube9 { animation-delay: 0.4s; }
+
+            @keyframes cube-pulse {
+                0%, 70%, 100% { transform: scale3D(1, 1, 1); }
+                35% { transform: scale3D(0, 0, 1); }
+            }
+
+            /* --- Navigation --- */
+            nav {
+                background: var(--black);
+                padding: 1rem 5%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                border-bottom: 2px solid var(--primary-red);
+            }
+
+            .logo img {
+                height: 50px;
+                width: auto;
+            }
+
+            /* --- Thank You Page --- */
             .thank-you-page {
-                background: #000000;
+                background: var(--white);
                 min-height: 100vh;
-                padding: 80px 20px;
+                padding: 6rem 5% 8rem;
                 display: flex;
                 align-items: center;
                 justify-content: center;
             }
+
             .thank-you-container {
                 max-width: 800px;
                 margin: 0 auto;
                 text-align: center;
             }
+
             .thank-you-icon {
                 width: 120px;
                 height: 120px;
-                margin: 0 auto 30px;
-                background: linear-gradient(135deg, #E24B2F 0%, #FF6B4A 100%);
+                margin: 0 auto 2rem;
+                background: linear-gradient(135deg, var(--primary-red) 0%, #FF6B4A 100%);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 animation: scaleIn 0.5s ease-out;
+                box-shadow: 0 10px 30px rgba(227, 27, 35, 0.3);
             }
+
             .thank-you-icon i {
                 font-size: 60px;
-                color: #FFFFFF;
+                color: var(--white);
             }
+
             @keyframes scaleIn {
                 from {
                     transform: scale(0);
@@ -61,98 +167,192 @@
                     opacity: 1;
                 }
             }
+
             .thank-you-title {
-                color: #FFFFFF;
-                font-size: 48px;
-                font-weight: 700;
-                margin-bottom: 20px;
+                color: var(--text-dark);
+                font-size: 3rem;
+                font-weight: 800;
+                margin-bottom: 1.5rem;
             }
+
             .thank-you-message {
-                color: #BFBFBF;
-                font-size: 20px;
-                line-height: 1.6;
-                margin-bottom: 40px;
+                color: var(--text-muted);
+                font-size: 1.1rem;
+                line-height: 1.8;
+                margin-bottom: 3rem;
             }
+
             .thank-you-info {
-                background: #121212;
-                border: 1px solid #2F2F2F;
+                background: var(--gray-light);
+                border: 2px solid var(--gray-light);
                 border-radius: 12px;
-                padding: 30px;
-                margin-bottom: 40px;
+                padding: 2rem;
+                margin-bottom: 3rem;
+                text-align: left;
             }
+
             .thank-you-info-item {
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                gap: 15px;
-                margin-bottom: 20px;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
             }
+
             .thank-you-info-item:last-child {
                 margin-bottom: 0;
             }
+
             .thank-you-info-item i {
-                color: #E24B2F;
-                font-size: 24px;
+                color: var(--primary-red);
+                font-size: 1.5rem;
+                width: 40px;
+                text-align: center;
             }
+
             .thank-you-info-item div {
-                text-align: left;
+                flex: 1;
             }
+
             .thank-you-info-item strong {
                 display: block;
-                color: #FFFFFF;
-                font-size: 16px;
+                color: var(--text-dark);
+                font-size: 0.9rem;
                 font-weight: 600;
-                margin-bottom: 5px;
+                margin-bottom: 0.3rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
+
             .thank-you-info-item span {
                 display: block;
-                color: #7A7A7A;
-                font-size: 14px;
+                color: var(--text-muted);
+                font-size: 1rem;
+                font-weight: 600;
             }
+
             .thank-you-actions {
                 display: flex;
-                gap: 20px;
+                gap: 1.5rem;
                 justify-content: center;
                 flex-wrap: wrap;
             }
-            .thank-you-actions .btn {
-                padding: 15px 40px;
-                font-size: 16px;
-                font-weight: 600;
+
+            .btn {
+                display: inline-block;
+                padding: 1rem 2.5rem;
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                text-decoration: none;
                 border-radius: 8px;
+                transition: var(--transition);
+                cursor: pointer;
+                border: none;
+            }
+
+            .btn-primary {
+                background: var(--primary-red);
+                color: var(--white);
+            }
+
+            .btn-primary:hover {
+                background: var(--hover-red);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(227, 27, 35, 0.3);
+            }
+
+            .btn-secondary {
+                background: transparent;
+                color: var(--text-dark);
+                border: 2px solid var(--gray-light);
+            }
+
+            .btn-secondary:hover {
+                border-color: var(--primary-red);
+                color: var(--primary-red);
+            }
+
+            /* Footer */
+            footer {
+                background: var(--black);
+                color: var(--white);
+                padding: 0;
+                position: relative;
+            }
+
+            footer::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: var(--primary-red);
+            }
+
+            .footer-bottom {
+                border-top: 1px solid rgba(255, 255, 255, 0.15);
+                padding: 2rem 5%;
+                text-align: center;
+                font-size: 0.85rem;
+                color: rgba(255, 255, 255, 0.6);
+                background: rgba(0, 0, 0, 0.3);
+            }
+
+            .footer-bottom p {
+                margin: 0;
+            }
+
+            /* WhatsApp Float */
+            .whatsapp-float {
+                position: fixed;
+                width: 60px;
+                height: 60px;
+                bottom: 20px;
+                right: 20px;
+                background: #25D366;
+                color: #FFFFFF;
+                border-radius: 50%;
+                text-align: center;
+                font-size: 30px;
+                box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 text-decoration: none;
                 transition: all 0.3s ease;
             }
-            .btn-primary {
-                background: #E24B2F;
-                color: #FFFFFF;
-                border: none;
+
+            .whatsapp-float:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
             }
-            .btn-primary:hover {
-                background: #FF6B4A;
-                transform: translateY(-2px);
-            }
-            .btn-secondary {
-                background: transparent;
-                color: #BFBFBF;
-                border: 1px solid #2F2F2F;
-            }
-            .btn-secondary:hover {
-                border-color: #E24B2F;
-                color: #E24B2F;
-            }
+
             @media (max-width: 768px) {
                 .thank-you-title {
-                    font-size: 36px;
+                    font-size: 2rem;
                 }
+
                 .thank-you-message {
-                    font-size: 18px;
+                    font-size: 1rem;
                 }
+
                 .thank-you-actions {
                     flex-direction: column;
                 }
+
                 .thank-you-actions .btn {
                     width: 100%;
+                }
+
+                .whatsapp-float {
+                    width: 55px;
+                    height: 55px;
+                    font-size: 28px;
+                    bottom: 15px;
+                    right: 15px;
                 }
             }
         </style>
@@ -192,6 +392,13 @@
             </div>
         </div>
         <!-- Pre-loader-end -->
+
+        <!-- Navigation -->
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="assets/img/logo/logo.svg" alt="NATUCART">
+            </a>
+        </nav>
 
         <!-- main-area -->
         <main class="thank-you-page">
@@ -235,8 +442,14 @@
             </div>
         </main>
 
+        <!-- Footer -->
+        <footer>
+            <div class="footer-bottom">
+                <p>© 2024 NATUCART. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+
         <!-- JS here -->
-        <script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="assets/js/meta-pixel.js"></script>
         <script>
             // Verificar se o pagamento foi aprovado
@@ -314,10 +527,7 @@
                 function hidePreloader() {
                     const preloader = document.getElementById('preloader');
                     if (preloader) {
-                        preloader.style.display = 'none';
-                        preloader.style.opacity = '0';
-                        preloader.style.visibility = 'hidden';
-                        preloader.style.transition = 'opacity 0.5s ease, visibility 0.5s ease';
+                        preloader.classList.add('hidden');
                     }
                 }
                 
@@ -334,38 +544,8 @@
         </script>
         
         <!-- Botão Flutuante WhatsApp -->
-        <a href="https://wa.me/556293444334" target="_blank" rel="noopener noreferrer" class="whatsapp-float" style="position: fixed; width: 60px; height: 60px; bottom: 20px; right: 20px; background: #25D366; color: #FFFFFF; border-radius: 50%; text-align: center; font-size: 30px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); z-index: 9999; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease;">
+        <a href="https://wa.me/556293444334" target="_blank" rel="noopener noreferrer" class="whatsapp-float">
             <i class="fab fa-whatsapp"></i>
         </a>
-        <style>
-            .whatsapp-float {
-                color: #FFFFFF !important;
-            }
-            .whatsapp-float i,
-            .whatsapp-float .fab,
-            .whatsapp-float .fa-whatsapp {
-                color: #FFFFFF !important;
-            }
-            .whatsapp-float:hover {
-                transform: scale(1.1);
-                box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
-                color: #FFFFFF !important;
-            }
-            .whatsapp-float:hover i,
-            .whatsapp-float:hover .fab,
-            .whatsapp-float:hover .fa-whatsapp {
-                color: #FFFFFF !important;
-            }
-            @media (max-width: 768px) {
-                .whatsapp-float {
-                    width: 55px;
-                    height: 55px;
-                    font-size: 28px;
-                    bottom: 15px;
-                    right: 15px;
-                }
-            }
-        </style>
     </body>
 </html>
-
