@@ -1365,7 +1365,7 @@
         </div>
         <model-viewer 
             class="hero-3d-model-free fade-in-right animate-on-scroll"
-            src="assets/models/natucart.glb" 
+            src="assets/models/NATUCART.glb" 
             alt="NATUCART 3D" 
             auto-rotate="-1"
             camera-orbit="-45deg 85deg 180%"
@@ -1956,6 +1956,60 @@
             animatedElements.forEach(el => {
                 observer.observe(el);
             });
+
+            // Debug Model Viewer em produção
+            setTimeout(() => {
+                const modelViewer = document.querySelector('model-viewer');
+                const container = document.querySelector('.hero-3d-model-free');
+                
+                if (modelViewer) {
+                    console.log('[3D Model] Model Viewer encontrado');
+                    console.log('[3D Model] Caminho do arquivo:', modelViewer.src);
+                    console.log('[3D Model] Largura da tela:', window.innerWidth);
+                    
+                    // Verificar se o arquivo existe
+                    fetch(modelViewer.src)
+                        .then(response => {
+                            if (response.ok) {
+                                console.log('[3D Model] ✅ Arquivo GLB encontrado:', modelViewer.src);
+                            } else {
+                                console.error('[3D Model] ❌ Arquivo GLB não encontrado:', modelViewer.src, 'Status:', response.status);
+                                console.error('[3D Model] Tentando caminho alternativo...');
+                                // Tentar caminho alternativo
+                                modelViewer.src = 'assets/models/natucart.glb';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('[3D Model] ❌ Erro ao verificar arquivo:', error);
+                        });
+                    
+                    modelViewer.addEventListener('load', () => {
+                        console.log('[3D Model] ✅ Modelo 3D carregado com sucesso!');
+                    });
+                    
+                    modelViewer.addEventListener('error', (event) => {
+                        console.error('[3D Model] ❌ Erro ao carregar modelo:', event.detail);
+                        console.error('[3D Model] Tentando caminho alternativo...');
+                        // Tentar caminho alternativo em caso de erro
+                        if (modelViewer.src.includes('NATUCART.glb')) {
+                            modelViewer.src = 'assets/models/natucart.glb';
+                        } else if (modelViewer.src.includes('natucart.glb')) {
+                            modelViewer.src = 'assets/models/NATUCART.glb';
+                        }
+                    });
+                } else {
+                    console.warn('[3D Model] ⚠️ Model Viewer não encontrado');
+                }
+                
+                if (container) {
+                    console.log('[3D Model] Container encontrado');
+                    console.log('[3D Model] Display:', window.getComputedStyle(container).display);
+                    if (window.innerWidth >= 1024) {
+                        container.style.display = 'block';
+                        console.log('[3D Model] ✅ Container forçado a aparecer em desktop');
+                    }
+                }
+            }, 1000);
 
             // Meta Pixel ViewContent
             if (window.MetaPixel) {
